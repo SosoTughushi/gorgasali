@@ -1,0 +1,35 @@
+.weapon-card {
+    float: left;
+    width: 200px;
+    height: 350px;
+    border: 10px solid rgb(17, 57, 131);
+    margin: 5px;
+    text-align: center;
+    color: whitesmoke;
+    .weaponImage {
+        width: 200px;
+        height: 150px;
+    }
+    &.common {
+        background: gray;
+    }
+    &.rare {
+        background: darkgreen;
+    }
+    &.epic {
+        background: purple;
+    }
+    &.legendary {
+        background: goldenrod;
+    }
+    .type {
+        font-size: large;
+    }
+    .name {
+        font-size: medium;
+        background: rgba(255, 127, 80, 0.198);
+    }
+    .specialSkill {
+        font-size: medium;
+    }
+}

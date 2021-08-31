@@ -1,0 +1,47 @@
+.tile {
+    float: left;
+    width: 30px;
+    height: 30px;
+    border: 2px solid white;
+    margin: 1px;
+    text-align: center;
+    font-size: x-small;
+    &.flat {
+        background: rgb(253, 245, 216);
+    }
+    &.forest {
+        background: rgb(57, 114, 79);
+    }
+    &.water {
+        background: rgb(15, 153, 218);
+    }
+    &.mountain {
+        background: rgb(98, 77, 44);
+    }
+    &.healingPlace {
+        background: rgb(255, 251, 18);
+    }
+    &.bridge {
+        background: rgb(66, 66, 66);
+    }
+    &.zone0 {}
+    &.zone1 {}
+    &.zone2 {}
+    &.zone3 {}
+    &.zone4 {}
+    &.left-border {
+        border-left-color: rgb(34, 34, 34);
+    }
+    &.right-border {
+        border-right-color: rgb(34, 34, 34);
+    }
+    &.top-border {
+        border-top-color: rgb(34, 34, 34);
+    }
+    &.bottom-border {
+        border-bottom-color: rgb(34, 34, 34);
+    }
+    &:hover {
+        background-color: white;
+    }
+}
