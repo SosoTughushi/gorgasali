@@ -7,16 +7,16 @@
     text-align: center;
     color: whitesmoke;
     &.common {
-        background: gray;
+        background: rgba(128, 128, 128, 0.575);
     }
     &.rare {
-        background: darkgreen;
+        background: rgba(0, 100, 0, 0.555);
     }
     &.epic {
-        background: purple;
+        background: rgba(128, 0, 128, 0.507);
     }
     &.legendary {
-        background: goldenrod;
+        background: rgba(218, 165, 32, 0.541);
     }
     .type {
         font-size: large;

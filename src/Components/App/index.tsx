@@ -71,8 +71,8 @@ function App() {
 export default App;
 
 
-function createEbue() {
-  const ebue = new Ebue();
+function createEmoon() {
+  const ebue = new Emoon();
   ebue.weaponSlot1 = { weaponCard: new ScoutWeaponCard("Scum", "epic", 22, noSpecialSkill), needsReload: false };
   ebue.weaponSlot2 = { weaponCard: new MassiveWeaponCard("Grdzaaa", "rare", 143, noSpecialSkill, 60), needsReload: false };
   ebue.defensiveConsumable = new MagicField();
@@ -128,8 +128,8 @@ function createDrain() {
   return drain;
 }
 
-function createEmoon() {
-  const emoon = new Emoon();
+function createEbue() {
+  const emoon = new Ebue();
   return emoon;
 }
 
