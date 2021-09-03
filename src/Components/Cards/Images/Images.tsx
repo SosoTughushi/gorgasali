@@ -102,7 +102,7 @@ export default function Images({ name, type }: ImageProps) {
         src = "https://img1.pnghut.com/17/7/20/mU5p69s5ig/handbag-bag-762-mm-caliber-firearm-weapon.jpg";
     }
 
-    return <img width="200px" height="150px" src={src} alt="image" />
+    return <img width="180px" height="150px" src={src} alt="image" />
 }
 
 interface ImageProps {

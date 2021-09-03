@@ -8,8 +8,16 @@ import Damage from '../Common/Damage';
 import SuccessCriteria from '../SuccessCriteria';
 import { Card as CardClass } from '../../../gorgasali/Cards/Card';
 
-export default function Card({ card }: CardProps) {
-    return <div className={"weapon-card " + card.level}>
+export default function Card({ card, isRotated = false, needsReload = false, placeholder }: CardProps) {
+    const rotatedClass = isRotated ? " rotated" : "";
+    if (!card ) {
+        return <div className={"weapon-card" + rotatedClass}>
+            <div className="placeholder-text">
+                {placeholder}
+            </div>
+        </div>
+    }
+    return <div className={"weapon-card " + card.level + rotatedClass}>
         <div className="type">{card.type}</div>
         <div className="name">{card.name}</div>
         <div className="weaponImage">
@@ -18,12 +26,15 @@ export default function Card({ card }: CardProps) {
         {card.damage ? <Damage damage={card.damage} /> : ""}
         {card.diceCount ? <Dice count={card.diceCount} /> : ""}
         {card.range ? <Range range={card.range} /> : ""}
-        
+
         <div className="specialSkill">{card.specialSkill.text}</div>
-        {card.criteria? <SuccessCriteria criteria={card.criteria} /> : ""}
+        {card.criteria ? <SuccessCriteria criteria={card.criteria} /> : ""}
     </div>
 }
 
 interface CardProps {
-    card: CardClass
+    card: CardClass | undefined,
+    placeholder: string,
+    isRotated: boolean,
+    needsReload: boolean
 }

@@ -6,10 +6,6 @@
     margin: 5px;
     text-align: center;
     color: whitesmoke;
-    .weaponImage {
-        width: 200px;
-        height: 150px;
-    }
     &.common {
         background: gray;
     }
@@ -28,6 +24,10 @@
     .name {
         font-size: medium;
         background: rgba(255, 127, 80, 0.198);
+    }
+    .placeholder-text {
+        color: black;
+        font-size: large;
     }
     .specialSkill {
         font-size: medium;

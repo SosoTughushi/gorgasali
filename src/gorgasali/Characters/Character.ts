@@ -24,12 +24,12 @@ export class CharacterBase {
 
     public health: number;
 
-    public hasBox: boolean;
+    public boxCount: number;
     constructor(
         public name: string,
         public ability: CharacterAbility) {
         this.health = 100;
-        this.hasBox = true;
+        this.boxCount = 1;
     }
 }
 
