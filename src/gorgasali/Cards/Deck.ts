@@ -24,10 +24,10 @@ export default class Deck {
     public supportCards: SupportCard[]
     constructor() {
         this.weaponCards = [
-            kiss, janeli, tochinator, jalugar, // MassiveWeapon
-            kondor, breathold, // Scout
-            scratch, elva, gemini, dobergun, // SixShooter
-            lynx, mantis, ibex, kbraus, // Striker
+            kiss, // janeli, tochinator, jalugar, // MassiveWeapon
+            kondor, // breathold, // Scout
+            scratch, // elva, gemini, dobergun, // SixShooter
+            lynx, // mantis, ibex, kbraus, // Striker
         ]
         this.supportCards = [
             new FlameBulb(), // 8x

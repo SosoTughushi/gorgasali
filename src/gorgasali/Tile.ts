@@ -1,19 +1,18 @@
+import { CharacterBase } from "./Characters/Character";
 import Terrain from "./Terrain";
 
 
 export default class Tile {
-    terrain: Terrain;
-    index: number;
     minDistance: number;
-    hasBox: boolean;
     x: number;
     y: number;
     zone: number;
 
-    constructor(terrain: Terrain, index: number, hasBox: boolean) {
-        this.terrain = terrain;
-        this.index = index;
-        this.hasBox = hasBox;
+    constructor(
+        public terrain: Terrain,
+        public index: number,
+        public hasBox: boolean,
+        public character: CharacterBase | undefined = undefined) {
         this.x = index % 30;
         this.y = (index - this.x) / 30;
 
@@ -37,4 +36,8 @@ export default class Tile {
     public setBox(hasBox: boolean): void {
         this.hasBox = hasBox;
     }
+}
+
+export function convertToIndex(x: number, y: number) {
+    return y * 30 + x;
 }

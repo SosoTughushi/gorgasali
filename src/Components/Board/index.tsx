@@ -1,14 +1,12 @@
 
 import React from 'react';
 import Tile from '../Tile';
-import BoardClass from "../../gorgasali/board"
+import BoardClass from "../../gorgasali/board";
 import './Board.css';
 
 
-function Board() {
+function Board({board}: BoardProps) {
     const n = 30;
-
-    const board = new BoardClass([]);
 
     const tiles = board
         .getTiles();
@@ -27,6 +25,10 @@ function Board() {
             {sliced}
         </div>
     );
+}
+
+interface BoardProps {
+    board: BoardClass;
 }
 
 export default Board;

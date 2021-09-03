@@ -1,17 +1,25 @@
 import { CharacterBase } from "./Characters/Character";
-import Tile from "./Tile";
+import Tile, {convertToIndex} from "./Tile";
 
 export default class Board {
     private tiles: Tile[];
     
-    private _players : CharacterBase[];
-    public get players() : CharacterBase[] {
-        return this._players;
+    private _characters : CharacterBase[];
+    public get characters() : CharacterBase[] {
+        return this._characters;
     }
     
-    constructor(players: CharacterBase[]) {
+    constructor() {
         this.tiles = generateTiles();
-        this._players = players;
+        this._characters = [];
+    }
+
+    public placeCharacter(x:number, y:number,character: CharacterBase) {
+        this._characters.push(character);
+
+        const index = convertToIndex(x,y);
+        const targetTile = this.tiles[index];
+        targetTile.character = character;
     }
 
     public getTiles(): Tile[] {
@@ -20,7 +28,6 @@ export default class Board {
 }
 
 function generateTiles(): Tile[] {
-
     let tileIndexes = Array.from({ length: 30 * 30 }, (_, i) => i);
 
     const getRandomAndRemove = () => {

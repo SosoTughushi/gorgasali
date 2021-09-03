@@ -3,6 +3,7 @@ import './Tile.scss';
 import TileClass from "../../gorgasali/Tile";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBox } from '@fortawesome/free-solid-svg-icons'
+import CharacterSymbol from '../Character/CharacterSybol';
 
 function Tile({ tile }: TileProps) {
 
@@ -33,6 +34,7 @@ function Tile({ tile }: TileProps) {
   return (
     <span className={classes} >
       {tile.hasBox ? (<FontAwesomeIcon icon={faBox}/>) : ("")}
+      {tile.character ? (<h2><CharacterSymbol name={tile.character.name} /></h2>) : ("")}
     </span>
   );
 }

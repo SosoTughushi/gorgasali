@@ -8,6 +8,7 @@ import { Card as PlayCard } from "../../gorgasali/Cards/Card";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBox } from '@fortawesome/free-solid-svg-icons';
 import Badge from "react-bootstrap/Badge";
+import CharacterSymbol from "./CharacterSybol";
 
 
 
@@ -42,7 +43,7 @@ export default function CharacterComponent({ character }: CharacterProps) {
                 {renderCardSlot(character.throwableBagSlot, true, false, "Throwable")}
             </div>
             <div className="col-md-2" >
-                <h2>{character.name}</h2>
+                <h2>{character.name} <CharacterSymbol name={character.name}/></h2>
                 <Card >
                     <Card.Body>
                         <Card.Subtitle className="mb-2 text-muted">Special Ability</Card.Subtitle>

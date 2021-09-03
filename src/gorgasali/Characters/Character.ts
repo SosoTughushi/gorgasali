@@ -26,16 +26,18 @@ export class CharacterBase {
 
     public boxCount: number;
     constructor(
-        public name: string,
+        public name: CharacterName,
         public ability: CharacterAbility) {
         this.health = 100;
         this.boxCount = 1;
     }
 }
 
+export type CharacterName = "ARMAZI" | "D'RAIN" | "EBUE" | "E'MOON" | "MEDEA" | "OCTOR" | "PRINCESS TSIVA" | "THARSIS" | "VARAS" | "KRUBER";
+
 export default abstract class Character<T extends CharacterAbility> extends CharacterBase {
     constructor(
-        name: string,
+        name: CharacterName,
         public ability: T) {
         super(name, ability)
     }
