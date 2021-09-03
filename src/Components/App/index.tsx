@@ -28,34 +28,44 @@ import Dirain from '../../gorgasali/Characters/Dirain';
 import Emoon from '../../gorgasali/Characters/Emoon';
 import { Teleport } from '../../gorgasali/Cards/Support/Consumable/MovementConsumables';
 import SmokeBulb from '../../gorgasali/Cards/Support/Throwable/SmokeBulb';
+import CharacterTileList from '../Character/CharacterTileList';
 
 
 function App() {
   const deck = new Deck();
 
-  const [board] = useState(() => new BoardClass());
+  const [board] = useState(() => {
+    const b = new BoardClass();
+
+    b.placeCharacter(0, 0, createEbue());
+    b.placeCharacter(1, 0, createArmazi());
+    b.placeCharacter(2, 0, createMedea());
+    b.placeCharacter(3, 0, createTharsis());
+    b.placeCharacter(4, 0, createVaras());
+    b.placeCharacter(5, 0, createTsiva());
+    b.placeCharacter(6, 0, createOctor());
+    b.placeCharacter(7, 0, createKruber());
+    b.placeCharacter(8, 0, createDrain());
+    b.placeCharacter(9, 0, createEmoon());
+
+    return b;
+  });
   const [selecterCharacter, setSelectedCharacter] = useState<CharacterBase | undefined>()
 
-  board.placeCharacter(0, 0, createEbue());
-  board.placeCharacter(1, 0, createArmazi());
-  board.placeCharacter(2, 0, createMedea());
-  board.placeCharacter(3, 0, createTharsis());
-  board.placeCharacter(4, 0, createVaras());
-  board.placeCharacter(5, 0, createTsiva());
-  board.placeCharacter(6, 0, createOctor());
-  board.placeCharacter(7, 0, createKruber());
-  board.placeCharacter(8, 0, createDrain());
-  board.placeCharacter(9, 0, createEmoon());
+
 
   const symbols = getAllCharacterNames().map(c => <CharacterSymbol name={c} />)
 
   return (
     <div className="App">
       <div className="row">
-        <div className="col-md-6">
-          <Board board={board} onTileClick={tile => setSelectedCharacter(tile.character)} />
+        <div className="col-md-2">
+          <CharacterTileList characters={board.characters} onCharacterTileClick={character => setSelectedCharacter(character)} selectedCharacter={selecterCharacter} />
         </div>
-        <div className="col-md-6">
+        <div className="col-md-5">
+          <Board board={board} onTileClick={tile => setSelectedCharacter(tile.character)} selectedCharacter={selecterCharacter} />
+        </div>
+        <div className="col-md-5">
           {selecterCharacter ? <CharacterComponent character={selecterCharacter} /> : ""}
         </div>
       </div>

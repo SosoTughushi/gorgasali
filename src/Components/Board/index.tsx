@@ -4,17 +4,20 @@ import Tile from '../Tile';
 import BoardClass from "../../gorgasali/board";
 import './Board.css';
 import TileClass from "../../gorgasali/Tile";
+import { CharacterBase } from '../../gorgasali/Characters/Character';
 
 
-function Board({ board, onTileClick }: BoardProps) {
+function Board({ board, onTileClick, selectedCharacter }: BoardProps) {
     const n = 30;
 
     const tiles = board
         .getTiles();
 
+    const isCharacterSelected = (tile: TileClass) => selectedCharacter && selectedCharacter === tile.character;
+
     const tileComponents =
         tiles
-            .map(tile => (<Tile tile={tile} onTileClick={onTileClick} />));
+            .map(tile => (<Tile tile={tile} onTileClick={onTileClick} attributes={{ isSelected: isCharacterSelected(tile) }} />));
 
     const sliced =
         Array
@@ -28,9 +31,11 @@ function Board({ board, onTileClick }: BoardProps) {
     );
 }
 
+
 interface BoardProps {
     board: BoardClass;
     onTileClick(tile: TileClass): void;
+    selectedCharacter: CharacterBase | undefined
 }
 
 export default Board;

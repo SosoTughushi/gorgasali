@@ -74,7 +74,7 @@ export default function CharacterComponent({ character }: CharacterProps) {
     </div>
 }
 
-function convertToCssClass(name: string) {
+export function convertToCssClass(name: string) {
     return name.toLowerCase().replace("'", "").split(' ').join('-');
 }
 

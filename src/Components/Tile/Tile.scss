@@ -41,6 +41,10 @@
     &.bottom-border {
         border-bottom-color: rgb(34, 34, 34);
     }
+    &.character-selected {
+        color: blueviolet;
+        border-color: blueviolet;
+    }
     &:hover {
         background-color: white;
     }
