@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBox } from '@fortawesome/free-solid-svg-icons'
 import CharacterSymbol from '../Character/CharacterSybol';
 
-function Tile({ tile }: TileProps) {
+export default function Tile({ tile, onTileClick }: TileProps) {
 
   const minDist = tile.minDistance;
 
@@ -32,15 +32,15 @@ function Tile({ tile }: TileProps) {
 
 
   return (
-    <span className={classes} >
-      {tile.hasBox ? (<FontAwesomeIcon icon={faBox}/>) : ("")}
+    <span className={classes} onClick={(ev) => onTileClick(tile)} >
+      {tile.hasBox ? (<FontAwesomeIcon icon={faBox} />) : ("")}
       {tile.character ? (<h2><CharacterSymbol name={tile.character.name} /></h2>) : ("")}
     </span>
   );
 }
 
 interface TileProps {
-  tile: TileClass
+  tile: TileClass,
+  onTileClick(tile: TileClass): void;
 }
 
-export default Tile;

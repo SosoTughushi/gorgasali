@@ -1,4 +1,64 @@
 .character {
-    width: 1300px;
+    width: 1400px;
+    height: 1024px;
+    padding: 15px;
     border: 10px solid rgb(131, 44, 17);
+    color: white;
+    background-size: cover;
+    &.medea {
+        background-image: url("https://mbaqdemo.files.wordpress.com/2012/03/colorcorrectphotoiqf.jpg");
+    }
+    &.armazi {
+        background-image: url("http://server5.intermedia.ge/article_images/small/201912/2019120211350481319.jpg");
+    }
+    &.ebue {
+        background-image: url("https://i.ytimg.com/vi/Avuvnomom7w/hqdefault.jpg");
+    }
+    &.tharsis {
+        background-image: url("https://img5.goodfon.com/wallpaper/nbig/0/26/blizzard-entertainment-highlord-bolvar-fordragon-world-of-wa.jpg");
+        background-size: cover;
+    }
+    &.varas {
+        background-image: url("https://cdna.artstation.com/p/assets/images/images/002/819/252/medium/dennis-frohlich-rogue-final.jpg");
+    }
+    &.princess-tsiva {
+        background-image: url("https://preview.redd.it/da16mb3f82551.jpg?auto=webp&s=1abc98f85eec4b3c4f916cc50b4f58e4729841aa");
+    }
+    &.octor {
+        background-image: url("https://m.media-amazon.com/images/M/MV5BYjEyODEyZTQtYjA3NC00MWU4LTlmYjgtZDFlNTZlMTNlMmFiXkEyXkFqcGdeQXVyNjA1NDAzMw@@._V1_.jpg");
+    }
+    &.kruber {
+        background-image: url("https://wiki.guildwars2.com/images/9/91/Undead_concept_art.jpg");
+    }
+    &.drain {
+        background-image: url("https://4.bp.blogspot.com/-rcI-_IrE2pI/WMGsPYO8tcI/AAAAAAAAJq0/o-Geq8QwG-gmRfc6-YM0uaxrYAu5hT2xwCLcB/s1600/essence_drain_by_satibalzane-d595e88.jpg");
+    }
+    &.emoon {
+        background-image: url("https://p2.pstatp.com/origin/pgc-image/38f4fb66eaaf4567a74a973405e1ae3f.jpeg");
+    }
+    .col {
+        flex: 20%;
+        /* The important bit. This percentage decides your columns. 
+       The percent can be px. It just represents your minimum starting width.
+        */
+    }
+    .special-ability {
+        border: 8px solid rgb(141, 141, 141);
+        .subtitle {
+            font-size: medium;
+        }
+        .title {
+            font-size: large;
+            font-weight: bold;
+        }
+        .text {
+            color: rgb(199, 229, 255);
+        }
+    }
+    .rotated {
+        transform-origin: top left;
+        transform: rotate(270deg);
+        margin-top: 250px;
+        margin-left: 20px;
+    }
 }

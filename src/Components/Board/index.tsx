@@ -3,9 +3,10 @@ import React from 'react';
 import Tile from '../Tile';
 import BoardClass from "../../gorgasali/board";
 import './Board.css';
+import TileClass from "../../gorgasali/Tile";
 
 
-function Board({board}: BoardProps) {
+function Board({ board, onTileClick }: BoardProps) {
     const n = 30;
 
     const tiles = board
@@ -13,7 +14,7 @@ function Board({board}: BoardProps) {
 
     const tileComponents =
         tiles
-            .map(tile => (<Tile tile={tile}  />));
+            .map(tile => (<Tile tile={tile} onTileClick={onTileClick} />));
 
     const sliced =
         Array
@@ -29,6 +30,7 @@ function Board({board}: BoardProps) {
 
 interface BoardProps {
     board: BoardClass;
+    onTileClick(tile: TileClass): void;
 }
 
 export default Board;
