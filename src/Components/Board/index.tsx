@@ -4,7 +4,7 @@ import Tile from '../Tile';
 import BoardClass from "../../gorgasali/board";
 import './Board.css';
 import TileClass from "../../gorgasali/Tile";
-import { CharacterBase } from '../../gorgasali/Characters/Character';
+import Character from '../../gorgasali/Characters/Character';
 
 
 function Board({ board, onTileClick, selectedCharacter }: BoardProps) {
@@ -35,7 +35,7 @@ function Board({ board, onTileClick, selectedCharacter }: BoardProps) {
 interface BoardProps {
     board: BoardClass;
     onTileClick(tile: TileClass): void;
-    selectedCharacter: CharacterBase | undefined
+    selectedCharacter: Character | undefined
 }
 
 export default Board;

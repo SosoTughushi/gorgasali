@@ -1,4 +1,4 @@
-import { CharacterBase } from "./Characters/Character";
+import Character from "./Characters/Character";
 import { MovementConsumable, Teleport } from "./Cards/Support/Consumable/MovementConsumables"
 import { Defensive } from "./Cards/Support/Defensive/Defensive";
 import GunSocket, { ExtraSix } from "./Cards/Support/Consumable/GunSocket";
@@ -7,9 +7,19 @@ import Potion from "./Cards/Support/Consumable/Potion";
 import Barrier from "./Cards/Support/Defensive/Barrier";
 
 
-type MovementDiceResult = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
+type TurnStateMachine = 
+    Initial 
+    | HealingCardUsed 
+    | AmmoBagUsed 
+    | MovementDiceRolled 
+    | MovementCardUsed 
+    | Moved 
+    | DefensiveCardUsed 
+    | ThrowableCardUsed 
+    | WeaponExtensionCardUsed
+    | TurnEnded
 
-
+export default TurnStateMachine
 
 ///// states
 
@@ -126,6 +136,10 @@ type UseHealingCard = {
 }
 type UseAmmoBag = {
 }
+
+
+type MovementDiceResult = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
+
 type RollDice = {
     result: MovementDiceResult,
 }
@@ -150,43 +164,6 @@ type ManageBackpack = {
 }
 type ShootEnemy = {
 }
-
-// transitions
-
-
-
-new Initial()
-    .useHealingCard({ card: new Potion("Small") })
-    .rollDice({ result: 11 })
-    .useMovementCard({ card: new Teleport() })
-    .move({})
-    .manageBackpack({})
-
-
-new Initial()
-    .rollDice({ result: 11 })
-    .skipMovement()
-    .reloadWeapons({})
-
-
-new Initial()
-    .rollDice({ result: 8 })
-    .move({})
-    .useDefensiveCard({ card: new Barrier() })
-    .shootEnemy({})
-
-new Initial()
-    .rollDice({ result: 8 })
-    .move({})
-    .useThrowableCard({ card: new Barrier() })
-    .shootEnemy({})
-
-new Initial()
-    .rollDice({ result: 8 })
-    .useMovementCard({ card: new Teleport() })
-    .move({})
-    .useWeaponExtensionCard({ card: new ExtraSix() })
-    .shootEnemy({})
 
 
 

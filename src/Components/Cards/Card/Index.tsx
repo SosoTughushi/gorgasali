@@ -6,35 +6,34 @@ import Dice from '../Common/Dice';
 import Range from '../Common/Range';
 import Damage from '../Common/Damage';
 import SuccessCriteria from '../SuccessCriteria';
-import { Card as CardClass } from '../../../gorgasali/Cards/Card';
+import { CardSlotBase } from '../../../gorgasali/Characters/CardSlot';
 
-export default function Card({ card, isRotated = false, needsReload = false, placeholder }: CardProps) {
+export default function Card({ cardSlot, isRotated = false, needsReload = false }: CardProps) {
     const rotatedClass = isRotated ? " rotated" : "";
-    if (!card ) {
+    if (!cardSlot.card) {
         return <div className={"weapon-card" + rotatedClass}>
             <div className="placeholder-text">
-                {placeholder}
+                {cardSlot.name}
             </div>
         </div>
     }
-    return <div className={"weapon-card " + card.level + rotatedClass}>
-        <div className="type">{card.type}</div>
-        <div className="name">{card.name}</div>
+    return <div className={"weapon-card " + cardSlot.card.level + rotatedClass}>
+        <div className="type">{cardSlot.card.type}</div>
+        <div className="name">{cardSlot.name}</div>
         <div className="weaponImage">
-            <Images name={card.name} type={card.type} />
+            <Images name={cardSlot.name} type={cardSlot.card.type} />
         </div>
-        {card.damage ? <Damage damage={card.damage} /> : ""}
-        {card.diceCount ? <Dice count={card.diceCount} /> : ""}
-        {card.range ? <Range range={card.range} /> : ""}
+        {cardSlot.card.damage ? <Damage damage={cardSlot.card.damage} /> : ""}
+        {cardSlot.card.diceCount ? <Dice count={cardSlot.card.diceCount} /> : ""}
+        {cardSlot.card.range ? <Range range={cardSlot.card.range} /> : ""}
 
-        <div className="specialSkill">{card.specialSkill.text}</div>
-        {card.criteria ? <SuccessCriteria criteria={card.criteria} /> : ""}
+        <div className="specialSkill">{cardSlot.card.specialSkill.text}</div>
+        {cardSlot.card.criteria ? <SuccessCriteria criteria={cardSlot.card.criteria} /> : ""}
     </div>
 }
 
 interface CardProps {
-    card: CardClass | undefined,
-    placeholder: string,
+    cardSlot: CardSlotBase,
     isRotated: boolean,
     needsReload: boolean
 }

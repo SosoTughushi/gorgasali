@@ -1,4 +1,4 @@
-import { CharacterBase } from "./Characters/Character";
+import Character from "./Characters/Character";
 import Terrain from "./Terrain";
 
 
@@ -12,7 +12,7 @@ export default class Tile {
         public terrain: Terrain,
         public index: number,
         public hasBox: boolean,
-        public character: CharacterBase | undefined = undefined) {
+        public character: Character | undefined = undefined) {
         this.x = index % 30;
         this.y = (index - this.x) / 30;
 

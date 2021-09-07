@@ -1,11 +1,11 @@
-import { CharacterBase } from "./Characters/Character";
+import Character from "./Characters/Character";
 import Tile, {convertToIndex} from "./Tile";
 
 export default class Board {
     private tiles: Tile[];
     
-    private _characters : CharacterBase[];
-    public get characters() : CharacterBase[] {
+    private _characters : Character[];
+    public get characters() : Character[] {
         return this._characters;
     }
     
@@ -14,7 +14,7 @@ export default class Board {
         this._characters = [];
     }
 
-    public placeCharacter(x:number, y:number,character: CharacterBase) {
+    public placeCharacter(x:number, y:number,character: Character) {
         this._characters.push(character);
 
         const index = convertToIndex(x,y);

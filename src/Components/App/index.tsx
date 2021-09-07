@@ -16,7 +16,7 @@ import MagicSpear from '../../gorgasali/Cards/Support/Throwable/MagicSpear';
 import { BodyArmor, Helmet } from '../../gorgasali/Cards/Support/Armor/Armor';
 import { Card } from '../../gorgasali/Cards/Card';
 import Armazi from '../../gorgasali/Characters/Armazi';
-import { CharacterBase, CharacterName } from '../../gorgasali/Characters/Character';
+import Character, {  CharacterName } from '../../gorgasali/Characters/Character';
 import CharacterSymbol from '../Character/CharacterSybol';
 import BoardClass from '../../gorgasali/board';
 import Medea from '../../gorgasali/Characters/Medea';
@@ -29,7 +29,7 @@ import Emoon from '../../gorgasali/Characters/Emoon';
 import { Teleport } from '../../gorgasali/Cards/Support/Consumable/MovementConsumables';
 import SmokeBulb from '../../gorgasali/Cards/Support/Throwable/SmokeBulb';
 import CharacterTileList from '../Character/CharacterTileList';
-
+import Turn from "../Turn";
 
 function App() {
   const deck = new Deck();
@@ -50,7 +50,7 @@ function App() {
 
     return b;
   });
-  const [selecterCharacter, setSelectedCharacter] = useState<CharacterBase | undefined>()
+  const [selecterCharacter, setSelectedCharacter] = useState<Character | undefined>()
 
 
 
@@ -58,6 +58,11 @@ function App() {
 
   return (
     <div className="App">
+      <div className="row">
+        <div className="col-md-6">
+        <Turn/>
+        </div>
+      </div>
       <div className="row">
         <div className="col-md-2">
           <CharacterTileList characters={board.characters} onCharacterTileClick={character => setSelectedCharacter(character)} selectedCharacter={selecterCharacter} />
@@ -72,10 +77,6 @@ function App() {
 
     </div>
   );
-
-  function createCard(w: Card): JSX.Element {
-    return <CardComponent card={w} isRotated={false} needsReload={false} placeholder="" />;
-  }
 }
 
 export default App;
@@ -83,18 +84,18 @@ export default App;
 
 function createEmoon() {
   const ebue = new Emoon();
-  ebue.weaponSlot1 = { weaponCard: new ScoutWeaponCard("Scum", "epic", 22, noSpecialSkill), needsReload: false };
-  ebue.weaponSlot2 = { weaponCard: new MassiveWeaponCard("Grdzaaa", "rare", 143, noSpecialSkill, 60), needsReload: false };
-  ebue.defensiveConsumable = new MagicField();
-  ebue.consumable1 = new ObstacleNulifier("forest");
-  ebue.consumable2 = new ObstacleNulifier("water");
-  ebue.throwable = new MagicSpear();
-  ebue.helmet = new Helmet();
-  ebue.bodyArmor = new BodyArmor();
+  ebue.weaponSlot1.card = new ScoutWeaponCard("Scum", "epic", 22, noSpecialSkill);
+  ebue.weaponSlot2.card = new MassiveWeaponCard("Grdzaaa", "rare", 143, noSpecialSkill, 60);
+  ebue.defensiveConsumable.card = new MagicField();
+  ebue.consumable1.card = new ObstacleNulifier("forest");
+  ebue.consumable2.card = new ObstacleNulifier("water");
+  ebue.throwable.card = new MagicSpear();
+  ebue.helmet.card = new Helmet();
+  ebue.bodyArmor.card = new BodyArmor();
   ebue.health = 15;
-  ebue.consumableBagSlot1 = new ObstacleNulifier("mountain");
-  ebue.consumableBagSlot2 = new Teleport();
-  ebue.throwableBagSlot = new SmokeBulb();
+  ebue.consumableBagSlot1.card = new ObstacleNulifier("mountain");
+  ebue.consumableBagSlot2.card = new Teleport();
+  ebue.throwableBagSlot.card = new SmokeBulb();
   return ebue;
 }
 

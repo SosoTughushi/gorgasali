@@ -1,4 +1,4 @@
-import { CharacterBase } from "../../gorgasali/Characters/Character";
+import Character from "../../gorgasali/Characters/Character";
 import "./Character.scss";
 import ProgressBar from 'react-bootstrap/ProgressBar';
 import CardComponent from "../Cards/Card/Index";
@@ -8,11 +8,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBox } from '@fortawesome/free-solid-svg-icons';
 import Badge from "react-bootstrap/Badge";
 import CharacterSymbol from "./CharacterSybol";
+import { CardSlotBase } from "../../gorgasali/Characters/CardSlot";
 
 
 
-function renderCardSlot(card: PlayCard | undefined, isRotated: boolean, needsReload: boolean | undefined, placeholder: string) {
-    return <CardComponent card={card} placeholder={placeholder} isRotated={isRotated} needsReload={needsReload ?? false} />
+function renderCardSlot(card: CardSlotBase, isRotated: boolean, needsReload: boolean | undefined) {
+    return <CardComponent cardSlot={card} isRotated={isRotated} needsReload={needsReload ?? false} />
 }
 
 export default function CharacterComponent({ character }: CharacterProps) {
@@ -28,19 +29,19 @@ export default function CharacterComponent({ character }: CharacterProps) {
                 <table>
                     <tr>
                         <td>
-                            {renderCardSlot(character.weaponSlot2?.weaponCard, false, character.weaponSlot1?.needsReload, "Weapon")}
-                            {renderCardSlot(character.weaponSlot1?.weaponCard, false, character.weaponSlot1?.needsReload, "Weapon")}
+                            {renderCardSlot(character.weaponSlot2, false, character.weaponSlot1?.needsReload)}
+                            {renderCardSlot(character.weaponSlot1, false, character.weaponSlot1?.needsReload)}
                         </td>
                         <td>
-                            {renderCardSlot(character.defensiveConsumable, false, false, "Defensive")}
+                            {renderCardSlot(character.defensiveConsumable, false, false)}
                         </td>
                         <td>
-                            {renderCardSlot(character.consumable1, false, false, "Consumable")}
-                            {renderCardSlot(character.consumable2, false, false, "Consumable")}
+                            {renderCardSlot(character.consumable1, false, false)}
+                            {renderCardSlot(character.consumable2, false, false)}
                         </td>
-                        <td>{renderCardSlot(character.throwable, false, false, "Throwable")}</td>
-                        <td>{renderCardSlot(character.helmet, false, false, "Helmet")}
-                            {renderCardSlot(character.bodyArmor, false, false, "Body Armor")}</td>
+                        <td>{renderCardSlot(character.throwable, false, false)}</td>
+                        <td>{renderCardSlot(character.helmet, false, false)}
+                            {renderCardSlot(character.bodyArmor, false, false)}</td>
                     </tr>
                 </table>
 
@@ -48,9 +49,9 @@ export default function CharacterComponent({ character }: CharacterProps) {
 
                 <div className="row">
                     <div className="col-md-3 rotated">
-                        {renderCardSlot(character.consumableBagSlot1, false, false, "Consumable")}
-                        {renderCardSlot(character.consumableBagSlot2, false, false, "Consumable")}
-                        {renderCardSlot(character.throwableBagSlot, false, false, "Throwable")}
+                        {renderCardSlot(character.consumableBagSlot1, false, false)}
+                        {renderCardSlot(character.consumableBagSlot2, false, false)}
+                        {renderCardSlot(character.throwableBagSlot, false, false)}
                     </div>
                 </div>
             </div>
@@ -79,5 +80,5 @@ export function convertToCssClass(name: string) {
 }
 
 interface CharacterProps {
-    character: CharacterBase
+    character: Character
 }

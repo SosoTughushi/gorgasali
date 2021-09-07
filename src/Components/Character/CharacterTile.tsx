@@ -1,4 +1,4 @@
-import { CharacterBase } from "../../gorgasali/Characters/Character";
+import Character from "../../gorgasali/Characters/Character";
 import "./Character.scss";
 import CharacterSymbol from "./CharacterSybol";
 import ProgressBar from 'react-bootstrap/ProgressBar';
@@ -26,7 +26,7 @@ export default function CharacterTile({ character, onCharacterTileClick, isSelec
 }
 
 interface CharacterTileProps {
-    character: CharacterBase,
+    character: Character,
     isSelected: boolean,
-    onCharacterTileClick(tile: CharacterBase): void;
+    onCharacterTileClick(tile: Character): void;
 }
