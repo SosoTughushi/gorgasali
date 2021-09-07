@@ -1,142 +1,99 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import Stepper from '@material-ui/core/Stepper';
-import Step from '@material-ui/core/Step';
-import StepLabel from '@material-ui/core/StepLabel';
-import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
+import CharacterClass from '../../gorgasali/Characters/Character';
+import Character, { Highlights } from "../Character";
+import TurnStateMachine, { Initial, HealingCardUsed, AmmoBagUsed, MovementDiceRolled, MovementCardUsed, Moved, DefensiveCardUsed, ThrowableCardUsed, WeaponExtensionCardUsed, TurnEnded } from '../../gorgasali/turnStateMachine';
+import Card from '../Cards/Card/Index';
+import { Button } from 'react-bootstrap';
 
-const useStyles = makeStyles((theme) => ({
-    root: {
-        width: '100%',
-    },
-    button: {
-        marginRight: theme.spacing(1),
-    },
-    instructions: {
-        marginTop: theme.spacing(1),
-        marginBottom: theme.spacing(1),
-    },
-}));
+export default function Turn({ turn, character }: TurnProps) {
+    let highlights: Highlights = {};
+    let rollDice = false;
+    let useAmmoBag = false;
+    let move = false;
+    let skip = false;
+    let reload = false;
+    let manageBackpack = false;
+    let name = "";
+    if (turn instanceof Initial) {
+        highlights = { healingPotion: true };
+        rollDice = true;
+        useAmmoBag = true;
 
-function getSteps() {
-    return ['Select campaign settings', 'Create an ad group', 'Create an ad'];
-}
-
-function getStepContent(step: number) {
-    switch (step) {
-        case 0:
-            return 'Select campaign settings...';
-        case 1:
-            return 'What is an ad group anyways?';
-        case 2:
-            return 'This is the bit I really care about!';
-        default:
-            return 'Unknown step';
+        name = "Initial";
     }
-}
+    if (turn instanceof HealingCardUsed) {
+        rollDice = true;
+        name = "HealingCardUsed";
+    }
 
-export default function HorizontalLinearStepper() {
-    const classes = useStyles();
-    const [activeStep, setActiveStep] = React.useState(0);
-    const [skipped, setSkipped] = React.useState(new Set());
-    const steps = getSteps();
+    if (turn instanceof AmmoBagUsed) {
+        rollDice = true;
+        name = "AmmoBagUsed";
+    }
+    if (turn instanceof MovementDiceRolled) {
+        highlights = { movementCard: true };
+        move = true;
+        skip = true;
+        name = "MovementDiceRolled";
+    }
 
-    const isStepOptional = (step: number) => {
-        return step === 1;
-    };
+    if (turn instanceof MovementCardUsed) {
+        move = true;
+        name = "MovementCardUsed";
+    }
 
-    const isStepSkipped = (step: number) => {
-        return skipped.has(step);
-    };
+    if (turn instanceof Moved) {
+        highlights = { defensiveCard: true, throwableCard: true, weaponExtensionCard: true, loadedWeapons: true }
 
-    const handleNext = () => {
-        let newSkipped = skipped;
-        if (isStepSkipped(activeStep)) {
-            newSkipped = new Set(newSkipped.values());
-            newSkipped.delete(activeStep);
-        }
+        reload = true;
+        manageBackpack = true;
+        name = "Moved";
+    }
+    if (turn instanceof DefensiveCardUsed) {
+        highlights = { loadedWeapons: true }
 
-        setActiveStep((prevActiveStep) => prevActiveStep + 1);
-        setSkipped(newSkipped);
-    };
+        manageBackpack = true;
+        reload = true;
+        name = "DefensiveCardUsed";
+    }
+    if (turn instanceof ThrowableCardUsed) {
+        highlights = { loadedWeapons: true }
 
-    const handleBack = () => {
-        setActiveStep((prevActiveStep) => prevActiveStep - 1);
-    };
+        manageBackpack = true;
+        reload = true;
+        name = "ThrowableCardUsed";
+    }
+    if (turn instanceof WeaponExtensionCardUsed) {
+        highlights = { loadedWeapons: true }
+        name = "WeaponExtensionCardUsed";
+    }
+    if (turn instanceof TurnEnded) {
+        name = "TurnEnded";
+    }
 
-    const handleSkip = () => {
-        if (!isStepOptional(activeStep)) {
-            // You probably want to guard against something like this,
-            // it should never occur unless someone's actively trying to break something.
-            throw new Error("You can't skip a step that isn't optional.");
-        }
-
-        setActiveStep((prevActiveStep) => prevActiveStep + 1);
-        setSkipped((prevSkipped) => {
-            const newSkipped = new Set(prevSkipped.values());
-            newSkipped.add(activeStep);
-            return newSkipped;
-        });
-    };
-
-    const handleReset = () => {
-        setActiveStep(0);
-    };
-
-    return (
-        <div className={classes.root}>
-            <Stepper activeStep={activeStep}>
-                {steps.map((label, index) => {
-                    const stepProps = {};
-                    const labelProps = {};
-                    return (
-                        <Step key={label} {...stepProps}>
-                            <StepLabel {...labelProps}>{label}</StepLabel>
-                        </Step>
-                    );
-                })}
-            </Stepper>
-            <div>
-                {activeStep === steps.length ? (
-                    <div>
-                        <Typography className={classes.instructions}>
-                            All steps completed - you&apos;re finished
-                        </Typography>
-                        <Button onClick={handleReset} className={classes.button}>
-                            Reset
-                        </Button>
-                    </div>
-                ) : (
-                    <div>
-                        <Typography className={classes.instructions}>{getStepContent(activeStep)}</Typography>
-                        <div>
-                            <Button disabled={activeStep === 0} onClick={handleBack} className={classes.button}>
-                                Back
-                            </Button>
-                            {isStepOptional(activeStep) && (
-                                <Button
-                                    variant="contained"
-                                    color="primary"
-                                    onClick={handleSkip}
-                                    className={classes.button}
-                                >
-                                    Skip
-                                </Button>
-                            )}
-
-                            <Button
-                                variant="contained"
-                                color="primary"
-                                onClick={handleNext}
-                                className={classes.button}
-                            >
-                                {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
-                            </Button>
-                        </div>
-                    </div>
-                )}
+    return <div>
+        <h1>{name}</h1>
+        <div className="row">
+            <div className="col-md-3">
+                {rollDice ? <Button>Roll Dice</Button> : ""}
+                <br />
+                {move ? <Button>Move</Button> : ""}
+                <br />
+                {skip ? <Button>Skip</Button> : ""}
+                <br />
+                {reload ? <Button>Reload</Button> : ""}
+                <br />
+                {manageBackpack ? <Button>Manage Backpack</Button> : ""}
+            </div>
+            <div className="col-md-9">
+                <Character character={character} highlights={highlights} />
             </div>
         </div>
-    );
+
+        <br />
+    </div>
+}
+interface TurnProps {
+    turn: TurnStateMachine,
+    character: CharacterClass
 }

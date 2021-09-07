@@ -6,6 +6,12 @@
     margin: 5px;
     text-align: center;
     color: whitesmoke;
+    &.highlight {
+        border: 10px solid goldenrod;
+        &:hover {
+            color: goldenrod;
+        }
+    }
     &.common {
         background: rgba(128, 128, 128, 0.575);
     }

@@ -1,5 +1,3 @@
-import React from 'react';
-import WeaponCardClass from "../../../gorgasali/Cards/Weapons/WeaponCard"
 import "./Card.scss";
 import Images from '../Images/Images';
 import Dice from '../Common/Dice';
@@ -8,16 +6,16 @@ import Damage from '../Common/Damage';
 import SuccessCriteria from '../SuccessCriteria';
 import { CardSlotBase } from '../../../gorgasali/Characters/CardSlot';
 
-export default function Card({ cardSlot, isRotated = false, needsReload = false }: CardProps) {
-    const rotatedClass = isRotated ? " rotated" : "";
+export default function Card({ cardSlot,  highlight = false }: CardProps) {
+    const highlightedClass = highlight? " highlight": "";
     if (!cardSlot.card) {
-        return <div className={"weapon-card" + rotatedClass}>
+        return <div className={"weapon-card" }>
             <div className="placeholder-text">
                 {cardSlot.name}
             </div>
         </div>
     }
-    return <div className={"weapon-card " + cardSlot.card.level + rotatedClass}>
+    return <div className={"weapon-card " + cardSlot.card.level  + highlightedClass}>
         <div className="type">{cardSlot.card.type}</div>
         <div className="name">{cardSlot.name}</div>
         <div className="weaponImage">
@@ -34,6 +32,6 @@ export default function Card({ cardSlot, isRotated = false, needsReload = false 
 
 interface CardProps {
     cardSlot: CardSlotBase,
-    isRotated: boolean,
-    needsReload: boolean
+    needsReload: boolean,
+    highlight?: boolean
 }

@@ -9,15 +9,34 @@ import { faBox } from '@fortawesome/free-solid-svg-icons';
 import Badge from "react-bootstrap/Badge";
 import CharacterSymbol from "./CharacterSybol";
 import { CardSlotBase } from "../../gorgasali/Characters/CardSlot";
+import Potion from "../../gorgasali/Cards/Support/Consumable/Potion";
+import WeaponCard from "../../gorgasali/Cards/Weapons/WeaponCard";
+import { MovementConsumable } from "../../gorgasali/Cards/Support/Consumable/MovementConsumables";
+import GunSocket from "../../gorgasali/Cards/Support/Consumable/GunSocket";
 
 
 
-function renderCardSlot(card: CardSlotBase, isRotated: boolean, needsReload: boolean | undefined) {
-    return <CardComponent cardSlot={card} isRotated={isRotated} needsReload={needsReload ?? false} />
-}
 
-export default function CharacterComponent({ character }: CharacterProps) {
-    console.log(character);
+export default function CharacterComponent({ character, highlights = undefined }: CharacterProps) {
+
+    function renderCardSlot(card: CardSlotBase, needsReload: boolean | undefined, isAmmoBag: boolean | undefined = undefined) {
+
+        const highlight = (() => {
+            if (!card.card) return false;
+            if (!highlights) return false;
+            if (isAmmoBag) return false;
+            if (highlights.defensiveCard && card.card.type === "Defensive") return true;
+            if (highlights.healingPotion && card.card instanceof Potion) return true;
+            if (highlights.loadedWeapons && card.card instanceof WeaponCard) return true;
+            if (highlights.movementCard && card.card instanceof MovementConsumable) return true;
+            if (highlights.throwableCard && card.card.type === "Throwable") return true;
+            if (highlights.weaponExtensionCard && card.card instanceof GunSocket) return true;
+            return false;
+        })();
+
+        return <CardComponent cardSlot={card} needsReload={needsReload ?? false} highlight={highlight} />
+    }
+
     return <div className={"character " + convertToCssClass(character.name)}>
         <div className="row">
             <div className="col-md-10" >
@@ -29,19 +48,19 @@ export default function CharacterComponent({ character }: CharacterProps) {
                 <table>
                     <tr>
                         <td>
-                            {renderCardSlot(character.weaponSlot2, false, character.weaponSlot1?.needsReload)}
-                            {renderCardSlot(character.weaponSlot1, false, character.weaponSlot1?.needsReload)}
+                            {renderCardSlot(character.weaponSlot2, character.weaponSlot1?.needsReload)}
+                            {renderCardSlot(character.weaponSlot1, character.weaponSlot1?.needsReload)}
                         </td>
                         <td>
-                            {renderCardSlot(character.defensiveConsumable, false, false)}
+                            {renderCardSlot(character.defensiveConsumable, false)}
                         </td>
                         <td>
-                            {renderCardSlot(character.consumable1, false, false)}
-                            {renderCardSlot(character.consumable2, false, false)}
+                            {renderCardSlot(character.consumable1, false)}
+                            {renderCardSlot(character.consumable2, false)}
                         </td>
-                        <td>{renderCardSlot(character.throwable, false, false)}</td>
-                        <td>{renderCardSlot(character.helmet, false, false)}
-                            {renderCardSlot(character.bodyArmor, false, false)}</td>
+                        <td>{renderCardSlot(character.throwable, false)}</td>
+                        <td>{renderCardSlot(character.helmet, false)}
+                            {renderCardSlot(character.bodyArmor, false)}</td>
                     </tr>
                 </table>
 
@@ -49,9 +68,9 @@ export default function CharacterComponent({ character }: CharacterProps) {
 
                 <div className="row">
                     <div className="col-md-3 rotated">
-                        {renderCardSlot(character.consumableBagSlot1, false, false)}
-                        {renderCardSlot(character.consumableBagSlot2, false, false)}
-                        {renderCardSlot(character.throwableBagSlot, false, false)}
+                        {renderCardSlot(character.consumableBagSlot1, false, true)}
+                        {renderCardSlot(character.consumableBagSlot2, false, true)}
+                        {renderCardSlot(character.throwableBagSlot, false, true)}
                     </div>
                 </div>
             </div>
@@ -80,5 +99,15 @@ export function convertToCssClass(name: string) {
 }
 
 interface CharacterProps {
-    character: Character
+    character: Character,
+    highlights?: Highlights
+}
+
+export interface Highlights {
+    healingPotion?: boolean,
+    movementCard?: boolean,
+    defensiveCard?: boolean,
+    throwableCard?: boolean,
+    weaponExtensionCard?: boolean,
+    loadedWeapons?: boolean,
 }

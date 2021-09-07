@@ -23,7 +23,7 @@ export default TurnStateMachine
 
 ///// states
 
-class Initial {
+export class Initial {
     useHealingCard(action: UseHealingCard): HealingCardUsed {
         return new HealingCardUsed();
     }
@@ -37,17 +37,17 @@ class Initial {
     }
 }
 
-class HealingCardUsed {
+export class HealingCardUsed {
     rollDice(action: RollDice) {
         return new MovementDiceRolled();
     }
 }
-class AmmoBagUsed {
+export class AmmoBagUsed {
     rollDice(action: RollDice) {
         return new MovementDiceRolled();
     }
 }
-class MovementDiceRolled {
+export class MovementDiceRolled {
 
     skipMovement(): Moved {
         return new Moved();
@@ -61,13 +61,13 @@ class MovementDiceRolled {
     }
 }
 
-class MovementCardUsed {
+export class MovementCardUsed {
     move(action: Move) {
         return new Moved();
     }
 }
 
-class Moved {
+export class Moved {
     useDefensiveCard(action: UseDefensiveCard) {
         return new DefensiveCardUsed();
     }
@@ -92,7 +92,7 @@ class Moved {
     }
 }
 
-class DefensiveCardUsed {
+export class DefensiveCardUsed {
     reloadWeapons(action: RealoadWeapons) {
         return new TurnEnded();
     }
@@ -107,7 +107,7 @@ class DefensiveCardUsed {
         return new TurnEnded();
     }
 }
-class ThrowableCardUsed {
+export class ThrowableCardUsed {
     reloadWeapons(action: RealoadWeapons) {
         return new TurnEnded();
     }
@@ -122,12 +122,12 @@ class ThrowableCardUsed {
         return new TurnEnded();
     }
 }
-class WeaponExtensionCardUsed {
+export class WeaponExtensionCardUsed {
     shootEnemy(action: ShootEnemy) {
         return new TurnEnded();
     }
 }
-class TurnEnded { }
+export class TurnEnded { }
 
 ////// Actions
 
