@@ -9,6 +9,6 @@ export default abstract class CharacterAbility {
         public text: string,
         public range: number | undefined = undefined,
         public cooldown: number | undefined = undefined) {
-            this.charge = 0;
+            this.charge = 1;
     }
 }

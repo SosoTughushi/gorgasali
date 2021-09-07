@@ -20,8 +20,8 @@ export default function CharacterComponent({ character }: CharacterProps) {
     return <div className={"character " + convertToCssClass(character.name)}>
         <div className="row">
             <div className="col-md-10" >
-                <ProgressBar>
-                    <ProgressBar variant="success" now={character.health} key={1} />
+                <ProgressBar >
+                    <ProgressBar variant="success" now={character.health} key={1} animated label={character.health} />
                     <ProgressBar variant="danger" now={100 - character.health} key={3} />
                 </ProgressBar>
 
@@ -63,7 +63,7 @@ export default function CharacterComponent({ character }: CharacterProps) {
                     <div className="text">{character.ability.text}
                         {character.ability.range ? <Range range={character.ability.range} /> : ""}
                         {character.ability.cooldown ? (
-                            <ProgressBar variant="success" now={(character.ability.charge + 1) / character.ability.cooldown * 100} />
+                            <ProgressBar now={(character.ability.charge) / character.ability.cooldown * 100} animated label={character.ability.charge + "/" + character.ability.cooldown} />
                         ) : ""}</div>
                 </div>
                 <br />

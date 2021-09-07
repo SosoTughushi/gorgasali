@@ -43,9 +43,9 @@ export default class Deck {
             new MagicField(), // 8x
             new TreePlatform(), // 8x
 
-            new Potion("Small", 20), // 15
-            new Potion("Medium", 50), // 8
-            new Potion("Large", 100), //5
+            new Potion("Small"), // 15
+            new Potion("Medium"), // 8
+            new Potion("Large"), //5
 
             new ObstacleNulifier("water"), //15x
             new ObstacleNulifier("mountain"),//15x

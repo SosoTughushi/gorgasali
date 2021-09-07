@@ -3,7 +3,7 @@ import { Consumable } from "./Consumable";
 
 
 
-abstract class MovementConsumable extends Consumable { }
+export abstract class MovementConsumable extends Consumable { }
 
 export class Teleport extends MovementConsumable {
     constructor() {

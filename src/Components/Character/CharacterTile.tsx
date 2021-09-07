@@ -13,11 +13,11 @@ export default function CharacterTile({ character, onCharacterTileClick, isSelec
             <div className="col-md-8">
                 <h3><CharacterSymbol name={character.name} /> {character.name}</h3>
                 <ProgressBar>
-                    <ProgressBar variant="success" now={character.health} key={1} />
-                    <ProgressBar variant="danger" now={100 - character.health} key={3} />
+                    <ProgressBar variant="success" now={character.health} key={1} animated label={character.health} />
+                    <ProgressBar variant="danger" now={100 - character.health} key={3} animated />
                 </ProgressBar>
                 {character.ability.cooldown ? (
-                    <ProgressBar now={(character.ability.charge + 1) / character.ability.cooldown * 100} />
+                    <ProgressBar now={(character.ability.charge) / character.ability.cooldown * 100} />
                 ) : ""}
             </div>
         </div>
