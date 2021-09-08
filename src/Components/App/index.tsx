@@ -32,9 +32,17 @@ import CharacterTileList from '../Character/CharacterTileList';
 import Turn from "../Turn";
 import { AmmoBagUsed, DefensiveCardUsed, HealingCardUsed, Initial, Moved, MovementCardUsed, MovementDiceRolled, ThrowableCardUsed, TurnEnded, WeaponExtensionCardUsed } from '../../gorgasali/turnStateMachine';
 import Potion from '../../gorgasali/Cards/Support/Consumable/Potion';
+import CardSlot from '../../gorgasali/Characters/CardSlot';
 
 function App() {
   const deck = new Deck();
+
+  const toCardComponent = (card: Card) => {
+    const slot = new CardSlot("Whatever");
+    slot.card = card;
+    return <CardComponent cardSlot={slot} needsReload={false} />
+  }
+  const cards = deck.supportCards.map(toCardComponent).concat(deck.weaponCards.map(toCardComponent))
 
   const [board] = useState(() => {
     const b = new BoardClass();
@@ -60,9 +68,11 @@ function App() {
   const emoon = createEmoon();
   return (
     <div className="App">
+      {cards}
       <div className="row">
+        
         <div className="col-md-2">
-          <Turn turn={new Initial()} character={emoon} />
+          {/* <Turn turn={new Initial()} character={emoon} />
           <Turn turn={new HealingCardUsed()} character={emoon} />
           <Turn turn={new AmmoBagUsed()} character={emoon} />
           <Turn turn={new MovementDiceRolled()} character={emoon} />
@@ -70,7 +80,7 @@ function App() {
           <Turn turn={new Moved()} character={emoon} />
           <Turn turn={new DefensiveCardUsed()} character={emoon} />
           <Turn turn={new WeaponExtensionCardUsed()} character={emoon} />
-          <Turn turn={new TurnEnded()} character={emoon} />
+          <Turn turn={new TurnEnded()} character={emoon} /> */}
 
           {/* <CharacterTileList characters={board.characters} onCharacterTileClick={character => setSelectedCharacter(character)} selectedCharacter={selecterCharacter} /> */}
         </div>

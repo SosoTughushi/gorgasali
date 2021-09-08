@@ -35,7 +35,7 @@ function Board({ board, onTileClick, selectedCharacter }: BoardProps) {
 interface BoardProps {
     board: BoardClass;
     onTileClick(tile: TileClass): void;
-    selectedCharacter: Character | undefined
+    selectedCharacter: Character | undefined;
 }
 
 export default Board;

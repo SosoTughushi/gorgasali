@@ -17,9 +17,9 @@ export default function Card({ cardSlot,  highlight = false }: CardProps) {
     }
     return <div className={"weapon-card " + cardSlot.card.level  + highlightedClass}>
         <div className="type">{cardSlot.card.type}</div>
-        <div className="name">{cardSlot.name}</div>
+        <div className="name">{cardSlot.card.name}</div>
         <div className="weaponImage">
-            <Images name={cardSlot.name} type={cardSlot.card.type} />
+            <Images name={cardSlot.card.name} type={cardSlot.card.type} />
         </div>
         {cardSlot.card.damage ? <Damage damage={cardSlot.card.damage} /> : ""}
         {cardSlot.card.diceCount ? <Dice count={cardSlot.card.diceCount} /> : ""}
