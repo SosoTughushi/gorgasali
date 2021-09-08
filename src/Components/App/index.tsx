@@ -30,9 +30,10 @@ import { Teleport } from '../../gorgasali/Cards/Support/Consumable/MovementConsu
 import SmokeBulb from '../../gorgasali/Cards/Support/Throwable/SmokeBulb';
 import CharacterTileList from '../Character/CharacterTileList';
 import Turn from "../Turn";
-import { AmmoBagUsed, DefensiveCardUsed, HealingCardUsed, Initial, Moved, MovementCardUsed, MovementDiceRolled, ThrowableCardUsed, TurnEnded, WeaponExtensionCardUsed } from '../../gorgasali/turnStateMachine';
+import TurnStateMachine, { AmmoBagUsed, DefensiveCardUsed, HealingCardUsed, Initial, Moved, MovementCardUsed, MovementDiceRolled, ThrowableCardUsed, TurnEnded, WeaponExtensionCardUsed } from '../../gorgasali/turnStateMachine';
 import Potion from '../../gorgasali/Cards/Support/Consumable/Potion';
 import CardSlot from '../../gorgasali/Characters/CardSlot';
+import AmmoBag from '../../gorgasali/Cards/Support/Consumable/AmmoBag';
 
 function App() {
   const deck = new Deck();
@@ -61,6 +62,7 @@ function App() {
     return b;
   });
   const [selecterCharacter, setSelectedCharacter] = useState<Character | undefined>()
+  const [turn, setTurn] = useState<TurnStateMachine>(() => new Initial());
 
 
 
@@ -68,19 +70,11 @@ function App() {
   const emoon = createEmoon();
   return (
     <div className="App">
-      {cards}
+
+      <Turn turn={turn} character={emoon} onStateChange={newTurn => setTurn(newTurn)}/>
       <div className="row">
-        
+
         <div className="col-md-2">
-          {/* <Turn turn={new Initial()} character={emoon} />
-          <Turn turn={new HealingCardUsed()} character={emoon} />
-          <Turn turn={new AmmoBagUsed()} character={emoon} />
-          <Turn turn={new MovementDiceRolled()} character={emoon} />
-          <Turn turn={new MovementCardUsed()} character={emoon} />
-          <Turn turn={new Moved()} character={emoon} />
-          <Turn turn={new DefensiveCardUsed()} character={emoon} />
-          <Turn turn={new WeaponExtensionCardUsed()} character={emoon} />
-          <Turn turn={new TurnEnded()} character={emoon} /> */}
 
           {/* <CharacterTileList characters={board.characters} onCharacterTileClick={character => setSelectedCharacter(character)} selectedCharacter={selecterCharacter} /> */}
         </div>
@@ -104,7 +98,7 @@ function createEmoon() {
   ebue.weaponSlot1.card = new ScoutWeaponCard("Scum", "epic", 22, noSpecialSkill);
   ebue.weaponSlot2.card = new MassiveWeaponCard("Grdzaaa", "rare", 143, noSpecialSkill, 60);
   ebue.defensiveConsumable.card = new MagicField();
-  ebue.consumable1.card = new ObstacleNulifier("forest");
+  ebue.consumable1.card = new AmmoBag();
   ebue.consumable2.card = new Potion("Medium");
   ebue.throwable.card = new MagicSpear();
   ebue.helmet.card = new Helmet();

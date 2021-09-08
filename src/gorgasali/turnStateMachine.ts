@@ -24,6 +24,8 @@ export default TurnStateMachine
 ///// states
 
 export class Initial {
+    public state: "Initial" = "Initial";
+    public order = 0;
     useHealingCard(action: UseHealingCard): HealingCardUsed {
         return new HealingCardUsed();
     }
@@ -38,17 +40,25 @@ export class Initial {
 }
 
 export class HealingCardUsed {
+    public state: "HealingCardUsed" = "HealingCardUsed";
+    public order = 1;
+
     rollDice(action: RollDice) {
         return new MovementDiceRolled();
     }
 }
 export class AmmoBagUsed {
+    
+    public state: "AmmoBagUsed" = "AmmoBagUsed";
+    public order = 2;
     rollDice(action: RollDice) {
         return new MovementDiceRolled();
     }
 }
 export class MovementDiceRolled {
 
+    public state: "MovementDiceRolled" = "MovementDiceRolled";
+    public order = 3;
     skipMovement(): Moved {
         return new Moved();
     }
@@ -62,12 +72,18 @@ export class MovementDiceRolled {
 }
 
 export class MovementCardUsed {
+    public state: "MovementCardUsed" = "MovementCardUsed";
+    public order = 4;
+
     move(action: Move) {
         return new Moved();
     }
 }
 
 export class Moved {
+    public state: "Moved" = "Moved";
+    public order = 5;
+
     useDefensiveCard(action: UseDefensiveCard) {
         return new DefensiveCardUsed();
     }
@@ -93,6 +109,9 @@ export class Moved {
 }
 
 export class DefensiveCardUsed {
+    public state: "DefensiveCardUsed" = "DefensiveCardUsed";
+    public order = 6;
+
     reloadWeapons(action: RealoadWeapons) {
         return new TurnEnded();
     }
@@ -108,6 +127,9 @@ export class DefensiveCardUsed {
     }
 }
 export class ThrowableCardUsed {
+    public state: "ThrowableCardUsed" = "ThrowableCardUsed";
+    public order = 7;
+
     reloadWeapons(action: RealoadWeapons) {
         return new TurnEnded();
     }
@@ -123,11 +145,17 @@ export class ThrowableCardUsed {
     }
 }
 export class WeaponExtensionCardUsed {
+    public state: "WeaponExtensionCardUsed" = "WeaponExtensionCardUsed";
+    public order = 8;
+
     shootEnemy(action: ShootEnemy) {
         return new TurnEnded();
     }
 }
-export class TurnEnded { }
+export class TurnEnded { 
+    public state: "TurnEnded" = "TurnEnded";
+    public order = 9;
+}
 
 ////// Actions
 

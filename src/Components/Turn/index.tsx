@@ -1,92 +1,93 @@
 import React from 'react';
 import CharacterClass from '../../gorgasali/Characters/Character';
-import Character, { Highlights } from "../Character";
+import Character, { CardHandlers } from "../Character";
 import TurnStateMachine, { Initial, HealingCardUsed, AmmoBagUsed, MovementDiceRolled, MovementCardUsed, Moved, DefensiveCardUsed, ThrowableCardUsed, WeaponExtensionCardUsed, TurnEnded } from '../../gorgasali/turnStateMachine';
 import Card from '../Cards/Card/Index';
 import { Button } from 'react-bootstrap';
+import ProgressBar from 'react-bootstrap/ProgressBar';
 
-export default function Turn({ turn, character }: TurnProps) {
-    let highlights: Highlights = {};
-    let rollDice = false;
-    let useAmmoBag = false;
-    let move = false;
-    let skip = false;
-    let reload = false;
-    let manageBackpack = false;
-    let name = "";
-    if (turn instanceof Initial) {
-        highlights = { healingPotion: true };
-        rollDice = true;
-        useAmmoBag = true;
+export default function Turn({ turn, character, onStateChange }: TurnProps) {
+    let handlers: CardHandlers = {};
 
-        name = "Initial";
+    const actions: JSX.Element[] = [];
+    const addAction = (name: string, nextState: () => TurnStateMachine) => {
+        const button = <Button onClick={() => {
+            const newState = nextState();
+            onStateChange(newState);
+        }}>{name}</Button>;
+        actions.push(button);
     }
-    if (turn instanceof HealingCardUsed) {
-        rollDice = true;
-        name = "HealingCardUsed";
+    if (turn.state === "Initial") {
+        handlers = {
+            healingPotion: card => onStateChange(turn.useHealingCard({ card: card })),
+            ammoBag: card => onStateChange(turn.useAmmoBag({}))
+        };
+        addAction("Roll Dice", () => turn.rollDice({ result: 8 }));
     }
-
-    if (turn instanceof AmmoBagUsed) {
-        rollDice = true;
-        name = "AmmoBagUsed";
-    }
-    if (turn instanceof MovementDiceRolled) {
-        highlights = { movementCard: true };
-        move = true;
-        skip = true;
-        name = "MovementDiceRolled";
+    if (turn.state === "HealingCardUsed") {
+        addAction("Roll Dice", () => turn.rollDice({ result: 8 }));
     }
 
-    if (turn instanceof MovementCardUsed) {
-        move = true;
-        name = "MovementCardUsed";
+    if (turn.state === "AmmoBagUsed") {
+        addAction("Roll Dice", () => turn.rollDice({ result: 8 }));
+    }
+    if (turn.state === "MovementDiceRolled") {
+        handlers = { movementCard: card => onStateChange(turn.useMovementCard({ card: card })) };
+        addAction("Move", () => turn.move({}));
+        addAction("Skip", () => turn.skipMovement());
     }
 
-    if (turn instanceof Moved) {
-        highlights = { defensiveCard: true, throwableCard: true, weaponExtensionCard: true, loadedWeapons: true }
+    if (turn.state === "MovementCardUsed") {
+        addAction("Move", () => turn.move({}));
+    }
 
-        reload = true;
-        manageBackpack = true;
-        name = "Moved";
+    if (turn.state === "Moved") {
+        handlers = {
+            defensiveCard: card => onStateChange(turn.useDefensiveCard({ card: card })),
+            throwableCard: card => onStateChange(turn.useThrowableCard({ card: card })),
+            weaponExtensionCard: card => onStateChange(turn.useWeaponExtensionCard({ card: card })),
+            loadedWeapons: card => onStateChange(turn.shootEnemy({ card: card }))
+        }
+        addAction("Reload", () => turn.reloadWeapons({}));
+        addAction("Manage Backpack", () => turn.manageBackpack({}));
     }
-    if (turn instanceof DefensiveCardUsed) {
-        highlights = { loadedWeapons: true }
+    if (turn.state === "DefensiveCardUsed") {
+        handlers = {
+            loadedWeapons: card => onStateChange(turn.shootEnemy({ card: card }))
+        }
 
-        manageBackpack = true;
-        reload = true;
-        name = "DefensiveCardUsed";
+        addAction("Reload", () => turn.reloadWeapons({}));
+        addAction("Manage Backpack", () => turn.manageBackpack({}));
     }
-    if (turn instanceof ThrowableCardUsed) {
-        highlights = { loadedWeapons: true }
+    if (turn.state === "ThrowableCardUsed") {
+        handlers = {
+            loadedWeapons: card => onStateChange(turn.shootEnemy({ card: card }))
+        }
 
-        manageBackpack = true;
-        reload = true;
-        name = "ThrowableCardUsed";
+        addAction("Reload", () => turn.reloadWeapons({}));
+        addAction("Manage Backpack", () => turn.manageBackpack({}));
     }
-    if (turn instanceof WeaponExtensionCardUsed) {
-        highlights = { loadedWeapons: true }
-        name = "WeaponExtensionCardUsed";
+    if (turn.state === "WeaponExtensionCardUsed") {
+        handlers = {
+            loadedWeapons: card => onStateChange(turn.shootEnemy({ card: card }))
+        }
     }
-    if (turn instanceof TurnEnded) {
-        name = "TurnEnded";
+    if (turn.state === "TurnEnded") {
     }
 
     return <div>
-        <h1>{name}</h1>
         <div className="row">
+
+            <div className="col-md-12" >
+                <h2>{turn.state} </h2>
+                <ProgressBar now={turn.order / 9 * 100} />
+                <br />
+            </div>
             <div className="col-md-3">
-                {rollDice ? <Button>Roll Dice</Button> : ""}
-                <br />
-                {move ? <Button>Move</Button> : ""}
-                <br />
-                {skip ? <Button>Skip</Button> : ""}
-                <br />
-                {reload ? <Button>Reload</Button> : ""}
-                <br />
-                {manageBackpack ? <Button>Manage Backpack</Button> : ""}
+                {actions}
             </div>
             <div className="col-md-9">
-                <Character character={character} highlights={highlights} />
+                <Character character={character} cardHandlers={handlers} />
             </div>
         </div>
 
@@ -95,5 +96,6 @@ export default function Turn({ turn, character }: TurnProps) {
 }
 interface TurnProps {
     turn: TurnStateMachine,
-    character: CharacterClass
+    character: CharacterClass,
+    onStateChange(state: TurnStateMachine): void;
 }

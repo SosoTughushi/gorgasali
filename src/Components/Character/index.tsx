@@ -13,28 +13,80 @@ import Potion from "../../gorgasali/Cards/Support/Consumable/Potion";
 import WeaponCard from "../../gorgasali/Cards/Weapons/WeaponCard";
 import { MovementConsumable } from "../../gorgasali/Cards/Support/Consumable/MovementConsumables";
 import GunSocket from "../../gorgasali/Cards/Support/Consumable/GunSocket";
+import { Defensive } from "../../gorgasali/Cards/Support/Defensive/Defensive";
+import Throwable from "../../gorgasali/Cards/Support/Throwable/Throwable";
+import AmmoBag from "../../gorgasali/Cards/Support/Consumable/AmmoBag";
 
 
 
 
-export default function CharacterComponent({ character, highlights = undefined }: CharacterProps) {
+export default function CharacterComponent({ character, cardHandlers }: CharacterProps) {
 
-    function renderCardSlot(card: CardSlotBase, needsReload: boolean | undefined, isAmmoBag: boolean | undefined = undefined) {
+    function renderCardSlot(slot: CardSlotBase, needsReload: boolean | undefined, isAmmoBag: boolean | undefined = undefined) {
 
-        const highlight = (() => {
-            if (!card.card) return false;
-            if (!highlights) return false;
-            if (isAmmoBag) return false;
-            if (highlights.defensiveCard && card.card.type === "Defensive") return true;
-            if (highlights.healingPotion && card.card instanceof Potion) return true;
-            if (highlights.loadedWeapons && card.card instanceof WeaponCard) return true;
-            if (highlights.movementCard && card.card instanceof MovementConsumable) return true;
-            if (highlights.throwableCard && card.card.type === "Throwable") return true;
-            if (highlights.weaponExtensionCard && card.card instanceof GunSocket) return true;
-            return false;
+        const handler = (() => {
+            if (!slot.card) return undefined;
+            if (!cardHandlers) return undefined;
+            if (isAmmoBag) return undefined;
+            if (cardHandlers.defensiveCard && slot.card.type === "Defensive") {
+                return () => {
+                    if (cardHandlers.defensiveCard) {
+                        cardHandlers.defensiveCard(slot.card as Defensive);
+                    }
+                }
+            }
+            if (cardHandlers.healingPotion && slot.card instanceof Potion) {
+                return () => {
+                    if (cardHandlers.healingPotion) {
+                        cardHandlers.healingPotion(slot.card as Potion)
+                    }
+                }
+            }
+            if (cardHandlers.loadedWeapons && slot.card instanceof WeaponCard) {
+                return () => {
+                    if (cardHandlers.loadedWeapons) {
+                        cardHandlers.loadedWeapons(slot.card as WeaponCard)
+                    }
+                }
+            }
+            if (cardHandlers.movementCard && slot.card instanceof MovementConsumable) {
+                return () => {
+                    if (cardHandlers.movementCard) {
+                        cardHandlers.movementCard(slot.card as MovementConsumable)
+                    }
+                }
+            }
+            if (cardHandlers.throwableCard && slot.card.type === "Throwable") {
+                return () => {
+                    if (cardHandlers.throwableCard) {
+                        cardHandlers.throwableCard(slot.card as Throwable)
+                    }
+                }
+            }
+            if (cardHandlers.weaponExtensionCard && slot.card instanceof GunSocket) {
+                return () => {
+                    if (cardHandlers.weaponExtensionCard) {
+                        cardHandlers.weaponExtensionCard(slot.card as GunSocket)
+                    }
+                }
+            }
+            if (cardHandlers.ammoBag && slot.card.name === "Ammo bag") {
+                return () => {
+                    if (cardHandlers.ammoBag) {
+                        cardHandlers.ammoBag(slot.card as AmmoBag)
+                    }
+                }
+            }
+            return undefined;
         })();
 
-        return <CardComponent cardSlot={card} needsReload={needsReload ?? false} highlight={highlight} />
+        const highlight = handler != undefined;
+
+        if (handler) {
+            return <div onClick={() => handler()}> <CardComponent cardSlot={slot} needsReload={needsReload ?? false} highlight={highlight} /></div>
+        }
+
+        return <CardComponent cardSlot={slot} needsReload={needsReload ?? false} highlight={highlight} />;
     }
 
     return <div className={"character " + convertToCssClass(character.name)}>
@@ -100,14 +152,15 @@ export function convertToCssClass(name: string) {
 
 interface CharacterProps {
     character: Character,
-    highlights?: Highlights
+    cardHandlers?: CardHandlers
 }
 
-export interface Highlights {
-    healingPotion?: boolean,
-    movementCard?: boolean,
-    defensiveCard?: boolean,
-    throwableCard?: boolean,
-    weaponExtensionCard?: boolean,
-    loadedWeapons?: boolean,
+export interface CardHandlers {
+    healingPotion?(card: Potion): void,
+    movementCard?(card: MovementConsumable): void,
+    defensiveCard?(card: Defensive): void,
+    throwableCard?(card: Throwable): void,
+    weaponExtensionCard?(card: GunSocket): void,
+    loadedWeapons?(card: WeaponCard): void,
+    ammoBag?(card: AmmoBag): void,
 }
