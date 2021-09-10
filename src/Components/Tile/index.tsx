@@ -16,10 +16,14 @@ export default function Tile({ tile, onTileClick, attributes }: TileProps) {
   classes += getAttributeClasses(attributes);
 
   return (
-    <span className={classes} onClick={(ev) => onTileClick(tile)} >
-      {tile.hasBox ? (<FontAwesomeIcon icon={faBox} />) : ("")}
-      {tile.character ? (<h2><CharacterSymbol name={tile.character.name} /></h2>) : ("")}
-    </span>
+    <div className={classes} onClick={(ev) => onTileClick(tile)} >
+
+      <span >
+        {tile.hasBox && !tile.character && (<FontAwesomeIcon icon={faBox} />)}
+        {tile.character && (<h2><CharacterSymbol name={tile.character.name} /></h2>)}
+      </span>
+      {attributes.isHighlighted && <div className="highlighted" />}
+    </div>
   );
 }
 
@@ -48,6 +52,9 @@ function getAttributeClasses(attributes: TileVisualAttributes) {
   if (attributes.isSelected) {
     return " character-selected";
   }
+  if(attributes.isCurrentPlayer) {
+    return " current-player";
+  }
   return "";
 }
 
@@ -59,5 +66,7 @@ interface TileProps {
 
 export interface TileVisualAttributes {
   isSelected?: boolean;
+  isHighlighted?: boolean;
+  isCurrentPlayer?: boolean;
 }
 

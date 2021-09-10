@@ -1,29 +1,34 @@
 import Character from "./Characters/Character";
-import Tile, {convertToIndex} from "./Tile";
+import Tile, { convertToIndex } from "./Tile";
 
 export default class Board {
     private tiles: Tile[];
     private currentPlayerIndex = 0;
-    
-    private _characters : Character[];
-    public get characters() : Character[] {
-        return this._characters;
+
+    private _characters: { character: Character, position: number }[];
+    public get characters(): Character[] {
+        return this._characters.map(c => c.character);
     }
 
     public get currentPlayer(): Character {
         const index = this.currentPlayerIndex % this._characters.length;
-        return this._characters[index];
+        return this._characters[index].character;
     }
-    
+
+    private get currentPlayerPosition(): number {
+        const index = this.currentPlayerIndex % this._characters.length;
+        return this._characters[index].position;
+    }
+
     constructor() {
         this.tiles = generateTiles();
         this._characters = [];
     }
 
-    public placeCharacter(x:number, y:number,character: Character) {
-        this._characters.push(character);
+    public placeCharacter(x: number, y: number, character: Character) {
+        const index = convertToIndex(x, y);
+        this._characters.push({ character: character, position: index });
 
-        const index = convertToIndex(x,y);
         const targetTile = this.tiles[index];
         targetTile.character = character;
     }
@@ -33,8 +38,26 @@ export default class Board {
     }
 
     public nextPlayer() {
-        this.currentPlayerIndex ++;
+        this.currentPlayerIndex++;
     }
+
+    public isInRange(targetX: number, targetY: number, maxRange: number) {
+        const { x, y } = convertToCoordinates(this.currentPlayerPosition);
+        if(x === targetX && y === targetY) {
+            return false;
+        }
+
+        const diffX = Math.abs(targetX-x);
+        const diffY = Math.abs(targetY-y);
+
+        return Math.max(diffX,diffY) <= maxRange;
+    }
+}
+
+function convertToCoordinates(index: number) {
+    const x = index % 30;
+    const y = (index - x) / 30;
+    return { x, y };
 }
 
 function generateTiles(): Tile[] {
@@ -62,7 +85,7 @@ function generateTiles(): Tile[] {
     generateTiles(5, "healingPlace");
     generateTiles(tileIndexes.length, "flat");
 
-    const addBoxes = ( zone: number, count: number) => {
+    const addBoxes = (zone: number, count: number) => {
         tileIndexes = tiles.filter(t => t.zone === zone).map(t => t.index);
         for (let i = 0; i < count; i++) {
             const index = getRandomAndRemove();

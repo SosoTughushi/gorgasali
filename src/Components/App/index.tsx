@@ -49,15 +49,15 @@ function App() {
   const [board] = useState(() => {
     const b = new BoardClass();
 
-    b.placeCharacter(0, 0, createEbue());
-    b.placeCharacter(1, 0, createArmazi());
-    b.placeCharacter(2, 0, createMedea());
-    b.placeCharacter(3, 0, createTharsis());
-    b.placeCharacter(4, 0, createVaras());
-    b.placeCharacter(5, 0, createTsiva());
-    b.placeCharacter(6, 0, createOctor());
-    b.placeCharacter(7, 0, createKruber());
-    b.placeCharacter(8, 0, createDrain());
+    b.placeCharacter(5, 9, createEbue());
+    b.placeCharacter(9, 15, createArmazi());
+    b.placeCharacter(24, 3, createMedea());
+    b.placeCharacter(26, 8, createTharsis());
+    b.placeCharacter(13, 22, createVaras());
+    b.placeCharacter(11, 6, createTsiva());
+    b.placeCharacter(0, 16, createOctor());
+    b.placeCharacter(18, 2, createKruber());
+    b.placeCharacter(23, 4, createDrain());
     b.placeCharacter(9, 0, createEmoon());
 
     return b;

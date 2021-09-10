@@ -13,11 +13,18 @@ function Board({ board, onTileClick, selectedCharacter }: BoardProps) {
     const tiles = board
         .getTiles();
 
-    const isCharacterSelected = (tile: TileClass) => selectedCharacter && selectedCharacter === tile.character;
 
     const tileComponents =
         tiles
-            .map(tile => (<Tile tile={tile} onTileClick={onTileClick} attributes={{ isSelected: isCharacterSelected(tile) }} />));
+            .map(tile => (<Tile 
+                tile={tile} 
+                onTileClick={onTileClick} 
+                attributes={{ 
+                    isSelected: selectedCharacter && selectedCharacter === tile.character, 
+                    isHighlighted: board.isInRange(tile.x, tile.y, 3),
+                    isCurrentPlayer: board.currentPlayer === tile.character
+                }} />
+                ));
 
     const sliced =
         Array

@@ -6,23 +6,42 @@
     margin: 1px;
     text-align: center;
     font-size: x-small;
+    position: relative;
     &.flat {
         background: rgb(253, 245, 216);
+        .highlighted {
+            background: green;
+        }
     }
     &.forest {
         background: rgb(57, 114, 79);
+        .highlighted {
+            background: yellow;
+        }
     }
     &.water {
         background: rgb(15, 153, 218);
+        .highlighted {
+            background: yellow;
+        }
     }
     &.mountain {
         background: rgb(98, 77, 44);
+        .highlighted {
+            background: yellow;
+        }
     }
     &.healingPlace {
         background: rgb(255, 251, 18);
+        .highlighted {
+            background: yellow;
+        }
     }
     &.bridge {
         background: rgb(66, 66, 66);
+        .highlighted {
+            background: yellow;
+        }
     }
     &.left-border {
         border-left-color: rgb(34, 34, 34);
@@ -40,7 +59,20 @@
         color: blueviolet;
         border-color: blueviolet;
     }
+    &.current-player {
+        color: purple;
+        border-color: purple;
+    }
     &:hover {
         background-color: white;
+    }
+    .highlighted {
+        width: 8px;
+        height: 8px;
+        position: absolute;
+        border-radius: 50%;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
     }
 }
