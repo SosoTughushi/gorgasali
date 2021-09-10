@@ -14,6 +14,7 @@ function Board({ board, onTileClick, selectedCharacter }: BoardProps) {
         .getTiles();
 
 
+    const availableMoves = board.getAvailableDestinations(12);
     const tileComponents =
         tiles
             .map(tile => (<Tile 
@@ -21,7 +22,8 @@ function Board({ board, onTileClick, selectedCharacter }: BoardProps) {
                 onTileClick={onTileClick} 
                 attributes={{ 
                     isSelected: selectedCharacter && selectedCharacter === tile.character, 
-                    isHighlighted: board.isInRange(tile.x, tile.y, 3),
+                    isHighlighted: availableMoves.has(tile.index),
+                    isDimmed: !availableMoves.has(tile.index),
                     isCurrentPlayer: board.currentPlayer === tile.character
                 }} />
                 ));

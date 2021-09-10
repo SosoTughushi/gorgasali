@@ -7,9 +7,10 @@
     text-align: center;
     color: whitesmoke;
     &.highlight {
-        border: 10px solid goldenrod;
+        filter: brightness(170%);
         &:hover {
             color: goldenrod;
+            border: 10px solid goldenrod;
         }
     }
     &.needs-reload {

@@ -22,7 +22,6 @@ export default function Tile({ tile, onTileClick, attributes }: TileProps) {
         {tile.hasBox && !tile.character && (<FontAwesomeIcon icon={faBox} />)}
         {tile.character && (<h2><CharacterSymbol name={tile.character.name} /></h2>)}
       </span>
-      {attributes.isHighlighted && <div className="highlighted" />}
     </div>
   );
 }
@@ -52,8 +51,16 @@ function getAttributeClasses(attributes: TileVisualAttributes) {
   if (attributes.isSelected) {
     return " character-selected";
   }
-  if(attributes.isCurrentPlayer) {
+  if (attributes.isCurrentPlayer) {
     return " current-player";
+  }
+
+  if (attributes.isDimmed) {
+    return " dim";
+  }
+
+  if(attributes.isHighlighted) {
+    return " highlighted";
   }
   return "";
 }
@@ -68,5 +75,6 @@ export interface TileVisualAttributes {
   isSelected?: boolean;
   isHighlighted?: boolean;
   isCurrentPlayer?: boolean;
+  isDimmed?: boolean;
 }
 
