@@ -1,5 +1,6 @@
 import Terrain from "../../../Terrain";
 import { CardSpecialSkill } from "../../Card";
+import TurnContext from "../../../Turn/TurnContext";
 import { MovementConsumable } from "./MovementConsumables";
 
 export default class ObstacleNulifier extends MovementConsumable {
@@ -9,13 +10,18 @@ export default class ObstacleNulifier extends MovementConsumable {
     }
 }
 
+export type ObstacleType = "water" | "mountain" | "forest";
+
 class ObstacleNulifierSpecialSkill extends CardSpecialSkill {
-    constructor(obstacle: "water" | "mountain" | "forest") {
+    use(context: TurnContext): void {
+        throw new Error("Method not implemented.");
+    }
+    constructor(obstacle: ObstacleType) {
         super("Move on the " + obstacle + " without penalty");
     }
 }
 
-function mapObstacleToName(obstacle: "water" | "mountain" | "forest"): string {
+function mapObstacleToName(obstacle: ObstacleType): string {
     switch (obstacle) {
         case "forest": return "Axe";
         case "mountain": return "Mountain rope";

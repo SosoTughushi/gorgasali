@@ -6,16 +6,18 @@ import Damage from '../Common/Damage';
 import SuccessCriteria from '../SuccessCriteria';
 import { CardSlotBase } from '../../../gorgasali/Characters/CardSlot';
 
-export default function Card({ cardSlot,  highlight = false }: CardProps) {
-    const highlightedClass = highlight? " highlight": "";
+export default function Card({ cardSlot, highlight = false, needsReload }: CardProps) {
+    const highlightedClass = highlight ? " highlight" : "";
+    const reloadClass = needsReload ? " needs-reload" : "";
     if (!cardSlot.card) {
-        return <div className={"weapon-card" }>
+        return <div className={"weapon-card"}>
             <div className="placeholder-text">
                 {cardSlot.name}
             </div>
         </div>
     }
-    return <div className={"weapon-card " + cardSlot.card.level  + highlightedClass}>
+    
+    return <div className={"weapon-card " + cardSlot.card.level + highlightedClass + reloadClass}>
         <div className="type">{cardSlot.card.type}</div>
         <div className="name">{cardSlot.card.name}</div>
         <div className="weaponImage">

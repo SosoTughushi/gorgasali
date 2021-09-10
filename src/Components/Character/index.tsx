@@ -3,12 +3,12 @@ import "./Character.scss";
 import ProgressBar from 'react-bootstrap/ProgressBar';
 import CardComponent from "../Cards/Card/Index";
 import Range from '../Cards/Common/Range';
-import { Card as PlayCard } from "../../gorgasali/Cards/Card";
+import { Card, Card as PlayCard } from "../../gorgasali/Cards/Card";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBox } from '@fortawesome/free-solid-svg-icons';
 import Badge from "react-bootstrap/Badge";
 import CharacterSymbol from "./CharacterSybol";
-import { CardSlotBase } from "../../gorgasali/Characters/CardSlot";
+import CardSlot, { CardSlotBase, WeaponSlot } from "../../gorgasali/Characters/CardSlot";
 import Potion from "../../gorgasali/Cards/Support/Consumable/Potion";
 import WeaponCard from "../../gorgasali/Cards/Weapons/WeaponCard";
 import { MovementConsumable } from "../../gorgasali/Cards/Support/Consumable/MovementConsumables";
@@ -16,69 +16,64 @@ import GunSocket from "../../gorgasali/Cards/Support/Consumable/GunSocket";
 import { Defensive } from "../../gorgasali/Cards/Support/Defensive/Defensive";
 import Throwable from "../../gorgasali/Cards/Support/Throwable/Throwable";
 import AmmoBag from "../../gorgasali/Cards/Support/Consumable/AmmoBag";
+import Board from "../../gorgasali/board";
+import TurnContext from "../../gorgasali/Turn/TurnContext";
 
 
 
 
-export default function CharacterComponent({ character, cardHandlers }: CharacterProps) {
+export default function CharacterComponent({ character, cardHandlers, turnContext }: CharacterProps) {
 
     function renderCardSlot(slot: CardSlotBase, needsReload: boolean | undefined, isAmmoBag: boolean | undefined = undefined) {
 
-        const handler = (() => {
+
+        const createHandler = (() => {
+            if (!turnContext) return undefined;
+            const context = turnContext;
             if (!slot.card) return undefined;
             if (!cardHandlers) return undefined;
             if (isAmmoBag) return undefined;
-            if (cardHandlers.defensiveCard && slot.card.type === "Defensive") {
+            if (needsReload) return undefined;
+
+
+            function onCardClick<T extends Card>(card: T,  cardCallback: (card: T) => void){
                 return () => {
-                    if (cardHandlers.defensiveCard) {
-                        cardHandlers.defensiveCard(slot.card as Defensive);
+                    cardCallback(card);
+                    turnContext?.usedCards.push(card);
+                    card.specialSkill.use(context);
+                    if (slot instanceof WeaponSlot) {
+                        slot.needsReload = true;
+                    } else {
+                        slot.card = undefined;
                     }
                 }
+            }
+
+            if (cardHandlers.defensiveCard && slot.card.type === "Defensive") {
+                return onCardClick(slot.card as Defensive, cardHandlers.defensiveCard);
             }
             if (cardHandlers.healingPotion && slot.card instanceof Potion) {
-                return () => {
-                    if (cardHandlers.healingPotion) {
-                        cardHandlers.healingPotion(slot.card as Potion)
-                    }
-                }
+                return onCardClick(slot.card, cardHandlers.healingPotion);
             }
             if (cardHandlers.loadedWeapons && slot.card instanceof WeaponCard) {
-                return () => {
-                    if (cardHandlers.loadedWeapons) {
-                        cardHandlers.loadedWeapons(slot.card as WeaponCard)
-                    }
-                }
+                return onCardClick(slot.card, cardHandlers.loadedWeapons);
             }
             if (cardHandlers.movementCard && slot.card instanceof MovementConsumable) {
-                return () => {
-                    if (cardHandlers.movementCard) {
-                        cardHandlers.movementCard(slot.card as MovementConsumable)
-                    }
-                }
+                return onCardClick(slot.card, cardHandlers.movementCard);
             }
             if (cardHandlers.throwableCard && slot.card.type === "Throwable") {
-                return () => {
-                    if (cardHandlers.throwableCard) {
-                        cardHandlers.throwableCard(slot.card as Throwable)
-                    }
-                }
+                return onCardClick(slot.card, cardHandlers.throwableCard);
             }
             if (cardHandlers.weaponExtensionCard && slot.card instanceof GunSocket) {
-                return () => {
-                    if (cardHandlers.weaponExtensionCard) {
-                        cardHandlers.weaponExtensionCard(slot.card as GunSocket)
-                    }
-                }
+                return onCardClick(slot.card, cardHandlers.weaponExtensionCard);
             }
             if (cardHandlers.ammoBag && slot.card.name === "Ammo bag") {
-                return () => {
-                    if (cardHandlers.ammoBag) {
-                        cardHandlers.ammoBag(slot.card as AmmoBag)
-                    }
-                }
+                return onCardClick(slot.card, cardHandlers.ammoBag);
             }
             return undefined;
-        })();
+        });
+
+        const handler = createHandler();
 
         const highlight = handler != undefined;
 
@@ -100,8 +95,8 @@ export default function CharacterComponent({ character, cardHandlers }: Characte
                 <table>
                     <tr>
                         <td>
-                            {renderCardSlot(character.weaponSlot2, character.weaponSlot1?.needsReload)}
-                            {renderCardSlot(character.weaponSlot1, character.weaponSlot1?.needsReload)}
+                            {renderCardSlot(character.weaponSlot1, character.weaponSlot1.needsReload)}
+                            {renderCardSlot(character.weaponSlot2, character.weaponSlot2.needsReload)}
                         </td>
                         <td>
                             {renderCardSlot(character.defensiveConsumable, false)}
@@ -152,7 +147,8 @@ export function convertToCssClass(name: string) {
 
 interface CharacterProps {
     character: Character,
-    cardHandlers?: CardHandlers
+    cardHandlers?: CardHandlers,
+    turnContext?: TurnContext
 }
 
 export interface CardHandlers {

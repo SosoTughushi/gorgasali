@@ -1,10 +1,10 @@
-import Character from "./Characters/Character";
-import { MovementConsumable, Teleport } from "./Cards/Support/Consumable/MovementConsumables"
-import { Defensive } from "./Cards/Support/Defensive/Defensive";
-import GunSocket, { ExtraSix } from "./Cards/Support/Consumable/GunSocket";
-import Throwable from "./Cards/Support/Throwable/Throwable";
-import Potion from "./Cards/Support/Consumable/Potion";
-import Barrier from "./Cards/Support/Defensive/Barrier";
+import Character from "../Characters/Character";
+import { MovementConsumable, Teleport } from "../Cards/Support/Consumable/MovementConsumables"
+import { Defensive } from "../Cards/Support/Defensive/Defensive";
+import GunSocket, { ExtraSix } from "../Cards/Support/Consumable/GunSocket";
+import Throwable from "../Cards/Support/Throwable/Throwable";
+import Potion from "../Cards/Support/Consumable/Potion";
+import Barrier from "../Cards/Support/Defensive/Barrier";
 
 
 type TurnStateMachine = 

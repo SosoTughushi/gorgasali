@@ -12,6 +12,10 @@
             color: goldenrod;
         }
     }
+    &.needs-reload {
+        border: 10px solid black;
+        background-color: black !important;
+    }
     &.common {
         background: rgba(128, 128, 128, 0.575);
     }

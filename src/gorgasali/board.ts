@@ -3,10 +3,16 @@ import Tile, {convertToIndex} from "./Tile";
 
 export default class Board {
     private tiles: Tile[];
+    private currentPlayerIndex = 0;
     
     private _characters : Character[];
     public get characters() : Character[] {
         return this._characters;
+    }
+
+    public get currentPlayer(): Character {
+        const index = this.currentPlayerIndex % this._characters.length;
+        return this._characters[index];
     }
     
     constructor() {
@@ -24,6 +30,10 @@ export default class Board {
 
     public getTiles(): Tile[] {
         return this.tiles;
+    }
+
+    public nextPlayer() {
+        this.currentPlayerIndex ++;
     }
 }
 

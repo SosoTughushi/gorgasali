@@ -1,15 +1,23 @@
 import { CardSpecialSkill } from "../Card";
+import TurnContext from "../../Turn/TurnContext";
 
 export default class WeaponSpecialSkill extends CardSpecialSkill {
-
     constructor(text: string) {
         super(text);
+    }
+    
+    use(context: TurnContext): void {
+        throw new Error("Method not implemented.");
     }
 }
 
 export class Roll7ForMaxDamage extends WeaponSpecialSkill {
     constructor() {
         super("Roll 7 for maximum damage");
+    }
+
+    use(context: TurnContext): void {
+        throw new Error("Method not implemented.");
     }
 }
 
@@ -21,11 +29,19 @@ export class RollForExtraDamage extends WeaponSpecialSkill {
         this.minRoll = minRoll;
         this.addedDamage = addedDamage;
     }
+
+    use(context: TurnContext): void {
+        throw new Error("Method not implemented.");
+    }
 }
 
 export class Roll4PlusToMove2ExtraSquares extends WeaponSpecialSkill {
     constructor() {
         super("Roll 4+ to move 2 extra squares");
+    }
+
+    use(context: TurnContext): void {
+        throw new Error("Method not implemented.");
     }
 }
 
@@ -33,11 +49,18 @@ export class StandDiagonallyForExtra1DamagePerBullet extends WeaponSpecialSkill 
     constructor() {
         super("Stand diagonally for extra +1 damage per bullet");
     }
+
+    use(context: TurnContext): void {
+        throw new Error("Method not implemented.");
+    }
 }
 
 export class Roll5PlusForInstantReload extends WeaponSpecialSkill {
     constructor() {
         super("Roll 5+ for instant reload");
+    }
+    use(context: TurnContext): void {
+        throw new Error("Method not implemented.");
     }
 }
 
@@ -45,11 +68,17 @@ export class LifeLeach extends WeaponSpecialSkill {
     constructor() {
         super("Life leech 15 health points");
     }
+    use(context: TurnContext): void {
+        throw new Error("Method not implemented.");
+    }
 }
 
 export class ArmorPenetration extends WeaponSpecialSkill {
     constructor() {
         super("Penetrates armor");
+    }
+    use(context: TurnContext): void {
+        throw new Error("Method not implemented.");
     }
 }
 

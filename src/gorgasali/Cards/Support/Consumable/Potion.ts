@@ -1,4 +1,6 @@
+import CharacterBase from "../../../Characters/Character";
 import { CardSpecialSkill } from "../../Card";
+import TurnContext from "../../../Turn/TurnContext";
 import { Consumable } from "./Consumable";
 
 export default class Potion extends Consumable {
@@ -17,8 +19,12 @@ function mapSizeToHealingAmount(size: "Small" | "Medium" | "Large"): number {
 }
 
 class PotionSpecialSkill extends CardSpecialSkill {
-    constructor(healingAmount: number) {
+    constructor(public healingAmount: number) {
         super("Restores " + healingAmount + " points");
+    } 
+
+    use(context: TurnContext): void {
+        context.self.heal(this.healingAmount);
     }
 }
 

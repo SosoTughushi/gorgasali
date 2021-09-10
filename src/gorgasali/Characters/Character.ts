@@ -22,13 +22,27 @@ export default class CharacterBase {
     public helmet: CardSlot<Helmet>;
     public bodyArmor: CardSlot<BodyArmor>;
 
-    public health: number;
+    public _health: number;
+    public get health(): number { return this._health }
+    public heal(amount: number) {
+        this._health += amount;
+        if (this._health > 100) {
+            this._health = 100;
+        }
+    }
+
+    public damage(amount: number) {
+        this._health -= amount;
+        if (this._health < 0) {
+            this._health = 0;
+        }
+    }
 
     public boxCount: number;
     constructor(
         public name: CharacterName,
         public ability: CharacterAbility) {
-        this.health = 100;
+        this._health = 100;
         this.boxCount = 1;
 
         this.weaponSlot1 = new WeaponSlot();

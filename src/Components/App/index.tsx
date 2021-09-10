@@ -30,10 +30,11 @@ import { Teleport } from '../../gorgasali/Cards/Support/Consumable/MovementConsu
 import SmokeBulb from '../../gorgasali/Cards/Support/Throwable/SmokeBulb';
 import CharacterTileList from '../Character/CharacterTileList';
 import Turn from "../Turn";
-import TurnStateMachine, { AmmoBagUsed, DefensiveCardUsed, HealingCardUsed, Initial, Moved, MovementCardUsed, MovementDiceRolled, ThrowableCardUsed, TurnEnded, WeaponExtensionCardUsed } from '../../gorgasali/turnStateMachine';
+import TurnStateMachine, { AmmoBagUsed, DefensiveCardUsed, HealingCardUsed, Initial, Moved, MovementCardUsed, MovementDiceRolled, ThrowableCardUsed, TurnEnded, WeaponExtensionCardUsed } from '../../gorgasali/Turn/turnStateMachine';
 import Potion from '../../gorgasali/Cards/Support/Consumable/Potion';
 import CardSlot from '../../gorgasali/Characters/CardSlot';
 import AmmoBag from '../../gorgasali/Cards/Support/Consumable/AmmoBag';
+import TurnContext from '../../gorgasali/Turn/TurnContext';
 
 function App() {
   const deck = new Deck();
@@ -62,29 +63,41 @@ function App() {
     return b;
   });
   const [selecterCharacter, setSelectedCharacter] = useState<Character | undefined>()
-  const [turn, setTurn] = useState<TurnStateMachine>(() => new Initial());
+  const [turnState, setTurnState] = useState<TurnStateMachine>(() => new Initial());
+  const [turnContext, setTurnContext] = useState<TurnContext>(() => {
+    return { self: board.currentPlayer, board: board, usedCards: [] };
+  })
 
 
-
-  const symbols = getAllCharacterNames().map(c => <CharacterSymbol name={c} />)
-  const emoon = createEmoon();
   return (
     <div className="App">
 
-      <Turn turn={turn} character={emoon} onStateChange={newTurn => setTurn(newTurn)}/>
+
       <div className="row">
 
         <div className="col-md-2">
 
-          {/* <CharacterTileList characters={board.characters} onCharacterTileClick={character => setSelectedCharacter(character)} selectedCharacter={selecterCharacter} /> */}
+          <CharacterTileList
+            characters={board.characters}
+            onCharacterTileClick={character => setSelectedCharacter(character)}
+            selectedCharacter={selecterCharacter}
+            currentPlayer={board.currentPlayer} />
         </div>
         <div className="col-md-5">
-          {/* <Board board={board} onTileClick={tile => setSelectedCharacter(tile.character)} selectedCharacter={selecterCharacter} /> */}
+          <Board board={board} onTileClick={tile => setSelectedCharacter(tile.character)} selectedCharacter={selecterCharacter} />
         </div>
         <div className="col-md-5">
-          {selecterCharacter ? <CharacterComponent character={selecterCharacter} /> : ""}
+          <Turn turn={{ board: board, state: turnState, context: turnContext }} onStateChange={newTurn => {
+            if (newTurn.state === "TurnEnded") {
+              board.nextPlayer();
+              setTurnState(new Initial());
+            } else {
+              setTurnState(newTurn);
+            }
+          }} />
         </div>
       </div>
+      {selecterCharacter ? <CharacterComponent character={selecterCharacter} /> : ""}
 
     </div>
   );
@@ -92,80 +105,59 @@ function App() {
 
 export default App;
 
-
-function createEmoon() {
-  const ebue = new Emoon();
+function createCharacter(ebue: Character) {
+  ebue.damage(75);
   ebue.weaponSlot1.card = new ScoutWeaponCard("Scum", "epic", 22, noSpecialSkill);
   ebue.weaponSlot2.card = new MassiveWeaponCard("Grdzaaa", "rare", 143, noSpecialSkill, 60);
+  ebue.weaponSlot2.needsReload = true;
   ebue.defensiveConsumable.card = new MagicField();
   ebue.consumable1.card = new AmmoBag();
   ebue.consumable2.card = new Potion("Medium");
   ebue.throwable.card = new MagicSpear();
   ebue.helmet.card = new Helmet();
   ebue.bodyArmor.card = new BodyArmor();
-  ebue.health = 15;
   ebue.consumableBagSlot1.card = new ObstacleNulifier("mountain");
   ebue.consumableBagSlot2.card = new Teleport();
   ebue.throwableBagSlot.card = new SmokeBulb();
   return ebue;
 }
 
+function createEmoon() {
+  return createCharacter(new Emoon());
+}
+
 function createArmazi() {
-  const armazi = new Armazi();
-  return armazi;
+  return createCharacter(new Armazi());
 }
 
 function createMedea() {
-  const medea = new Medea();
-  return medea;
+  return createCharacter(new Medea());
 }
 
 function createTharsis() {
-  const tharsis = new Tharsis();
-  return tharsis;
+  return createCharacter(new Tharsis());
 }
 
 function createVaras() {
-  const varas = new Varas();
-  return varas;
+  return createCharacter(new Varas());
 }
 
 function createTsiva() {
-  const tsiva = new PrincessTsiva();
-  return tsiva;
+  return createCharacter(new PrincessTsiva());
 }
 
 function createOctor() {
-  const octor = new Octor();
-  return octor;
+  return createCharacter(new Octor());
 }
 
 function createKruber() {
-  const kruber = new Kruber();
-  return kruber;
+  return createCharacter(new Kruber());
 }
 
 function createDrain() {
-  const drain = new Dirain();
-  return drain;
+  return createCharacter(new Dirain());
 }
 
 function createEbue() {
-  const emoon = new Ebue();
-  return emoon;
-}
-
-function getAllCharacterNames(): CharacterName[] {
-  return [
-    "ARMAZI",
-    "D'RAIN",
-    "E'MOON",
-    "EBUE",
-    "KRUBER",
-    "MEDEA",
-    "OCTOR",
-    "PRINCESS TSIVA",
-    "THARSIS",
-    "VARAS"
-  ]
+  return createCharacter(new Ebue());
 }

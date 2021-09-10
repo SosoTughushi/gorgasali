@@ -1,4 +1,5 @@
 import { CardSpecialSkill } from "../../Card";
+import TurnContext from "../../../Turn/TurnContext";
 import { Defensive } from "./Defensive";
 
 export default class Barrier extends Defensive {
@@ -20,5 +21,10 @@ export default class Barrier extends Defensive {
 export class BarrierSpecialSkill extends CardSpecialSkill {
     constructor() {
         super("Blocks movement and targeting");
+    }
+    
+    use(context: TurnContext): void {
+        // board.placeLightningBall(context.targetIndex)
+        throw new Error("Method not implemented.");
     }
 }

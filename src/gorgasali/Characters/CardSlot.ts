@@ -23,7 +23,6 @@ export default class CardSlot <T extends Card> extends CardSlotBase {
 
 export class WeaponSlot extends CardSlot<WeaponCard> {
     public needsReload: boolean;
-
     constructor() {
         super("Weapon");
         this.needsReload = false;

@@ -4,8 +4,10 @@ import CharacterSymbol from "./CharacterSybol";
 import ProgressBar from 'react-bootstrap/ProgressBar';
 import { convertToCssClass } from ".";
 
-export default function CharacterTile({ character, onCharacterTileClick, isSelected }: CharacterTileProps) {
-    return <div className={"character-tile " + (isSelected? "selected-tile" : "")} onClick={_ => onCharacterTileClick(character)}>
+export default function CharacterTile({ character, onCharacterTileClick, isSelected, isCurrentPlayer }: CharacterTileProps) {
+    const selectedClass = isSelected? "selected-tile" : "";
+    const currentPlayerClass = isCurrentPlayer? "current-player-tile" : ""
+    return <div className={"character-tile " + selectedClass + currentPlayerClass} onClick={_ => onCharacterTileClick(character)}>
         <div className="row">
             <div className="col-md-4">
                 <div className={"tile-image " + convertToCssClass(character.name)} />
@@ -28,5 +30,6 @@ export default function CharacterTile({ character, onCharacterTileClick, isSelec
 interface CharacterTileProps {
     character: Character,
     isSelected: boolean,
+    isCurrentPlayer: boolean,
     onCharacterTileClick(tile: Character): void;
 }

@@ -83,6 +83,9 @@
     &.selected-tile {
         background-color: rgba(137, 43, 226, 0.52);
     }
+    &.current-player-tile {
+        background-color: rgba(218, 165, 32, 0.52);
+    }
     .tile-image {
         border-radius: 50%;
         width: 100px;
