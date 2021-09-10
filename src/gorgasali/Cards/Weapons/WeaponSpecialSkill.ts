@@ -1,13 +1,10 @@
-import { CardSpecialSkill } from "../Card";
 import TurnContext from "../../Turn/TurnContext";
 
-export default class WeaponSpecialSkill extends CardSpecialSkill {
-    constructor(text: string) {
-        super(text);
+export default class WeaponSpecialSkill {
+    constructor(public text: string) {
     }
     
     use(context: TurnContext): void {
-        throw new Error("Method not implemented.");
     }
 }
 

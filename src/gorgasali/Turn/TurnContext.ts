@@ -1,7 +1,7 @@
 import Board from "../board";
 import CharacterBase from "../Characters/Character";
-import { EagleEyeSpecialSkill, ExtraSixSpecialSkill, SecondChanceSpecialSkill, StrikeOptionSpecialSkill } from "../Cards/Support/Consumable/GunSocket";
-import { AdrenalineSpecialSkill, CompassSpecialSkill, TeleportSpecialSkill } from "../Cards/Support/Consumable/MovementConsumables";
+import { EagleEye, ExtraSix, SecondChance, StrikeOption } from "../Cards/Support/Consumable/GunSocket";
+import { Adrenaline, Compass, Teleport } from "../Cards/Support/Consumable/MovementConsumables";
 import { ObstacleType } from "../Cards/Support/Consumable/ObstacleNulifier";
 import { Card } from "../Cards/Card";
 
@@ -22,14 +22,14 @@ export default TurnContext;
 
 
 type GunSockets = {
-    secondChanceActive?: SecondChanceSpecialSkill,
-    extraSixActive?: ExtraSixSpecialSkill,
-    strikeOptionActive?: StrikeOptionSpecialSkill,
-    eagleEyeActive?: EagleEyeSpecialSkill
+    secondChanceActive?: SecondChance,
+    extraSixActive?: ExtraSix,
+    strikeOptionActive?: StrikeOption,
+    eagleEyeActive?: EagleEye
 }
 
 type MovementAmplifiers = {
-    teleport?: TeleportSpecialSkill,
-    adrenaline?: AdrenalineSpecialSkill,
-    compass?: CompassSpecialSkill
+    teleport?: Teleport,
+    adrenaline?: Adrenaline,
+    compass?: Compass
 }

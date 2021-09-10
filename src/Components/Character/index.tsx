@@ -40,7 +40,7 @@ export default function CharacterComponent({ character, cardHandlers, turnContex
                 return () => {
                     cardCallback(card);
                     turnContext?.usedCards.push(card);
-                    card.specialSkill.use(context);
+                    card.use(context);
                     if (slot instanceof WeaponSlot) {
                         slot.needsReload = true;
                     } else {

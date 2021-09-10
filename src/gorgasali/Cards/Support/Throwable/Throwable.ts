@@ -1,4 +1,3 @@
-import { CardSpecialSkill } from "../../Card";
 import { ScoutRangeMinRoll } from "../../Weapons/ScoutWeaponCard";
 import WeaponDamage from "../../Weapons/WeaponDamage";
 import SupportCard from "../SupportCard";
@@ -7,7 +6,7 @@ import SupportCard from "../SupportCard";
 export default abstract class Throwable extends SupportCard {
     constructor(
         name: string, 
-        specialSkill: CardSpecialSkill, 
+        specialSkill: string, 
         diceCount: number| undefined,
         range: number | undefined, 
         damage: WeaponDamage | undefined,

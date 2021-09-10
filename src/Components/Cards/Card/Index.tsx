@@ -27,7 +27,7 @@ export default function Card({ cardSlot, highlight = false, needsReload }: CardP
         {cardSlot.card.diceCount ? <Dice count={cardSlot.card.diceCount} /> : ""}
         {cardSlot.card.range ? <Range range={cardSlot.card.range} /> : ""}
 
-        <div className="specialSkill">{cardSlot.card.specialSkill.text}</div>
+        <div className="specialSkill">{cardSlot.card.specialSkillText}</div>
         {cardSlot.card.criteria ? <SuccessCriteria criteria={cardSlot.card.criteria} /> : ""}
     </div>
 }

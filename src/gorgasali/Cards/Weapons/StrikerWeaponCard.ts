@@ -1,6 +1,7 @@
 import WeaponSpecialSkill, { noSpecialSkill, standDiagonallyForExtra1DamagePerBullet, roll5ForExtra5Damage } from "./WeaponSpecialSkill";
 import { CardLevel } from "../CardLevel";
 import WeaponCard from "./WeaponCard";
+import TurnContext from "../../Turn/TurnContext";
 
 
 export default class StrikerWeaponCard extends WeaponCard {
@@ -11,6 +12,10 @@ export default class StrikerWeaponCard extends WeaponCard {
         specialSkill: WeaponSpecialSkill) {
 
         super(name, "Striker", level, diceCount, 3, specialSkill, {isFixed:false, value:damageMultiplier}, undefined);
+    }
+    
+    use(context: TurnContext): void {
+        throw new Error("Method not implemented.");
     }
 }
 

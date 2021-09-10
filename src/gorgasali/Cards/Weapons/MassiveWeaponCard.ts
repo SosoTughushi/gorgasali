@@ -1,10 +1,13 @@
 import WeaponSpecialSkill, { noSpecialSkill, roll5PlusForInstantReload, lifeLeach } from "./WeaponSpecialSkill";
 import { CardLevel } from "../CardLevel";
 import WeaponCard from "./WeaponCard";
+import TurnContext from "../../Turn/TurnContext";
 
 
 
 export default class MassiveWeaponCard extends WeaponCard {
+    use(context: TurnContext): void {
+    }
     constructor(
         name: string,
         level: CardLevel,

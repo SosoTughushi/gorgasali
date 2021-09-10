@@ -1,5 +1,4 @@
 import { CardLevel } from "./CardLevel";
-import { EagleEyeSpecialSkill, ExtraSixSpecialSkill, SecondChanceSpecialSkill, StrikeOptionSpecialSkill } from "./Support/Consumable/GunSocket";
 import TurnContext from "../Turn/TurnContext";
 import { ScoutRangeMinRoll } from "./Weapons/ScoutWeaponCard";
 import WeaponDamage from "./Weapons/WeaponDamage";
@@ -10,7 +9,7 @@ export abstract class Card {
         public name: string,
         public level: CardLevel,
         public type: CardType,
-        public specialSkill: CardSpecialSkill,
+        public specialSkillText: string,
         public diceCount: number | undefined,
         public range: number | undefined,
         public damage: WeaponDamage | undefined,
@@ -18,15 +17,10 @@ export abstract class Card {
     ) {
 
     }
+
+    abstract use(context: TurnContext): void;
 }
 
 type SupportCard = "Throwable" | "Consumable" | "Defensive" | "Armor";
 
 type CardType = WeaponType | SupportCard;
-
-export abstract class CardSpecialSkill {
-    constructor(public text: string) {
-    }
-
-    abstract use(context: TurnContext): void;
-}

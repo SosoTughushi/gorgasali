@@ -64,9 +64,10 @@ function App() {
   });
   const [selecterCharacter, setSelectedCharacter] = useState<Character | undefined>()
   const [turnState, setTurnState] = useState<TurnStateMachine>(() => new Initial());
-  const [turnContext, setTurnContext] = useState<TurnContext>(() => {
+  const createInitialTurnContext = () => {
     return { self: board.currentPlayer, board: board, usedCards: [] };
-  })
+  };
+  const [turnContext, setTurnContext] = useState<TurnContext>(createInitialTurnContext)
 
 
   return (
@@ -91,6 +92,7 @@ function App() {
             if (newTurn.state === "TurnEnded") {
               board.nextPlayer();
               setTurnState(new Initial());
+              setTurnContext(createInitialTurnContext());
             } else {
               setTurnState(newTurn);
             }

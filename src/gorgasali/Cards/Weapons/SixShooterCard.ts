@@ -3,6 +3,7 @@ import WeaponSpecialSkill from "./WeaponSpecialSkill";
 import { noSpecialSkill, roll7forMaxDamage, roll4PlusToMove2ExtraSquares } from "./WeaponSpecialSkill";
 import { CardLevel } from "../CardLevel";
 import WeaponCard from "./WeaponCard";
+import TurnContext from "../../Turn/TurnContext";
 
 export default class SixShooterCard extends WeaponCard {
     constructor(
@@ -12,6 +13,10 @@ export default class SixShooterCard extends WeaponCard {
         damageMultiplier: number,
         specialSkill: WeaponSpecialSkill) {
         super(name, "SixShooter", level, diceCount, 2, specialSkill, { isFixed: false, value: damageMultiplier }, undefined);
+    }
+    
+    use(context: TurnContext): void {
+        throw new Error("Method not implemented.");
     }
 }
 

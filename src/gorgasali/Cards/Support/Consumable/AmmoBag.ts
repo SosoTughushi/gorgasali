@@ -1,17 +1,10 @@
-import { CardSpecialSkill } from "../../Card";
 import TurnContext from "../../../Turn/TurnContext";
 import { Consumable } from "./Consumable";
 
 export default class AmmoBag extends Consumable {
     constructor() {
-        super("Ammo bag", "epic", "Consumable", new AmmoBagSpecialSkill(), 
+        super("Ammo bag", "epic", "Consumable", "Instant reload", 
         undefined, undefined, undefined, undefined)
-    }
-}
-
-class AmmoBagSpecialSkill extends CardSpecialSkill {
-    constructor() {
-        super("Instant reload");
     }
     
     use(context: TurnContext): void {

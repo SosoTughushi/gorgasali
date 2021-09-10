@@ -16,7 +16,7 @@ export default abstract class WeaponCard extends Card {
         public specialSkill: WeaponSpecialSkill,
         damage: WeaponDamage,
         criteria: number | ScoutRangeMinRoll[]| undefined) {
-        super(name, level, type, specialSkill, diceCount, range, damage, criteria);
+        super(name, level, type, specialSkill.text, diceCount, range, damage, criteria);
     }
 }
 
