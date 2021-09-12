@@ -7,6 +7,8 @@ import CardComponent from '../Cards/Card/Index';
 import { Card } from '../../gorgasali/Cards/Card';
 import CardSlot from '../../gorgasali/Characters/CardSlot';
 import ChangesTurnState from "./ChangesTurnState";
+import { CardOutcome } from "../../gorgasali/Turn/TurnContext";
+
 
 export default function Turn({ turn, onTurnStateChange }: TurnProps) {
     const state = turn.state;
@@ -63,7 +65,6 @@ export default function Turn({ turn, onTurnStateChange }: TurnProps) {
             handlers = {
                 loadedWeapons: true
             }
-    
             addAction("Reload", () => state.reloadWeapons({}));
             addAction("Manage Backpack", () => state.manageBackpack({}));
             break;
@@ -74,10 +75,16 @@ export default function Turn({ turn, onTurnStateChange }: TurnProps) {
             break;
     }
 
-    const toCardComponent = (card: Card) => {
+    const toCardComponent = (outcome: CardOutcome) => {
         const slot = new CardSlot("Whatever");
-        slot.card = card;
-        return <CardComponent cardSlot={slot} needsReload={false} />
+        slot.card = outcome.usedCard;
+        return <div>
+            <CardComponent cardSlot={slot} needsReload={false} />
+            {outcome.diceResults && outcome.diceResults.map((c, i) => <div>dice {i + 1}: <h3>{c}</h3></div>)}
+            {outcome.diceResults && <div>total <h2>{outcome.diceResults.map(c => c as number).reduce((a, b) => a + b, 0)}</h2></div>}
+            {outcome.successfull && <h1>Successfull</h1>}
+            {outcome.successfull === false && <h1>Fail</h1>}
+        </div>
     }
 
     return <div>

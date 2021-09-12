@@ -1,6 +1,6 @@
 import React from 'react';
 import Tile from '../Tile';
-import BoardClass from "../../gorgasali/board";
+import BoardClass from "../../gorgasali/Board/board";
 import './Board.css';
 import TileClass from "../../gorgasali/Tile";
 import Character from '../../gorgasali/Characters/Character';
@@ -8,6 +8,9 @@ import TurnContext from '../../gorgasali/Turn/TurnContext';
 import TurnStateMachine from '../../gorgasali/Turn/TurnStates/turnStateMachine';
 import context from 'react-bootstrap/esm/AccordionContext';
 import ChangesTurnState from '../Turn/ChangesTurnState';
+import getTeleportDestinations from '../../gorgasali/Board/destinations/getTeleportDestinations';
+import getMoveDestinations from '../../gorgasali/Board/destinations/getMoveDestinations';
+import getShootingRange from '../../gorgasali/Board/destinations/getShootingRange';
 
 
 function Board({ board, selectedCharacter, turnContext, turnState, onTurnStateChange }: BoardProps) {
@@ -25,7 +28,7 @@ function Board({ board, selectedCharacter, turnContext, turnState, onTurnStateCh
         case "MovementCardUsed":
         case "MovementDiceRolled":
         case "MoveInProgress":
-            const availableMoves = board.getAvailableDestinations(turnContext);
+            const availableMoves = getMoveDestinations.bind(board)(turnContext);
 
             isHighlighted = tile => availableMoves.has(tile.index);
             isDimmed = tile => !isHighlighted(tile)
@@ -39,7 +42,7 @@ function Board({ board, selectedCharacter, turnContext, turnState, onTurnStateCh
             break;
 
         case "TeleportInProgress":
-            const teleportDestinations = board.getTeleportDestinations();
+            const teleportDestinations = getTeleportDestinations.bind(board)();
 
             isHighlighted = tile => teleportDestinations.has(tile.index);
             isDimmed = tile => !isHighlighted(tile);
@@ -49,6 +52,21 @@ function Board({ board, selectedCharacter, turnContext, turnState, onTurnStateCh
                     onTurnStateChange(turnState.teleport(tile))
                 }
             }
+            break;
+        case "FlameBulbInProgress":
+            const rangeOf2 = getShootingRange.bind(board)(2, 2);
+
+            isHighlighted = tile => rangeOf2.has(tile.index);
+            isDimmed = tile => !isHighlighted(tile);
+
+            onTileClick = tile => {
+                if(isHighlighted(tile) && tile.character !== undefined) {
+                    onTurnStateChange(turnState.chooseTarget(tile.character));
+                }
+            }
+            break;
+        case "FlameBulbInProgress":
+
             break;
     }
 

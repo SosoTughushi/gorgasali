@@ -1,4 +1,4 @@
-import Board from "../board";
+import Board from "../Board/board";
 import CharacterBase from "../Characters/Character";
 import { EagleEye, ExtraSix, SecondChance, StrikeOption } from "../Cards/Support/Consumable/GunSocket";
 import Compass from "../Cards/Support/Consumable/MovementConsumables/Compass";
@@ -18,7 +18,7 @@ import { Card } from "../Cards/Card";
     obstaclePenaltyNulified?: ObstacleType;
     movementAmplifiers?: MovementAmplifiers;
 
-    usedCards: Card[]
+    usedCards: CardOutcome[]
 };
 
 
@@ -36,6 +36,12 @@ type MovementAmplifiers = {
     teleport?: Teleport,
     compass?: Compass,
     adrenaline?: Adrenaline
+}
+
+export type CardOutcome = {
+    usedCard: Card,
+    diceResults?: Dice[],
+    successfull?: boolean
 }
 
 

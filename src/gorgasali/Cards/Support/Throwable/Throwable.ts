@@ -1,3 +1,4 @@
+import TurnContext from "../../../Turn/TurnContext";
 import TurnStateBase from "../../../Turn/TurnStates/TurnStateBase";
 import { ScoutRangeMinRoll } from "../../Weapons/ScoutWeaponCard";
 import WeaponDamage from "../../Weapons/WeaponDamage";
@@ -14,4 +15,6 @@ export default abstract class Throwable extends SupportCard {
         criteria: number | ScoutRangeMinRoll[]| undefined) {
         super(name, "common", "Throwable", specialSkill, diceCount, range, damage, criteria);
     }
+
+    abstract canUse(context: TurnContext) : boolean;
 }

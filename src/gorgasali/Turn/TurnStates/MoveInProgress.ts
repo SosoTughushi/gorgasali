@@ -1,6 +1,7 @@
 import Tile, { getTileCost } from "../../Tile";
 import TurnStateBase from "./TurnStateBase";
 import Moved from "./Moved";
+import getMoveDestinations from "../../Board/destinations/getMoveDestinations";
 
 
 export default class MoveInProgress extends TurnStateBase {
@@ -15,7 +16,7 @@ export default class MoveInProgress extends TurnStateBase {
         this.context.previousLocations.add(this.context.board.currentPlayerPosition);
         this.context.board.moveTo(targetTile.index);
 
-        const availableMoves = this.context.board.getAvailableDestinations(this.context);
+        const availableMoves = getMoveDestinations.bind(this.context.board)(this.context);
         if (availableMoves.size === 0) {
             return new Moved(this.context);
         }

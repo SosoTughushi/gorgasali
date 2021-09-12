@@ -1,4 +1,4 @@
-import Board from "../board";
+import Board from "../Board/board";
 import TurnContext from "./TurnContext";
 import TurnStateMachine from "./TurnStates/turnStateMachine";
 

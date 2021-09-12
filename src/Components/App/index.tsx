@@ -16,7 +16,7 @@ import { BodyArmor, Helmet } from '../../gorgasali/Cards/Support/Armor/Armor';
 import { Card } from '../../gorgasali/Cards/Card';
 import Armazi from '../../gorgasali/Characters/Armazi';
 import Character from '../../gorgasali/Characters/Character';
-import BoardClass from '../../gorgasali/board';
+import BoardClass from '../../gorgasali/Board/board';
 import Medea from '../../gorgasali/Characters/Medea';
 import Varas from '../../gorgasali/Characters/Varas';
 import PrincessTsiva from '../../gorgasali/Characters/PrincessTsiva';
@@ -32,19 +32,12 @@ import CharacterTileList from '../Character/CharacterTileList';
 import Turn from "../Turn";
 import TurnStateMachine from '../../gorgasali/Turn/TurnStates/turnStateMachine';
 import Initial from "../../gorgasali/Turn/TurnStates/Initial";
-import CardSlot from '../../gorgasali/Characters/CardSlot';
 import TurnContext from '../../gorgasali/Turn/TurnContext';
 import Potion from '../../gorgasali/Cards/Support/Consumable/Potion';
 import FlameBulb from '../../gorgasali/Cards/Support/Throwable/FlameBulb';
+import AmmoBag from '../../gorgasali/Cards/Support/Consumable/AmmoBag';
 
 function App() {
-  const deck = new Deck();
-
-  const toCardComponent = (card: Card) => {
-    const slot = new CardSlot("Whatever");
-    slot.card = card;
-    return <CardComponent cardSlot={slot} needsReload={false} />
-  }
 
   const [board] = useState(() => {
     const b = new BoardClass();
@@ -125,7 +118,7 @@ function createCharacter(ebue: Character) {
   ebue.weaponSlot2.needsReload = true;
   ebue.defensiveConsumable.card = new MagicField();
 
-  ebue.consumable1.card = new Potion("Small");
+  ebue.consumable1.card = new AmmoBag();
   ebue.consumable2.card = new Teleport();
 
   ebue.throwable.card = new FlameBulb();

@@ -16,6 +16,7 @@ import GunSocket from "../../gorgasali/Cards/Support/Consumable/GunSocket";
 import { Defensive } from "../../gorgasali/Cards/Support/Defensive/Defensive";
 import TurnContext from "../../gorgasali/Turn/TurnContext";
 import ChangesTurnState from "../Turn/ChangesTurnState";
+import Throwable from "../../gorgasali/Cards/Support/Throwable/Throwable";
 
 
 
@@ -36,7 +37,7 @@ export default function CharacterComponent({ character, usableCards, turnContext
 
             function onCardClick<T extends Card>(card: T) {
                 return () => {
-                    turnContext?.usedCards.push(card);
+                    turnContext?.usedCards.push({ usedCard: card });
                     const result = card.use(context);
                     if (slot instanceof WeaponSlot) {
                         slot.needsReload = true;
@@ -62,8 +63,10 @@ export default function CharacterComponent({ character, usableCards, turnContext
             if (usableCards.movementCard && slot.card instanceof MovementConsumable) {
                 return onCardClick(slot.card);
             }
-            if (usableCards.throwableCard && slot.card.type === "Throwable") {
-                return onCardClick(slot.card);
+            if (usableCards.throwableCard && slot.card instanceof Throwable) {
+                if (slot.card.canUse(context)) {
+                    return onCardClick(slot.card);
+                }
             }
             if (usableCards.weaponExtensionCard && slot.card instanceof GunSocket) {
                 return onCardClick(slot.card);
