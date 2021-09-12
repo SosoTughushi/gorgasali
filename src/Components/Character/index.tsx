@@ -11,12 +11,9 @@ import CharacterSymbol from "./CharacterSybol";
 import { CardSlotBase, WeaponSlot } from "../../gorgasali/Characters/CardSlot";
 import Potion from "../../gorgasali/Cards/Support/Consumable/Potion";
 import WeaponCard from "../../gorgasali/Cards/Weapons/WeaponCard";
-import { MovementConsumable } from "../../gorgasali/Cards/Support/Consumable/MovementConsumables";
+import MovementConsumable from "../../gorgasali/Cards/Support/Consumable/MovementConsumables/MovementConsumable";
 import GunSocket from "../../gorgasali/Cards/Support/Consumable/GunSocket";
 import { Defensive } from "../../gorgasali/Cards/Support/Defensive/Defensive";
-import Throwable from "../../gorgasali/Cards/Support/Throwable/Throwable";
-import AmmoBag from "../../gorgasali/Cards/Support/Consumable/AmmoBag";
-import Board from "../../gorgasali/board";
 import TurnContext from "../../gorgasali/Turn/TurnContext";
 import ChangesTurnState from "../Turn/ChangesTurnState";
 

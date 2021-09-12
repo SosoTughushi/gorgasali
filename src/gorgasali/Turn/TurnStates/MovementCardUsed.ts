@@ -12,4 +12,8 @@ export default class MovementCardUsed extends TurnStateBase {
         const inProgress = new MoveInProgress(this.context);
         return inProgress.move(targetTile);
     }
+    
+    skipMovement(): Moved {
+        return new Moved(this.context);
+    }
 }

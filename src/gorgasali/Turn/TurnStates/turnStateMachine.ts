@@ -1,5 +1,4 @@
-import Character from "../../Characters/Character";
-import { MovementConsumable, Teleport } from "../../Cards/Support/Consumable/MovementConsumables"
+import MovementConsumable from "../../Cards/Support/Consumable/MovementConsumables/MovementConsumable"
 import { Defensive } from "../../Cards/Support/Defensive/Defensive";
 import GunSocket, { ExtraSix } from "../../Cards/Support/Consumable/GunSocket";
 import Throwable from "../../Cards/Support/Throwable/Throwable";

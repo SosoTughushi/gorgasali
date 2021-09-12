@@ -38,6 +38,9 @@ export default function Turn({ turn, onTurnStateChange }: TurnProps) {
             handlers = { movementCard: true };
             addAction("Skip", () => state.skipMovement());
             break;
+        case "MovementCardUsed":
+            addAction("Skip", () => state.skipMovement());
+            break;
         case "Moved":
             handlers = {
                 defensiveCard: true,
@@ -60,7 +63,7 @@ export default function Turn({ turn, onTurnStateChange }: TurnProps) {
             handlers = {
                 loadedWeapons: true
             }
-
+    
             addAction("Reload", () => state.reloadWeapons({}));
             addAction("Manage Backpack", () => state.manageBackpack({}));
             break;

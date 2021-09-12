@@ -10,7 +10,7 @@ import ScoutWeaponCard from '../../gorgasali/Cards/Weapons/ScoutWeaponCard';
 import { noSpecialSkill } from '../../gorgasali/Cards/Weapons/WeaponSpecialSkill';
 import MassiveWeaponCard from '../../gorgasali/Cards/Weapons/MassiveWeaponCard';
 import MagicField from '../../gorgasali/Cards/Support/Defensive/MagicField';
-import ObstacleNulifier from '../../gorgasali/Cards/Support/Consumable/ObstacleNulifier';
+import ObstacleNulifier from '../../gorgasali/Cards/Support/Consumable/MovementConsumables/ObstacleNulifier';
 import MagicSpear from '../../gorgasali/Cards/Support/Throwable/MagicSpear';
 import { BodyArmor, Helmet } from '../../gorgasali/Cards/Support/Armor/Armor';
 import { Card } from '../../gorgasali/Cards/Card';
@@ -24,7 +24,9 @@ import Octor from '../../gorgasali/Characters/Octor';
 import Kruber from '../../gorgasali/Characters/Kruber';
 import Dirain from '../../gorgasali/Characters/Dirain';
 import Emoon from '../../gorgasali/Characters/Emoon';
-import { Adrenaline, Compass, Teleport } from '../../gorgasali/Cards/Support/Consumable/MovementConsumables';
+import Compass from "../../gorgasali/Cards/Support/Consumable/MovementConsumables/Compass";
+import Adrenaline from "../../gorgasali/Cards/Support/Consumable/MovementConsumables/Adrenaline";
+import Teleport from "../../gorgasali/Cards/Support/Consumable/MovementConsumables/Teleport";
 import SmokeBulb from '../../gorgasali/Cards/Support/Throwable/SmokeBulb';
 import CharacterTileList from '../Character/CharacterTileList';
 import Turn from "../Turn";
@@ -124,7 +126,7 @@ function createCharacter(ebue: Character) {
   ebue.defensiveConsumable.card = new MagicField();
 
   ebue.consumable1.card = new Potion("Small");
-  ebue.consumable2.card = new Compass();
+  ebue.consumable2.card = new Teleport();
 
   ebue.throwable.card = new FlameBulb();
   ebue.helmet.card = new Helmet();

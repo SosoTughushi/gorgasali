@@ -1,8 +1,10 @@
 import { BodyArmor, Helmet } from "./Support/Armor/Armor";
 import AmmoBag from "./Support/Consumable/AmmoBag";
 import { EagleEye, ExtraSix, SecondChance, StrikeOption } from "./Support/Consumable/GunSocket";
-import { Adrenaline, Compass, Teleport } from "./Support/Consumable/MovementConsumables";
-import ObstacleNulifier from "./Support/Consumable/ObstacleNulifier";
+import Compass from "./Support/Consumable/MovementConsumables/Compass";
+import Adrenaline from "./Support/Consumable/MovementConsumables/Adrenaline";
+import Teleport from "./Support/Consumable/MovementConsumables/Teleport";
+import ObstacleNulifier from "./Support/Consumable/MovementConsumables/ObstacleNulifier";
 import Potion from "./Support/Consumable/Potion";
 import BallLightning from "./Support/Defensive/BallLightning";
 import Barrier from "./Support/Defensive/Barrier";

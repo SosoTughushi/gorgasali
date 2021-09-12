@@ -28,14 +28,27 @@ function Board({ board, selectedCharacter, turnContext, turnState, onTurnStateCh
             const availableMoves = board.getAvailableDestinations(turnContext);
 
             isHighlighted = tile => availableMoves.has(tile.index);
-            isDimmed = tile => !availableMoves.has(tile.index);
+            isDimmed = tile => !isHighlighted(tile)
             isTrace = tile => turnContext.previousLocations.has(tile.index);
 
             onTileClick = tile => {
-                if (availableMoves.has(tile.index)) {
+                if (isHighlighted(tile)) {
                     onTurnStateChange(turnState.move(tile));
                 }
             };
+            break;
+
+        case "TeleportInProgress":
+            const teleportDestinations = board.getTeleportDestinations();
+
+            isHighlighted = tile => teleportDestinations.has(tile.index);
+            isDimmed = tile => !isHighlighted(tile);
+
+            onTileClick = tile => {
+                if (isHighlighted(tile)) {
+                    onTurnStateChange(turnState.teleport(tile))
+                }
+            }
             break;
     }
 

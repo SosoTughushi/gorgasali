@@ -1,8 +1,10 @@
 import Board from "../board";
 import CharacterBase from "../Characters/Character";
 import { EagleEye, ExtraSix, SecondChance, StrikeOption } from "../Cards/Support/Consumable/GunSocket";
-import { Adrenaline, Compass, Teleport } from "../Cards/Support/Consumable/MovementConsumables";
-import { ObstacleType } from "../Cards/Support/Consumable/ObstacleNulifier";
+import Compass from "../Cards/Support/Consumable/MovementConsumables/Compass";
+import Adrenaline from "../Cards/Support/Consumable/MovementConsumables/Adrenaline";
+import Teleport from "../Cards/Support/Consumable/MovementConsumables/Teleport";
+import { ObstacleType } from "../Cards/Support/Consumable/MovementConsumables/ObstacleNulifier";
 import { Card } from "../Cards/Card";
 
  type TurnContext = {

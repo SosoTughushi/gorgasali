@@ -1,7 +1,7 @@
-import Terrain from "../../../Terrain";
-import TurnContext from "../../../Turn/TurnContext";
-import MovementCardUsed from "../../../Turn/TurnStates/MovementCardUsed";
-import { MovementConsumable } from "./MovementConsumables";
+import Terrain from "../../../../Terrain";
+import TurnContext from "../../../../Turn/TurnContext";
+import MovementCardUsed from "../../../../Turn/TurnStates/MovementCardUsed";
+import MovementConsumable from "./MovementConsumable";
 
 export default class ObstacleNulifier extends MovementConsumable {
     use(context: TurnContext): MovementCardUsed {

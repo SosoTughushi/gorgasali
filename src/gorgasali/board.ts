@@ -1,4 +1,4 @@
-import { ObstacleType } from "./Cards/Support/Consumable/ObstacleNulifier";
+import { ObstacleType } from "./Cards/Support/Consumable/MovementConsumables/ObstacleNulifier";
 import Character from "./Characters/Character";
 import Terrain from "./Terrain";
 import Tile, { convertToIndex, getTileCost } from "./Tile";
@@ -55,6 +55,31 @@ export default class Board {
         const diffY = Math.abs(targetY - y);
 
         return Math.max(diffX, diffY) <= maxRange;
+    }
+
+
+    public getTeleportDestinations() {
+
+        const { x, y } = convertToCoordinates(this.currentPlayerPosition);
+
+        const array8 = Array.from({ length: 8 }, (_, i) => i + 1);
+
+        const arr = array8.map(i => { return { x: x + i, y } }).filter(a => a.x < 30)
+            .concat(
+                array8.map(i => { return { x: x - i, y } }).filter(a => a.x > -1)
+            ).concat(
+                array8.map(i => { return { x, y: y + i } }).filter(a => a.y < 30)
+            ).concat(
+                array8.map(i => { return { x, y: y - i } }).filter(a => a.y > -1)
+            )
+            .map(c => convertToIndex(c.x, c.y))
+            .map(i => this.tiles[i])
+            .filter(t => t.character === undefined)
+            .map(c => c.index);
+
+
+        let destinations = new Set<number>(arr);
+        return destinations;
     }
 
     public getAvailableDestinations(turnContext: TurnContext) {
