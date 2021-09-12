@@ -5,8 +5,9 @@ import './Board.css';
 import TileClass from "../../gorgasali/Tile";
 import Character from '../../gorgasali/Characters/Character';
 import TurnContext from '../../gorgasali/Turn/TurnContext';
-import TurnStateMachine from '../../gorgasali/Turn/turnStateMachine';
+import TurnStateMachine from '../../gorgasali/Turn/TurnStates/turnStateMachine';
 import context from 'react-bootstrap/esm/AccordionContext';
+import ChangesTurnState from '../Turn/ChangesTurnState';
 
 
 function Board({ board, selectedCharacter, turnContext, turnState, onTurnStateChange }: BoardProps) {
@@ -65,12 +66,11 @@ function Board({ board, selectedCharacter, turnContext, turnState, onTurnStateCh
 }
 
 
-interface BoardProps {
+interface BoardProps extends ChangesTurnState {
     board: BoardClass;
     selectedCharacter: Character | undefined;
     turnContext: TurnContext;
     turnState: TurnStateMachine;
-    onTurnStateChange(state: TurnStateMachine): void;
 }
 
 export default Board;

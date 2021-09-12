@@ -1,5 +1,6 @@
 import CharacterBase from "../../../Characters/Character";
 import TurnContext from "../../../Turn/TurnContext";
+import HealingCardUsed from "../../../Turn/TurnStates/HealingCardUsed";
 import { Consumable } from "./Consumable";
 
 export default class Potion extends Consumable {
@@ -11,8 +12,9 @@ export default class Potion extends Consumable {
 
     public healingAmount: number;
 
-    use(context: TurnContext): void {
+    use(context: TurnContext): HealingCardUsed {
         context.self.heal(this.healingAmount);
+        return new HealingCardUsed(context);
     }
 }
 

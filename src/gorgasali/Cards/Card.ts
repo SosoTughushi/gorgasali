@@ -4,6 +4,8 @@ import { ScoutRangeMinRoll } from "./Weapons/ScoutWeaponCard";
 import WeaponDamage from "./Weapons/WeaponDamage";
 import { WeaponType } from "./Weapons/WeaponType";
 
+import TurnStateMachine from "../Turn/TurnStates/turnStateMachine";
+
 export abstract class Card {
     constructor(
         public name: string,
@@ -18,9 +20,11 @@ export abstract class Card {
 
     }
 
-    abstract use(context: TurnContext): void;
+    abstract use(context: TurnContext): void | TurnStateMachine;
 }
 
 type SupportCard = "Throwable" | "Consumable" | "Defensive" | "Armor";
 
 type CardType = WeaponType | SupportCard;
+
+

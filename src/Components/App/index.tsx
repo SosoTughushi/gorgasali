@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-import logo from '../../logo.svg';
+import { useState } from 'react';
 import './App.css';
 import Board from '../Board';
 import CardComponent from '../Cards/Card/Index';
@@ -16,8 +15,7 @@ import MagicSpear from '../../gorgasali/Cards/Support/Throwable/MagicSpear';
 import { BodyArmor, Helmet } from '../../gorgasali/Cards/Support/Armor/Armor';
 import { Card } from '../../gorgasali/Cards/Card';
 import Armazi from '../../gorgasali/Characters/Armazi';
-import Character, { CharacterName } from '../../gorgasali/Characters/Character';
-import CharacterSymbol from '../Character/CharacterSybol';
+import Character from '../../gorgasali/Characters/Character';
 import BoardClass from '../../gorgasali/board';
 import Medea from '../../gorgasali/Characters/Medea';
 import Varas from '../../gorgasali/Characters/Varas';
@@ -30,11 +28,12 @@ import { Adrenaline, Compass, Teleport } from '../../gorgasali/Cards/Support/Con
 import SmokeBulb from '../../gorgasali/Cards/Support/Throwable/SmokeBulb';
 import CharacterTileList from '../Character/CharacterTileList';
 import Turn from "../Turn";
-import TurnStateMachine, { AmmoBagUsed, DefensiveCardUsed, HealingCardUsed, Initial, Moved, MovementCardUsed, MovementDiceRolled, ThrowableCardUsed, TurnEnded, WeaponExtensionCardUsed } from '../../gorgasali/Turn/turnStateMachine';
-import Potion from '../../gorgasali/Cards/Support/Consumable/Potion';
+import TurnStateMachine from '../../gorgasali/Turn/TurnStates/turnStateMachine';
+import Initial from "../../gorgasali/Turn/TurnStates/Initial";
 import CardSlot from '../../gorgasali/Characters/CardSlot';
-import AmmoBag from '../../gorgasali/Cards/Support/Consumable/AmmoBag';
 import TurnContext from '../../gorgasali/Turn/TurnContext';
+import Potion from '../../gorgasali/Cards/Support/Consumable/Potion';
+import FlameBulb from '../../gorgasali/Cards/Support/Throwable/FlameBulb';
 
 function App() {
   const deck = new Deck();
@@ -94,10 +93,10 @@ function App() {
             onTurnStateChange={newTurn => {
               setTurnState(newTurn);
             }}
-             />
+          />
         </div>
         <div className="col-md-5">
-          <Turn turn={{ board: board, state: turnState, context: turnContext }} onStateChange={newTurn => {
+          <Turn turn={{ board: board, state: turnState, context: turnContext }} onTurnStateChange={newTurn => {
             if (newTurn.state === "TurnEnded") {
               board.nextPlayer();
               const newContext = createInitialTurnContext();
@@ -109,7 +108,7 @@ function App() {
           }} />
         </div>
       </div>
-      {selecterCharacter ? <CharacterComponent character={selecterCharacter} /> : ""}
+      {selecterCharacter ? <CharacterComponent character={selecterCharacter} onTurnStateChange={(_) => { }} /> : ""}
 
     </div>
   );
@@ -123,9 +122,11 @@ function createCharacter(ebue: Character) {
   ebue.weaponSlot2.card = new MassiveWeaponCard("Grdzaaa", "rare", 143, noSpecialSkill, 60);
   ebue.weaponSlot2.needsReload = true;
   ebue.defensiveConsumable.card = new MagicField();
-  ebue.consumable1.card = new Adrenaline();
+
+  ebue.consumable1.card = new Potion("Small");
   ebue.consumable2.card = new Compass();
-  ebue.throwable.card = new MagicSpear();
+
+  ebue.throwable.card = new FlameBulb();
   ebue.helmet.card = new Helmet();
   ebue.bodyArmor.card = new BodyArmor();
   ebue.consumableBagSlot1.card = new ObstacleNulifier("mountain");

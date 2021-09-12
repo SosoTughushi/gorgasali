@@ -1,4 +1,5 @@
 import TurnContext from "../../../Turn/TurnContext";
+import AmmoBagUsed from "../../../Turn/TurnStates/AmmoBagUsed";
 import { Consumable } from "./Consumable";
 
 export default class AmmoBag extends Consumable {
@@ -7,8 +8,9 @@ export default class AmmoBag extends Consumable {
         undefined, undefined, undefined, undefined)
     }
     
-    use(context: TurnContext): void {
+    use(context: TurnContext): AmmoBagUsed {
         context.self.weaponSlot1.needsReload = false;
         context.self.weaponSlot2.needsReload = false;
+        return new AmmoBagUsed(context);
     }
 }

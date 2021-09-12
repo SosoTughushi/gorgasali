@@ -8,7 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBox } from '@fortawesome/free-solid-svg-icons';
 import Badge from "react-bootstrap/Badge";
 import CharacterSymbol from "./CharacterSybol";
-import CardSlot, { CardSlotBase, WeaponSlot } from "../../gorgasali/Characters/CardSlot";
+import { CardSlotBase, WeaponSlot } from "../../gorgasali/Characters/CardSlot";
 import Potion from "../../gorgasali/Cards/Support/Consumable/Potion";
 import WeaponCard from "../../gorgasali/Cards/Weapons/WeaponCard";
 import { MovementConsumable } from "../../gorgasali/Cards/Support/Consumable/MovementConsumables";
@@ -18,11 +18,12 @@ import Throwable from "../../gorgasali/Cards/Support/Throwable/Throwable";
 import AmmoBag from "../../gorgasali/Cards/Support/Consumable/AmmoBag";
 import Board from "../../gorgasali/board";
 import TurnContext from "../../gorgasali/Turn/TurnContext";
+import ChangesTurnState from "../Turn/ChangesTurnState";
 
 
 
 
-export default function CharacterComponent({ character, cardHandlers, turnContext }: CharacterProps) {
+export default function CharacterComponent({ character, usableCards, turnContext, onTurnStateChange }: CharacterProps) {
 
     function renderCardSlot(slot: CardSlotBase, needsReload: boolean | undefined, isAmmoBag: boolean | undefined = undefined) {
 
@@ -31,44 +32,47 @@ export default function CharacterComponent({ character, cardHandlers, turnContex
             if (!turnContext) return undefined;
             const context = turnContext;
             if (!slot.card) return undefined;
-            if (!cardHandlers) return undefined;
+            if (!usableCards) return undefined;
             if (isAmmoBag) return undefined;
             if (needsReload) return undefined;
 
 
-            function onCardClick<T extends Card>(card: T,  cardCallback: (card: T) => void){
+            function onCardClick<T extends Card>(card: T) {
                 return () => {
-                    cardCallback(card);
                     turnContext?.usedCards.push(card);
-                    card.use(context);
+                    const result = card.use(context);
                     if (slot instanceof WeaponSlot) {
                         slot.needsReload = true;
                     } else {
                         slot.card = undefined;
                     }
+
+                    if (result) {
+                        onTurnStateChange(result);
+                    }
                 }
             }
 
-            if (cardHandlers.defensiveCard && slot.card.type === "Defensive") {
-                return onCardClick(slot.card as Defensive, cardHandlers.defensiveCard);
+            if (usableCards.defensiveCard && slot.card.type === "Defensive") {
+                return onCardClick(slot.card as Defensive);
             }
-            if (cardHandlers.healingPotion && slot.card instanceof Potion) {
-                return onCardClick(slot.card, cardHandlers.healingPotion);
+            if (usableCards.healingPotion && slot.card instanceof Potion) {
+                return onCardClick(slot.card);
             }
-            if (cardHandlers.loadedWeapons && slot.card instanceof WeaponCard) {
-                return onCardClick(slot.card, cardHandlers.loadedWeapons);
+            if (usableCards.loadedWeapons && slot.card instanceof WeaponCard) {
+                return onCardClick(slot.card);
             }
-            if (cardHandlers.movementCard && slot.card instanceof MovementConsumable) {
-                return onCardClick(slot.card, cardHandlers.movementCard);
+            if (usableCards.movementCard && slot.card instanceof MovementConsumable) {
+                return onCardClick(slot.card);
             }
-            if (cardHandlers.throwableCard && slot.card.type === "Throwable") {
-                return onCardClick(slot.card, cardHandlers.throwableCard);
+            if (usableCards.throwableCard && slot.card.type === "Throwable") {
+                return onCardClick(slot.card);
             }
-            if (cardHandlers.weaponExtensionCard && slot.card instanceof GunSocket) {
-                return onCardClick(slot.card, cardHandlers.weaponExtensionCard);
+            if (usableCards.weaponExtensionCard && slot.card instanceof GunSocket) {
+                return onCardClick(slot.card);
             }
-            if (cardHandlers.ammoBag && slot.card.name === "Ammo bag") {
-                return onCardClick(slot.card, cardHandlers.ammoBag);
+            if (usableCards.ammoBag && slot.card.name === "Ammo bag") {
+                return onCardClick(slot.card);
             }
             return undefined;
         });
@@ -145,18 +149,18 @@ export function convertToCssClass(name: string) {
     return name.toLowerCase().replace("'", "").split(' ').join('-');
 }
 
-interface CharacterProps {
+interface CharacterProps extends ChangesTurnState {
     character: Character,
-    cardHandlers?: CardHandlers,
-    turnContext?: TurnContext
+    usableCards?: UsableCards,
+    turnContext?: TurnContext,
 }
 
-export interface CardHandlers {
-    healingPotion?(card: Potion): void,
-    movementCard?(card: MovementConsumable): void,
-    defensiveCard?(card: Defensive): void,
-    throwableCard?(card: Throwable): void,
-    weaponExtensionCard?(card: GunSocket): void,
-    loadedWeapons?(card: WeaponCard): void,
-    ammoBag?(card: AmmoBag): void,
+export interface UsableCards {
+    healingPotion?: boolean,
+    movementCard?: boolean,
+    defensiveCard?: boolean,
+    throwableCard?: boolean,
+    weaponExtensionCard?: boolean,
+    loadedWeapons?: boolean,
+    ammoBag?: boolean,
 }

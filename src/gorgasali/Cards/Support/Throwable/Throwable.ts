@@ -1,3 +1,4 @@
+import TurnStateBase from "../../../Turn/TurnStates/TurnStateBase";
 import { ScoutRangeMinRoll } from "../../Weapons/ScoutWeaponCard";
 import WeaponDamage from "../../Weapons/WeaponDamage";
 import SupportCard from "../SupportCard";

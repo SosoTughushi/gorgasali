@@ -1,10 +1,12 @@
 import Terrain from "../../../Terrain";
 import TurnContext from "../../../Turn/TurnContext";
+import MovementCardUsed from "../../../Turn/TurnStates/MovementCardUsed";
 import { MovementConsumable } from "./MovementConsumables";
 
 export default class ObstacleNulifier extends MovementConsumable {
-    use(context: TurnContext): void {
+    use(context: TurnContext): MovementCardUsed {
         context.obstaclePenaltyNulified = this.obstacle;
+        return new MovementCardUsed(context);
     }
 
     constructor(public obstacle: ObstacleType) {
