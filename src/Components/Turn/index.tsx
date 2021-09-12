@@ -27,23 +27,21 @@ export default function Turn({ turn, onStateChange }: TurnProps) {
             healingPotion: card => onStateChange(state.useHealingCard({ card: card })),
             ammoBag: card => onStateChange(state.useAmmoBag({}))
         };
-        addAction("Roll Dice", () => state.rollDice({ result: 8 }));
+        addAction("Roll Dice", () => state.rollDice());
     }
     if (state.state === "HealingCardUsed") {
-        addAction("Roll Dice", () => state.rollDice({ result: 8 }));
+        addAction("Roll Dice", () => state.rollDice());
     }
 
     if (state.state === "AmmoBagUsed") {
-        addAction("Roll Dice", () => state.rollDice({ result: 8 }));
+        addAction("Roll Dice", () => state.rollDice());
     }
     if (state.state === "MovementDiceRolled") {
         handlers = { movementCard: card => onStateChange(state.useMovementCard({ card: card })) };
-        addAction("Move", () => state.move({}));
         addAction("Skip", () => state.skipMovement());
     }
 
     if (state.state === "MovementCardUsed") {
-        addAction("Move", () => state.move({}));
     }
 
     if (state.state === "Moved") {
@@ -96,12 +94,19 @@ export default function Turn({ turn, onStateChange }: TurnProps) {
         </div>
 
         {actions}
+        <br />
+        {turn.context.movementDice &&
+            <div>
+                dice1: <h3>{turn.context.movementDice.dice1}</h3>
+                dice1: <h3>{turn.context.movementDice.dice2}</h3>
+                available move points: <h3>{turn.context.movementDiceTotal}</h3>
+            </div>}
         <Character character={turn.board.currentPlayer} cardHandlers={handlers} turnContext={turn.context} />
         <br />
         {turn.context.usedCards.map(toCardComponent)}
     </div>
 }
 interface TurnProps {
-    turn: TurnClass
+    turn: TurnClass;
     onStateChange(state: TurnStateMachine): void;
 }

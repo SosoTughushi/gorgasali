@@ -55,11 +55,15 @@ function getAttributeClasses(attributes: TileVisualAttributes) {
     return " current-player";
   }
 
+  if(attributes.trace) {
+    return " trace";
+  }
+
   if (attributes.isDimmed) {
     return " dim";
   }
 
-  if(attributes.isHighlighted) {
+  if (attributes.isHighlighted) {
     return " highlighted";
   }
   return "";
@@ -74,6 +78,7 @@ interface TileProps {
 export interface TileVisualAttributes {
   isSelected?: boolean;
   isHighlighted?: boolean;
+  trace?: boolean; //"up" | "down" | "left" | "right";
   isCurrentPlayer?: boolean;
   isDimmed?: boolean;
 }

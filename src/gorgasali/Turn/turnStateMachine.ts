@@ -4,18 +4,20 @@ import { Defensive } from "../Cards/Support/Defensive/Defensive";
 import GunSocket, { ExtraSix } from "../Cards/Support/Consumable/GunSocket";
 import Throwable from "../Cards/Support/Throwable/Throwable";
 import Potion from "../Cards/Support/Consumable/Potion";
-import Barrier from "../Cards/Support/Defensive/Barrier";
+import TurnContext, { Dice } from "./TurnContext";
+import Tile, { getTileCost } from "../Tile";
 
 
-type TurnStateMachine = 
-    Initial 
-    | HealingCardUsed 
-    | AmmoBagUsed 
-    | MovementDiceRolled 
-    | MovementCardUsed 
-    | Moved 
-    | DefensiveCardUsed 
-    | ThrowableCardUsed 
+type TurnStateMachine =
+    Initial
+    | HealingCardUsed
+    | AmmoBagUsed
+    | MovementDiceRolled
+    | MovementCardUsed
+    | MoveInProgress
+    | Moved
+    | DefensiveCardUsed
+    | ThrowableCardUsed
     | WeaponExtensionCardUsed
     | TurnEnded
 
@@ -23,138 +25,181 @@ export default TurnStateMachine
 
 ///// states
 
-export class Initial {
+abstract class TurnStateBase {
+    constructor(protected context: TurnContext) {
+    }
+}
+
+export class Initial extends TurnStateBase {
     public state: "Initial" = "Initial";
     public order = 0;
     useHealingCard(action: UseHealingCard): HealingCardUsed {
-        return new HealingCardUsed();
+        return new HealingCardUsed(this.context);
     }
 
     useAmmoBag(action: UseAmmoBag): AmmoBagUsed {
-        return new AmmoBagUsed();
+        return new AmmoBagUsed(this.context);
     }
 
-    rollDice(action: RollDice): MovementDiceRolled {
-        return new MovementDiceRolled()
+    rollDice(): MovementDiceRolled {
+        this.context.movementDice = {
+            dice1: rollSingleDice(),
+            dice2: rollSingleDice()
+        }
+        this.context.movementDiceTotal = this.context.movementDice.dice1 + this.context.movementDice.dice2;
+        return new MovementDiceRolled(this.context);
     }
 }
 
-export class HealingCardUsed {
+export class HealingCardUsed extends TurnStateBase {
     public state: "HealingCardUsed" = "HealingCardUsed";
     public order = 1;
 
-    rollDice(action: RollDice) {
-        return new MovementDiceRolled();
+    rollDice() {
+        return new MovementDiceRolled(this.context);
     }
 }
-export class AmmoBagUsed {
-    
+export class AmmoBagUsed extends TurnStateBase {
+
     public state: "AmmoBagUsed" = "AmmoBagUsed";
     public order = 2;
-    rollDice(action: RollDice) {
-        return new MovementDiceRolled();
+    rollDice() {
+        return new MovementDiceRolled(this.context);
     }
 }
-export class MovementDiceRolled {
+
+export class MoveInProgress extends TurnStateBase {
+
+    public state: "MoveInProgress" = "MoveInProgress";
+    public order = 4.5;
+    move(targetTile: Tile): MoveInProgress | Moved {
+        let cost = getTileCost(this.context.obstaclePenaltyNulified, targetTile);
+        if (this.context.movementDiceTotal) {
+            this.context.movementDiceTotal -= cost;
+        }
+        this.context.previousLocations.add(this.context.board.currentPlayerPosition);
+        this.context.board.moveTo(targetTile.index);
+
+        const availableMoves = this.context.board.getAvailableDestinations(this.context);
+        if (availableMoves.size === 0) {
+            return new Moved(this.context);
+        }
+
+        return new MoveInProgress(this.context);
+    }
+
+    endMove(action: Move) {
+        return new Moved(this.context);
+    }
+}
+export class MovementDiceRolled extends TurnStateBase {
 
     public state: "MovementDiceRolled" = "MovementDiceRolled";
     public order = 3;
     skipMovement(): Moved {
-        return new Moved();
+        return new Moved(this.context);
     }
 
     useMovementCard(action: UseMovementCard) {
-        return new MovementCardUsed();
+        return new MovementCardUsed(this.context);
     }
-    move(action: Move): Moved {
-        return new Moved();
+
+    move(targetTile: Tile): MoveInProgress | Moved {
+        const inProgress = new MoveInProgress(this.context);
+        return inProgress.move(targetTile);
     }
 }
 
-export class MovementCardUsed {
+export class MovementCardUsed extends TurnStateBase {
     public state: "MovementCardUsed" = "MovementCardUsed";
     public order = 4;
 
-    move(action: Move) {
-        return new Moved();
+    move(targetTile: Tile): MoveInProgress| Moved {
+        const inProgress = new MoveInProgress(this.context);
+        return inProgress.move(targetTile);
     }
 }
 
-export class Moved {
+export class Moved extends TurnStateBase {
     public state: "Moved" = "Moved";
     public order = 5;
 
     useDefensiveCard(action: UseDefensiveCard) {
-        return new DefensiveCardUsed();
+        return new DefensiveCardUsed(this.context);
     }
     useThrowableCard(action: UseThrowableCard) {
-        return new ThrowableCardUsed();
+        return new ThrowableCardUsed(this.context);
     }
 
     useWeaponExtensionCard(action: UseWeaponExtensionCard) {
-        return new WeaponExtensionCardUsed();
+        return new WeaponExtensionCardUsed(this.context);
     }
 
     reloadWeapons(action: RealoadWeapons) {
-        return new TurnEnded();
+        return new TurnEnded(this.context);
     }
 
     manageBackpack(action: ManageBackpack) {
-        return new TurnEnded();
+        return new TurnEnded(this.context);
     }
 
     shootEnemy(action: ShootEnemy) {
-        return new TurnEnded();
+        return new TurnEnded(this.context);
     }
 }
 
-export class DefensiveCardUsed {
+export class DefensiveCardUsed extends TurnStateBase {
     public state: "DefensiveCardUsed" = "DefensiveCardUsed";
     public order = 6;
 
     reloadWeapons(action: RealoadWeapons) {
-        return new TurnEnded();
+        return new TurnEnded(this.context);
     }
 
 
     manageBackpack(action: ManageBackpack) {
-        return new TurnEnded();
+        return new TurnEnded(this.context);
     }
 
 
     shootEnemy(action: ShootEnemy) {
-        return new TurnEnded();
+        return new TurnEnded(this.context);
     }
 }
-export class ThrowableCardUsed {
+export class ThrowableCardUsed extends TurnStateBase {
     public state: "ThrowableCardUsed" = "ThrowableCardUsed";
     public order = 7;
 
     reloadWeapons(action: RealoadWeapons) {
-        return new TurnEnded();
+        return new TurnEnded(this.context);
     }
 
 
     manageBackpack(action: ManageBackpack) {
-        return new TurnEnded();
+        return new TurnEnded(this.context);
     }
 
 
     shootEnemy(action: ShootEnemy) {
-        return new TurnEnded();
+        return new TurnEnded(this.context);
     }
 }
-export class WeaponExtensionCardUsed {
+export class WeaponExtensionCardUsed extends TurnStateBase {
     public state: "WeaponExtensionCardUsed" = "WeaponExtensionCardUsed";
     public order = 8;
 
     shootEnemy(action: ShootEnemy) {
-        return new TurnEnded();
+        return new TurnEnded(this.context);
     }
 }
-export class TurnEnded { 
+export class TurnEnded extends TurnStateBase {
     public state: "TurnEnded" = "TurnEnded";
     public order = 9;
+}
+
+function rollSingleDice(): Dice {
+    // @ts-ignore: ts cant figure out that result will be from 1 to 6
+    return Math.floor(Math.random() * 6) + 1;
 }
 
 ////// Actions
@@ -163,13 +208,6 @@ type UseHealingCard = {
     card: Potion,
 }
 type UseAmmoBag = {
-}
-
-
-type MovementDiceResult = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
-
-type RollDice = {
-    result: MovementDiceResult,
 }
 type UseMovementCard = {
     card: MovementConsumable

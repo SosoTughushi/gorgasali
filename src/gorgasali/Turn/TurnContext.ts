@@ -8,7 +8,9 @@ import { Card } from "../Cards/Card";
  type TurnContext = {
     self: CharacterBase;
     target?: CharacterBase;
-    diceResult?: number;
+    movementDice?: MovementDice;
+    movementDiceTotal?: number;
+    previousLocations: Set<number>;
     board: Board;
     gunSockets?: GunSockets;
     obstaclePenaltyNulified?: ObstacleType;
@@ -30,6 +32,10 @@ type GunSockets = {
 
 type MovementAmplifiers = {
     teleport?: Teleport,
-    adrenaline?: Adrenaline,
-    compass?: Compass
+    compass?: Compass,
+    adrenaline?: Adrenaline
 }
+
+
+export type Dice = 1 | 2 | 3 | 4 | 5 | 6;
+export type MovementDice = { dice1: Dice, dice2: Dice };

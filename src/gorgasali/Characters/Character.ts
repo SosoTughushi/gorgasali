@@ -59,7 +59,10 @@ export default class CharacterBase {
         this.helmet = new CardSlot<Helmet>("Helmet");
         this.bodyArmor = new CardSlot<BodyArmor>("Body Armor");
         this.defensiveConsumable = new CardSlot<Defensive>("Defensive");
+        this.position = -1;
     }
+
+    public position: number;
 }
 
 export type CharacterName = "ARMAZI" | "D'RAIN" | "EBUE" | "E'MOON" | "MEDEA" | "OCTOR" | "PRINCESS TSIVA" | "THARSIS" | "VARAS" | "KRUBER";

@@ -41,3 +41,20 @@ export default class Tile {
 export function convertToIndex(x: number, y: number) {
     return y * 30 + x;
 }
+
+export function getTileCost(obstacleNulified: string | undefined, tile: Tile) {
+    const costs = new Map<Terrain, number>();
+    costs.set("bridge", 1);
+    costs.set("flat", 1);
+    costs.set("healingPlace", 1);
+    costs.set("forest", obstacleNulified == "forest" ? 1 : 2);
+    costs.set("mountain", obstacleNulified == "mountain" ? 1 : 2);
+    costs.set("water", obstacleNulified == "water" ? 1 : 3);
+    const result =  costs.get(tile.terrain);
+
+    if(result) {
+        return result;
+    }
+
+    return 1;
+}

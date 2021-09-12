@@ -1,32 +1,56 @@
-
 import React from 'react';
 import Tile from '../Tile';
 import BoardClass from "../../gorgasali/board";
 import './Board.css';
 import TileClass from "../../gorgasali/Tile";
 import Character from '../../gorgasali/Characters/Character';
+import TurnContext from '../../gorgasali/Turn/TurnContext';
+import TurnStateMachine from '../../gorgasali/Turn/turnStateMachine';
+import context from 'react-bootstrap/esm/AccordionContext';
 
 
-function Board({ board, onTileClick, selectedCharacter }: BoardProps) {
+function Board({ board, selectedCharacter, turnContext, turnState, onTurnStateChange }: BoardProps) {
     const n = 30;
 
     const tiles = board
         .getTiles();
 
+    let isDimmed: (tile: TileClass) => boolean = t => false;
+    let isHighlighted: (tile: TileClass) => boolean = t => false;
+    let isTrace: (tile: TileClass) => boolean = t => false;
 
-    const availableMoves = board.getAvailableDestinations(12);
+    let onTileClick = (tile: TileClass) => { }
+    switch (turnState.state) {
+        case "MovementCardUsed":
+        case "MovementDiceRolled":
+        case "MoveInProgress":
+            const availableMoves = board.getAvailableDestinations(turnContext);
+
+            isHighlighted = tile => availableMoves.has(tile.index);
+            isDimmed = tile => !availableMoves.has(tile.index);
+            isTrace = tile => turnContext.previousLocations.has(tile.index);
+
+            onTileClick = tile => {
+                if (availableMoves.has(tile.index)) {
+                    onTurnStateChange(turnState.move(tile));
+                }
+            };
+            break;
+    }
+
     const tileComponents =
         tiles
-            .map(tile => (<Tile 
-                tile={tile} 
-                onTileClick={onTileClick} 
-                attributes={{ 
-                    isSelected: selectedCharacter && selectedCharacter === tile.character, 
-                    isHighlighted: availableMoves.has(tile.index),
-                    isDimmed: !availableMoves.has(tile.index),
-                    isCurrentPlayer: board.currentPlayer === tile.character
+            .map(tile => (<Tile
+                tile={tile}
+                onTileClick={onTileClick}
+                attributes={{
+                    isSelected: selectedCharacter && selectedCharacter === tile.character,
+                    isHighlighted: isHighlighted(tile),
+                    isDimmed: isDimmed(tile),
+                    trace: isTrace(tile),
+                    isCurrentPlayer: board.currentPlayer === tile.character,
                 }} />
-                ));
+            ));
 
     const sliced =
         Array
@@ -43,8 +67,10 @@ function Board({ board, onTileClick, selectedCharacter }: BoardProps) {
 
 interface BoardProps {
     board: BoardClass;
-    onTileClick(tile: TileClass): void;
     selectedCharacter: Character | undefined;
+    turnContext: TurnContext;
+    turnState: TurnStateMachine;
+    onTurnStateChange(state: TurnStateMachine): void;
 }
 
 export default Board;

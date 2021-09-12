@@ -1,23 +1,24 @@
 import { ObstacleType } from "./Cards/Support/Consumable/ObstacleNulifier";
 import Character from "./Characters/Character";
 import Terrain from "./Terrain";
-import Tile, { convertToIndex } from "./Tile";
+import Tile, { convertToIndex, getTileCost } from "./Tile";
+import TurnContext from "./Turn/TurnContext";
 
 export default class Board {
     private tiles: Tile[];
     private currentPlayerIndex = 0;
 
-    private _characters: { character: Character, position: number }[];
+    private _characters: Character[];
     public get characters(): Character[] {
-        return this._characters.map(c => c.character);
+        return this._characters;
     }
 
     public get currentPlayer(): Character {
         const index = this.currentPlayerIndex % this._characters.length;
-        return this._characters[index].character;
+        return this._characters[index];
     }
 
-    private get currentPlayerPosition(): number {
+    public get currentPlayerPosition(): number {
         const index = this.currentPlayerIndex % this._characters.length;
         return this._characters[index].position;
     }
@@ -29,10 +30,11 @@ export default class Board {
 
     public placeCharacter(x: number, y: number, character: Character) {
         const index = convertToIndex(x, y);
-        this._characters.push({ character: character, position: index });
+        this._characters.push(character);
 
         const targetTile = this.tiles[index];
         targetTile.character = character;
+        character.position = index;
     }
 
     public getTiles(): Tile[] {
@@ -55,95 +57,78 @@ export default class Board {
         return Math.max(diffX, diffY) <= maxRange;
     }
 
-    public canReach(targetX: number, targetY: number, movementDiceResult: number, obstacleNulified?: ObstacleType, canMoveDiagonally?: boolean) {
-        const index = convertToIndex(targetX, targetY);
-        if (this._characters.find(c => c.position === index)) {
-            return false;
-        }
+    public getAvailableDestinations(turnContext: TurnContext) {
 
-        const availableDestinations = this.getAvailableDestinations(movementDiceResult, obstacleNulified, canMoveDiagonally);
-        if (availableDestinations.has(index)) {
-            return true;
-        }
-
-        return false;
+        return this.getAvailableDestinationsRaw(turnContext.movementDiceTotal ?? 0,
+            turnContext.previousLocations,
+            turnContext.obstaclePenaltyNulified,
+            turnContext.movementAmplifiers?.compass !== undefined);
     }
 
-    public getAvailableDestinations(movementDiceResult: number, obstacleNulified?: ObstacleType, canMoveDiagonally?: boolean) {
-        const costs = new Map<Terrain, number>();
-        costs.set("bridge", 1);
-        costs.set("flat", 1);
-        costs.set("healingPlace", 1);
-        costs.set("forest", obstacleNulified == "forest" ? 1 : 2);
-        costs.set("mountain", obstacleNulified == "mountain" ? 1 : 2);
-        costs.set("water", obstacleNulified == "water" ? 1 : 3);
+    private getAvailableDestinationsRaw(movementDiceResult: number, alreadyVisited: Set<number>, obstacleNulified?: ObstacleType, canMoveDiagonally?: boolean) {
 
-        const visited = new Set<number>();
-        const results = new Set<number>();
-        const _this = this;
-        function dfs(current: number, movementLeft: number) {
-            visited.add(current);
-            const neighbourIndexes = [];
-            const { x, y } = convertToCoordinates(current);
+        const current = this.currentPlayerPosition;
+        const { x, y } = convertToCoordinates(current);
 
-            const isOnLeft = x === 0;
-            const isOnRight = x === 29;
-            const isOnTop = y === 0;
-            const isOnBottom = y === 29;
+        const neighbourIndexes = []
 
-            if (!isOnTop) {
-                neighbourIndexes.push(current - 30);
-            }
-            if (!isOnBottom) {
-                neighbourIndexes.push(current + 30);
-            }
-            if (!isOnLeft) {
-                neighbourIndexes.push(current - 1);
-            }
-            if (!isOnRight) {
-                neighbourIndexes.push(current + 1);
-            }
+        const isOnLeft = x === 0;
+        const isOnRight = x === 29;
+        const isOnTop = y === 0;
+        const isOnBottom = y === 29;
 
-            if (canMoveDiagonally) {
-                if (!isOnTop) {
-                    if (!isOnLeft) {
-                        neighbourIndexes.push(current - 31);
-                    }
-                    if (!isOnRight) {
-                        neighbourIndexes.push(current - 29);
-                    }
-                }
-
-                if (!isOnBottom) {
-                    if (!isOnLeft) {
-                        neighbourIndexes.push(current + 29);
-                    }
-                    if (!isOnRight) {
-                        neighbourIndexes.push(current + 31);
-                    }
-                }
-            }
-
-            const neighbourTiles =
-                neighbourIndexes
-                    .filter(n => !visited.has(n))
-                    .map(n => _this.tiles[n])
-                    .filter(t => t.character === undefined)
-                    .filter(t => movementLeft >= (costs.get(t.terrain) ?? 0))
-
-            neighbourTiles.forEach(neighbour => {
-                dfs(neighbour.index, movementLeft - (costs.get(neighbour.terrain) ?? 0));
-            });
-
-            if (neighbourTiles.length === 0 || _this.tiles[current].hasBox) {
-                results.add(current);
-            }
-
-            visited.delete(current);
+        if (!isOnTop) {
+            neighbourIndexes.push(current - 30);
+        }
+        if (!isOnBottom) {
+            neighbourIndexes.push(current + 30);
+        }
+        if (!isOnLeft) {
+            neighbourIndexes.push(current - 1);
+        }
+        if (!isOnRight) {
+            neighbourIndexes.push(current + 1);
         }
 
-        dfs(this.currentPlayerPosition, movementDiceResult);
-        return results;
+        if (canMoveDiagonally) {
+            if (!isOnTop) {
+                if (!isOnLeft) {
+                    neighbourIndexes.push(current - 31);
+                }
+                if (!isOnRight) {
+                    neighbourIndexes.push(current - 29);
+                }
+            }
+
+            if (!isOnBottom) {
+                if (!isOnLeft) {
+                    neighbourIndexes.push(current + 29);
+                }
+                if (!isOnRight) {
+                    neighbourIndexes.push(current + 31);
+                }
+            }
+        }
+
+        const resultArray = neighbourIndexes
+            .filter(n => !alreadyVisited.has(n))
+            .map(n => this.tiles[n])
+            .filter(t => t.character === undefined)
+            .filter(t => movementDiceResult >= (getTileCost(obstacleNulified, t) ?? 0))
+            .map(c => c.index);
+
+        const resultSet = new Set(resultArray);
+
+        return resultSet;
+    }
+
+    public moveTo(position: number) {
+        const currentTile = this.tiles[this.currentPlayerPosition];
+        currentTile.character = undefined;
+
+        this.currentPlayer.position = position;
+        const targetTile = this.tiles[position];
+        targetTile.character = this.currentPlayer;
     }
 }
 

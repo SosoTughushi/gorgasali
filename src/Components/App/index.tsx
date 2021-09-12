@@ -26,7 +26,7 @@ import Octor from '../../gorgasali/Characters/Octor';
 import Kruber from '../../gorgasali/Characters/Kruber';
 import Dirain from '../../gorgasali/Characters/Dirain';
 import Emoon from '../../gorgasali/Characters/Emoon';
-import { Teleport } from '../../gorgasali/Cards/Support/Consumable/MovementConsumables';
+import { Adrenaline, Compass, Teleport } from '../../gorgasali/Cards/Support/Consumable/MovementConsumables';
 import SmokeBulb from '../../gorgasali/Cards/Support/Throwable/SmokeBulb';
 import CharacterTileList from '../Character/CharacterTileList';
 import Turn from "../Turn";
@@ -44,7 +44,6 @@ function App() {
     slot.card = card;
     return <CardComponent cardSlot={slot} needsReload={false} />
   }
-  const cards = deck.supportCards.map(toCardComponent).concat(deck.weaponCards.map(toCardComponent))
 
   const [board] = useState(() => {
     const b = new BoardClass();
@@ -63,11 +62,13 @@ function App() {
     return b;
   });
   const [selecterCharacter, setSelectedCharacter] = useState<Character | undefined>()
-  const [turnState, setTurnState] = useState<TurnStateMachine>(() => new Initial());
   const createInitialTurnContext = () => {
-    return { self: board.currentPlayer, board: board, usedCards: [] };
+    const previousLocations = new Set<number>();
+    previousLocations.add(board.currentPlayerPosition);
+    return { self: board.currentPlayer, board: board, usedCards: [], previousLocations };
   };
   const [turnContext, setTurnContext] = useState<TurnContext>(createInitialTurnContext)
+  const [turnState, setTurnState] = useState<TurnStateMachine>(() => new Initial(turnContext));
 
 
   return (
@@ -85,14 +86,23 @@ function App() {
             currentPlayer={board.currentPlayer} />
         </div>
         <div className="col-md-5">
-          <Board board={board} onTileClick={tile => setSelectedCharacter(tile.character)} selectedCharacter={selecterCharacter} />
+          <Board
+            board={board}
+            selectedCharacter={selecterCharacter}
+            turnContext={turnContext}
+            turnState={turnState}
+            onTurnStateChange={newTurn => {
+              setTurnState(newTurn);
+            }}
+             />
         </div>
         <div className="col-md-5">
           <Turn turn={{ board: board, state: turnState, context: turnContext }} onStateChange={newTurn => {
             if (newTurn.state === "TurnEnded") {
               board.nextPlayer();
-              setTurnState(new Initial());
-              setTurnContext(createInitialTurnContext());
+              const newContext = createInitialTurnContext();
+              setTurnContext(newContext);
+              setTurnState(new Initial(newContext));
             } else {
               setTurnState(newTurn);
             }
@@ -113,8 +123,8 @@ function createCharacter(ebue: Character) {
   ebue.weaponSlot2.card = new MassiveWeaponCard("Grdzaaa", "rare", 143, noSpecialSkill, 60);
   ebue.weaponSlot2.needsReload = true;
   ebue.defensiveConsumable.card = new MagicField();
-  ebue.consumable1.card = new AmmoBag();
-  ebue.consumable2.card = new Potion("Medium");
+  ebue.consumable1.card = new Adrenaline();
+  ebue.consumable2.card = new Compass();
   ebue.throwable.card = new MagicSpear();
   ebue.helmet.card = new Helmet();
   ebue.bodyArmor.card = new BodyArmor();

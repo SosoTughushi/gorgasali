@@ -8,7 +8,7 @@
     font-size: x-small;
     position: relative;
     &.dim {
-        filter: brightness(70%)
+        filter: brightness(90%)
     }
     &.flat {
         background: rgb(253, 245, 216);
@@ -53,5 +53,9 @@
         &:hover {
             background-color: whitesmoke;
         }
+    }
+    &.trace {
+        // filter: brightness(50%);
+        background-color: purple;
     }
 }

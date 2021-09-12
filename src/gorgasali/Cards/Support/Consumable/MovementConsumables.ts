@@ -22,7 +22,10 @@ export class Adrenaline extends MovementConsumable {
     }
 
     use(context: TurnContext): void {
-        context.movementAmplifiers = { adrenaline: this }
+        if (context.movementDiceTotal) {
+            context.movementDiceTotal *= 2;
+            context.movementAmplifiers = { adrenaline: this }
+        }
     }
 }
 
