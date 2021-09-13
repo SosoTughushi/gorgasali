@@ -16,6 +16,14 @@ export default class Potion extends Consumable {
         context.self.heal(this.healingAmount);
         return new HealingCardUsed(context);
     }
+
+    canUse(context: TurnContext) {
+        if(context.self.health === 100) {
+            return false;
+        }
+
+        return true;
+    }
 }
 
 function mapSizeToHealingAmount(size: "Small" | "Medium" | "Large"): number {

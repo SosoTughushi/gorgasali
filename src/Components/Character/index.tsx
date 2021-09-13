@@ -35,18 +35,20 @@ export default function CharacterComponent({ character, usableCards, turnContext
             if (needsReload) return undefined;
 
 
-            function onCardClick<T extends Card>(card: T) {
-                return () => {
-                    turnContext?.usedCards.push({ usedCard: card });
-                    const result = card.use(context);
-                    if (slot instanceof WeaponSlot) {
-                        slot.needsReload = true;
-                    } else {
-                        slot.card = undefined;
-                    }
+            function onCardClick(card: Card) {
+                if (card.canUse(context)) {
+                    return () => {
+                        turnContext?.usedCards.push({ usedCard: card });
+                        const result = card.use(context);
+                        if (slot instanceof WeaponSlot) {
+                            slot.needsReload = true;
+                        } else {
+                            slot.card = undefined;
+                        }
 
-                    if (result) {
-                        onTurnStateChange(result);
+                        if (result) {
+                            onTurnStateChange(result);
+                        }
                     }
                 }
             }
@@ -58,17 +60,13 @@ export default function CharacterComponent({ character, usableCards, turnContext
                 return onCardClick(slot.card);
             }
             if (usableCards.loadedWeapons && slot.card instanceof WeaponCard) {
-                if (slot.card.canUse(context)) {
-                    return onCardClick(slot.card);
-                }
+                return onCardClick(slot.card);
             }
             if (usableCards.movementCard && slot.card instanceof MovementConsumable) {
                 return onCardClick(slot.card);
             }
             if (usableCards.throwableCard && slot.card instanceof Throwable) {
-                if (slot.card.canUse(context)) {
-                    return onCardClick(slot.card);
-                }
+                return onCardClick(slot.card);
             }
             if (usableCards.weaponExtensionCard && slot.card instanceof GunSocket) {
                 return onCardClick(slot.card);
@@ -76,7 +74,6 @@ export default function CharacterComponent({ character, usableCards, turnContext
             if (usableCards.ammoBag && slot.card.name === "Ammo bag") {
                 return onCardClick(slot.card);
             }
-            return undefined;
         });
 
         const handler = createHandler();

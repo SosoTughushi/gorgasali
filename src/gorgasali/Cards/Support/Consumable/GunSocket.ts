@@ -9,6 +9,21 @@ export default abstract class GunSocket extends Consumable {
     constructor(public targetGunType: WeaponType, name: string, specialSkill: string) {
         super(name, "rare", "Consumable", specialSkill, undefined, undefined, undefined, undefined);
     }
+
+    canUse(context: TurnContext) {
+        if (context.self.weaponSlot1.card
+            && !context.self.weaponSlot1.needsReload
+            && context.self.weaponSlot1.card.type === this.targetGunType) {
+            return true;
+        }
+
+        if (context.self.weaponSlot2.card
+            && !context.self.weaponSlot2.needsReload
+            && context.self.weaponSlot2.card.type === this.targetGunType) {
+            return true;
+        }
+        return false;
+    }
 }
 
 
