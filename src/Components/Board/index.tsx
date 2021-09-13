@@ -19,8 +19,8 @@ function Board({ board, selectedCharacter, turnContext, turnState, onTurnStateCh
     const tiles = board
         .getTiles();
 
-    let isDimmed: (tile: TileClass) => boolean = t => false;
     let isHighlighted: (tile: TileClass) => boolean = t => false;
+    let isDimmed: (tile: TileClass) => boolean = t => false;
     let isTrace: (tile: TileClass) => boolean = t => false;
 
     let onTileClick = (tile: TileClass) => { }
@@ -60,13 +60,22 @@ function Board({ board, selectedCharacter, turnContext, turnState, onTurnStateCh
             isDimmed = tile => !isHighlighted(tile);
 
             onTileClick = tile => {
-                if(isHighlighted(tile) && tile.character !== undefined) {
+                if (isHighlighted(tile) && tile.character !== undefined) {
                     onTurnStateChange(turnState.chooseTarget(tile.character));
                 }
             }
             break;
-        case "FlameBulbInProgress":
+        case "WeaponCardInProgress":
+            const ranges = getShootingRange.bind(board)(turnState.card.weaponRange);
 
+            isHighlighted = tile => ranges.has(tile.index);
+            isDimmed = tile => !isHighlighted(tile);
+
+            onTileClick = tile => {
+                if(isHighlighted(tile) && tile.character !== undefined) {
+                    onTurnStateChange(turnState.chooseTarget(tile.character));
+                }
+            }
             break;
     }
 

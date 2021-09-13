@@ -43,7 +43,7 @@ function App() {
     const b = new BoardClass();
 
     b.placeCharacter(5, 9, createEbue());
-    b.placeCharacter(9, 15, createArmazi());
+    b.placeCharacter(5, 10, createArmazi());
     b.placeCharacter(24, 3, createMedea());
     b.placeCharacter(26, 8, createTharsis());
     b.placeCharacter(13, 22, createVaras());
@@ -64,7 +64,17 @@ function App() {
   const [turnContext, setTurnContext] = useState<TurnContext>(createInitialTurnContext)
   const [turnState, setTurnState] = useState<TurnStateMachine>(() => new Initial(turnContext));
 
-
+  const onTurnChange = (newTurn: TurnStateMachine) => {
+    // if (newTurn.state === "TurnEnded") {
+    //   board.nextPlayer();
+    //   const newContext = createInitialTurnContext();
+    //   setTurnContext(newContext);
+    //   setTurnState(new Initial(newContext));
+    // } else {
+    //   setTurnState(newTurn);
+    // }
+    setTurnState(newTurn);
+  }
   return (
     <div className="App">
 
@@ -85,22 +95,11 @@ function App() {
             selectedCharacter={selecterCharacter}
             turnContext={turnContext}
             turnState={turnState}
-            onTurnStateChange={newTurn => {
-              setTurnState(newTurn);
-            }}
+            onTurnStateChange={onTurnChange}
           />
         </div>
         <div className="col-md-5">
-          <Turn turn={{ board: board, state: turnState, context: turnContext }} onTurnStateChange={newTurn => {
-            if (newTurn.state === "TurnEnded") {
-              board.nextPlayer();
-              const newContext = createInitialTurnContext();
-              setTurnContext(newContext);
-              setTurnState(new Initial(newContext));
-            } else {
-              setTurnState(newTurn);
-            }
-          }} />
+          <Turn turn={{ board: board, state: turnState, context: turnContext }} onTurnStateChange={onTurnChange} />
         </div>
       </div>
       {selecterCharacter ? <CharacterComponent character={selecterCharacter} onTurnStateChange={(_) => { }} /> : ""}
@@ -115,7 +114,6 @@ function createCharacter(ebue: Character) {
   ebue.damage(75);
   ebue.weaponSlot1.card = new ScoutWeaponCard("Scum", "epic", 22, noSpecialSkill);
   ebue.weaponSlot2.card = new MassiveWeaponCard("Grdzaaa", "rare", 143, noSpecialSkill, 60);
-  ebue.weaponSlot2.needsReload = true;
   ebue.defensiveConsumable.card = new MagicField();
 
   ebue.consumable1.card = new AmmoBag();

@@ -5,6 +5,7 @@ import WeaponDamage from "./Weapons/WeaponDamage";
 import { WeaponType } from "./Weapons/WeaponType";
 
 import TurnStateMachine from "../Turn/TurnStates/turnStateMachine";
+import { WeaponCardState } from "./Weapons/WeaponCard";
 
 export abstract class Card {
     constructor(
@@ -21,6 +22,10 @@ export abstract class Card {
     }
 
     abstract use(context: TurnContext): void | TurnStateMachine;
+
+    canUse(context: TurnContext): boolean {
+        return true;
+    }
 }
 
 type SupportCard = "Throwable" | "Consumable" | "Defensive" | "Armor";

@@ -58,7 +58,9 @@ export default function CharacterComponent({ character, usableCards, turnContext
                 return onCardClick(slot.card);
             }
             if (usableCards.loadedWeapons && slot.card instanceof WeaponCard) {
-                return onCardClick(slot.card);
+                if (slot.card.canUse(context)) {
+                    return onCardClick(slot.card);
+                }
             }
             if (usableCards.movementCard && slot.card instanceof MovementConsumable) {
                 return onCardClick(slot.card);

@@ -1,7 +1,6 @@
 import WeaponSpecialSkill, { roll11PlusForExtra15Damage, armorPenetration } from "./WeaponSpecialSkill";
 import { CardLevel } from "../CardLevel";
 import WeaponCard from "./WeaponCard";
-import TurnContext from "../../Turn/TurnContext";
 
 
 export type ScoutRangeMinRoll = {
@@ -33,9 +32,6 @@ export default class ScoutWeaponCard extends WeaponCard {
                 range: 4,
                 minRoll: 9
             }]);
-    }
-    
-    use(context: TurnContext): void {
     }
 }
 
