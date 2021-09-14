@@ -95,12 +95,29 @@ function Board({ board, selectedCharacter, turnContext, turnState, onTurnStateCh
     const sliced =
         Array
             .from({ length: n }, (_, i) => tileComponents.slice(i * n, i * n + n))
-            .map(slice => (<div>{slice} <br /></div>))
+            .map(slice => (<div className="board-row">{slice} <br /></div>))
 
     return (
         <div className="board-container">
             <div className="board" >
-                {sliced}
+                <div className="top-coordinates-panel">OE</div>
+                <div className="board-body">
+                    <table>
+                        <tbody>
+                            <tr>
+                                <td className="left-coordinates-panel">
+                                    <div >20</div>
+                                </td>
+                                <td>
+                                    <div className="board-tiles">
+                                        {sliced}
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
             </div>
         </div>
     );

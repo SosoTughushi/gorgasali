@@ -1,9 +1,28 @@
 .board-container {
     border: 5px solid black;
     overflow: auto;
+    // height: 1000px;
+    // width: 1500px;
     .board {
         float: left;
-        width: 3090px;
-        height: 3090px;
+        .board-row {
+            width: max-content;
+        }
+        .top-coordinates-panel {
+            height: 30px;
+            width: 100%;
+            top: 0;
+            position: sticky;
+            z-index: 99;
+            background-color: purple;
+        }
+        .left-coordinates-panel {
+            height: 100%;
+            width: 30px;
+            left: 0;
+            position: sticky;
+            z-index: 99;
+            background-color: purple;
+        }
     }
 }
