@@ -1,0 +1,9 @@
+.board-container {
+    border: 5px solid black;
+    overflow: auto;
+    .board {
+        float: left;
+        width: 3090px;
+        height: 3090px;
+    }
+}

@@ -1,12 +1,11 @@
 import React from 'react';
 import Tile from '../Tile';
 import BoardClass from "../../gorgasali/Board/board";
-import './Board.css';
+import './Board.scss';
 import TileClass from "../../gorgasali/Tile";
 import Character from '../../gorgasali/Characters/Character';
 import TurnContext from '../../gorgasali/Turn/TurnContext';
 import TurnStateMachine from '../../gorgasali/Turn/TurnStates/turnStateMachine';
-import context from 'react-bootstrap/esm/AccordionContext';
 import ChangesTurnState from '../Turn/ChangesTurnState';
 import getTeleportDestinations from '../../gorgasali/Board/destinations/getTeleportDestinations';
 import getMoveDestinations from '../../gorgasali/Board/destinations/getMoveDestinations';
@@ -72,7 +71,7 @@ function Board({ board, selectedCharacter, turnContext, turnState, onTurnStateCh
             isDimmed = tile => !isHighlighted(tile);
 
             onTileClick = tile => {
-                if(isHighlighted(tile) && tile.character !== undefined) {
+                if (isHighlighted(tile) && tile.character !== undefined) {
                     onTurnStateChange(turnState.chooseTarget(tile.character));
                 }
             }
@@ -99,8 +98,10 @@ function Board({ board, selectedCharacter, turnContext, turnState, onTurnStateCh
             .map(slice => (<div>{slice} <br /></div>))
 
     return (
-        <div className="board">
-            {sliced}
+        <div className="board-container">
+            <div className="board" >
+                {sliced}
+            </div>
         </div>
     );
 }

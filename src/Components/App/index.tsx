@@ -43,7 +43,7 @@ function App() {
     const b = new BoardClass();
 
     b.placeCharacter(5, 9, createEbue());
-    b.placeCharacter(5, 10, createArmazi());
+    b.placeCharacter(5, 11, createArmazi());
     b.placeCharacter(24, 3, createMedea());
     b.placeCharacter(26, 8, createTharsis());
     b.placeCharacter(13, 22, createVaras());
@@ -111,7 +111,7 @@ function App() {
 export default App;
 
 function createCharacter(ebue: Character) {
-  ebue.damage(75);
+  ebue.damage(40);
   ebue.weaponSlot1.card = new ScoutWeaponCard("Scum", "epic", 22, noSpecialSkill);
   ebue.weaponSlot2.card = new MassiveWeaponCard("Grdzaaa", "rare", 143, noSpecialSkill, 60);
   ebue.defensiveConsumable.card = new MagicField();

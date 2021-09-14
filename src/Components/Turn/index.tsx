@@ -8,6 +8,8 @@ import { Card } from '../../gorgasali/Cards/Card';
 import CardSlot from '../../gorgasali/Characters/CardSlot';
 import ChangesTurnState from "./ChangesTurnState";
 import { CardOutcome } from "../../gorgasali/Turn/TurnContext";
+import UsedCard from "./UsedCard";
+import "./Turn.scss";
 
 
 export default function Turn({ turn, onTurnStateChange }: TurnProps) {
@@ -76,15 +78,13 @@ export default function Turn({ turn, onTurnStateChange }: TurnProps) {
     }
 
     const toCardComponent = (outcome: CardOutcome) => {
-        const slot = new CardSlot("Whatever");
-        slot.card = outcome.usedCard;
-        return <div>
-            <CardComponent cardSlot={slot} needsReload={false} />
-            {outcome.diceResults && outcome.diceResults.map((c, i) => <div>dice {i + 1}: <h3>{c}</h3></div>)}
-            {outcome.diceResults && <div>total <h2>{outcome.diceResults.map(c => c as number).reduce((a, b) => a + b, 0)}</h2></div>}
-            {outcome.successfull && <h1>Successfull</h1>}
-            {outcome.successfull === false && <h1>Fail</h1>}
+        return <div className="col-md-3">
+            <UsedCard
+                card={outcome.usedCard}
+                diceResults={outcome.diceResults}
+                successfull={outcome.successfull} />
         </div>
+
     }
 
     return <div>
@@ -106,7 +106,10 @@ export default function Turn({ turn, onTurnStateChange }: TurnProps) {
             </div>}
         <Character character={turn.board.currentPlayer} usableCards={handlers} turnContext={turn.context} onTurnStateChange={onTurnStateChange} />
         <br />
-        {turn.context.usedCards.map(toCardComponent)}
+        <div className="row">
+            {turn.context.usedCards.map(toCardComponent)}
+
+        </div>
     </div>
 }
 interface TurnProps extends ChangesTurnState {
