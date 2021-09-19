@@ -16,10 +16,12 @@ import ThrowableCardUsed from "./ThrowableCardUsed";
 import WeaponExtensionCardUsed from "./WeaponExtensionCardUsed";
 import MovementCardUsed from "./MovementCardUsed";
 import { CardState } from "../../Cards/CardState";
+import TurnStateBase from "./TurnStateBase";
 
 
 type TurnStateMachine =
-    Initial
+    TurnStateBase
+    | Initial
     | HealingCardUsed
     | AmmoBagUsed
     | MovementDiceRolled
@@ -63,10 +65,6 @@ export type UseThrowableCard = {
 }
 export type UseWeaponExtensionCard = {
     card: GunSocket
-}
-export type RealoadWeapons = {
-}
-export type ManageBackpack = {
 }
 
 

@@ -7,9 +7,9 @@ import Character from '../../gorgasali/Characters/Character';
 import TurnContext from '../../gorgasali/Turn/TurnContext';
 import TurnStateMachine from '../../gorgasali/Turn/TurnStates/turnStateMachine';
 import ChangesTurnState from '../Turn/ChangesTurnState';
-import getTeleportDestinations from '../../gorgasali/Board/destinations/getTeleportDestinations';
-import getMoveDestinations from '../../gorgasali/Board/destinations/getMoveDestinations';
-import getShootingRange from '../../gorgasali/Board/destinations/getShootingRange';
+// import getTeleportDestinations from '../../gorgasali/Board/destinations/getTeleportDestinations';
+// import getMoveDestinations from '../../gorgasali/Board/destinations/getMoveDestinations';
+// import getShootingRange from '../../gorgasali/Board/destinations/getShootingRange';
 
 
 function Board({ board, selectedCharacter, turnContext, turnState, onTurnStateChange }: BoardProps) {
@@ -23,59 +23,17 @@ function Board({ board, selectedCharacter, turnContext, turnState, onTurnStateCh
     let isTrace: (tile: TileClass) => boolean = t => false;
 
     let onTileClick = (tile: TileClass) => { }
-    switch (turnState.state) {
-        case "MovementCardUsed":
-        case "MovementDiceRolled":
-        case "MoveInProgress":
-            const availableMoves = getMoveDestinations.bind(board)(turnContext);
 
-            isHighlighted = tile => availableMoves.has(tile.index);
-            isDimmed = tile => !isHighlighted(tile)
-            isTrace = tile => turnContext.previousLocations.has(tile.index);
-
-            onTileClick = tile => {
-                if (isHighlighted(tile)) {
-                    onTurnStateChange(turnState.move(tile));
-                }
-            };
-            break;
-
-        case "TeleportInProgress":
-            const teleportDestinations = getTeleportDestinations.bind(board)();
-
-            isHighlighted = tile => teleportDestinations.has(tile.index);
-            isDimmed = tile => !isHighlighted(tile);
-
-            onTileClick = tile => {
-                if (isHighlighted(tile)) {
-                    onTurnStateChange(turnState.teleport(tile))
-                }
+    if (turnState.availableMoves) {
+        const availableMoves = turnState.availableMoves;
+        isHighlighted = tile => availableMoves.has(tile.index);
+        isDimmed = tile => !isHighlighted(tile)
+        isTrace = tile => turnContext.previousLocations.has(tile.index);
+        onTileClick = tile => {
+            if (isHighlighted(tile)) {
+                onTurnStateChange(turnState.selectTile(tile));
             }
-            break;
-        case "FlameBulbInProgress":
-            const rangeOf2 = getShootingRange.bind(board)(2, 2);
-
-            isHighlighted = tile => rangeOf2.has(tile.index);
-            isDimmed = tile => !isHighlighted(tile);
-
-            onTileClick = tile => {
-                if (isHighlighted(tile) && tile.character !== undefined) {
-                    onTurnStateChange(turnState.chooseTarget(tile.character));
-                }
-            }
-            break;
-        case "WeaponCardInProgress":
-            const ranges = getShootingRange.bind(board)(turnState.card.weaponRange);
-
-            isHighlighted = tile => ranges.has(tile.index);
-            isDimmed = tile => !isHighlighted(tile);
-
-            onTileClick = tile => {
-                if (isHighlighted(tile) && tile.character !== undefined) {
-                    onTurnStateChange(turnState.chooseTarget(tile.character));
-                }
-            }
-            break;
+        };
     }
 
     const tileComponents =
@@ -100,13 +58,16 @@ function Board({ board, selectedCharacter, turnContext, turnState, onTurnStateCh
     return (
         <div className="board-container">
             <div className="board" >
-                <div className="top-coordinates-panel">OE</div>
+                <div className="top-coordinates-panel">
+                    {Array.from({ length: 880 }, (_, i) => i).map(c => (c % 20 == 0 ? (<span>|</span>) : (<span>.</span>)))}
+                </div>
+
                 <div className="board-body">
                     <table>
                         <tbody>
                             <tr>
                                 <td className="left-coordinates-panel">
-                                    <div >20</div>
+                                {Array.from({ length: 128 }, (_, i) => i).map(c => (c % 20 == 0 ? (<div>___</div>) : (<div>-</div>)))}
                                 </td>
                                 <td>
                                     <div className="board-tiles">
@@ -116,6 +77,7 @@ function Board({ board, selectedCharacter, turnContext, turnState, onTurnStateCh
                             </tr>
                         </tbody>
                     </table>
+
 
                 </div>
             </div>

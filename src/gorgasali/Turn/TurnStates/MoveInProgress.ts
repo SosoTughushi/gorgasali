@@ -8,6 +8,11 @@ export default class MoveInProgress extends TurnStateBase {
 
     public state: "MoveInProgress" = "MoveInProgress";
     public order = 4.5;
+
+    selectTile(tile: Tile) {
+        return this.move(tile);
+    }
+
     move(targetTile: Tile): MoveInProgress | Moved {
         let cost = getTileCost(this.context.obstaclePenaltyNulified, targetTile);
         if (this.context.movementDiceTotal) {
@@ -16,12 +21,12 @@ export default class MoveInProgress extends TurnStateBase {
         this.context.previousLocations.add(this.context.board.currentPlayerPosition);
         this.context.board.moveTo(targetTile.index);
 
-        const availableMoves = getMoveDestinations.bind(this.context.board)(this.context);
-        if (availableMoves.size === 0) {
+        this.availableMoves = getMoveDestinations.bind(this.context.board)(this.context);
+        if (this.availableMoves.size === 0) {
             return new Moved(this.context);
         }
 
-        return new MoveInProgress(this.context);
+        return new MoveInProgress(this.context, this.availableMoves);
     }
 
     endMove() {

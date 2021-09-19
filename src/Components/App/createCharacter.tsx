@@ -14,6 +14,7 @@ export function createCharacter(ebue: Character) {
   ebue.damage(40);
   ebue.weaponSlot1.card = new ScoutWeaponCard("Scum", "epic", 22, noSpecialSkill);
   ebue.weaponSlot2.card = new MassiveWeaponCard("Grdzaaa", "rare", 143, noSpecialSkill, 60);
+  ebue.weaponSlot2.needsReload = true;
   ebue.defensiveConsumable.card = new MagicField();
 
   ebue.consumable1.card = new AmmoBag();

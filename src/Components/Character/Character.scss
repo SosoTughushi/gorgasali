@@ -74,17 +74,19 @@
 }
 
 .character-tile {
-    width: 400px;
+    width: 300px;
     margin: 30px;
-    border: 5px solid gray;
-    &:hover {
-        background-color: rgba(137, 43, 226, 0.52);
-    }
+    filter: brightness(60%);
     &.selected-tile {
         background-color: rgba(137, 43, 226, 0.52);
     }
     &.current-player-tile {
-        background-color: rgba(218, 165, 32, 0.52);
+        // background-color: rgba(218, 165, 32, 0.52);
+        .tile-image {
+            border: 6px solid goldenrod !important;
+        }
+        color: goldenrod;
+        filter: brightness(100%)
     }
     .tile-image {
         border-radius: 50%;
@@ -94,3 +96,9 @@
         background-size: cover;
     }
 }
+
+// .character-tile-list {
+//     position: fixed;
+//     right: 0;
+//     z-index: 200;
+// }

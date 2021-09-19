@@ -5,12 +5,13 @@ import { CardLevel } from "../CardLevel";
 import WeaponDamage from "./WeaponDamage";
 import { ScoutRangeMinRoll } from "./ScoutWeaponCard";
 import TurnContext, { Dice } from "../../Turn/TurnContext";
-import { isAnyoneInRange } from "../../Board/destinations/getShootingRange";
+import getShootingRange, { isAnyoneInRange } from "../../Board/destinations/getShootingRange";
 import TurnStateBase from "../../Turn/TurnStates/TurnStateBase";
 import CharacterBase from "../../Characters/Character";
 import TurnEnded from "../../Turn/TurnStates/TurnEnded";
 import { rollSingleDice } from "../../Turn/TurnStates/turnStateMachine";
 import { convertToCoordinates } from "../../Board/convertToCoordinates";
+import Tile from "../../Tile";
 
 
 export default abstract class WeaponCard extends Card {
@@ -52,6 +53,15 @@ class WeaponCardInProgress extends TurnStateBase {
 
     constructor(context: TurnContext, public card: WeaponCard) {
         super(context);
+        this.availableMoves = getShootingRange.bind(context.board)(card.weaponRange);
+    }
+
+    selectTile(tile: Tile) {
+        if(!tile.character) {
+            return this;
+        }
+
+        return this.chooseTarget(tile.character);
     }
 
     public chooseTarget(character: CharacterBase) {
@@ -71,7 +81,6 @@ class WeaponCardTargetChosen extends TurnStateBase {
     }
 
     public roll() {
-
         const usedCard = this.context.usedCards.filter(c => c.usedCard instanceof WeaponCard)[0];
         usedCard.diceResults = [];
         for (let i = 0; i < this.card.weaponDiceCount; i++) {
@@ -83,20 +92,20 @@ class WeaponCardTargetChosen extends TurnStateBase {
         let isSuccessfull = false;
         if (typeof this.card.criteria === "number") {
             isSuccessfull = totalDiceResult >= this.card.criteria;
-        } else if(this.card.criteria === undefined){
+        } else if (this.card.criteria === undefined) {
             isSuccessfull = true;
         } else {
-            const target = convertToCoordinates(this.context.target?.position??0);
+            const target = convertToCoordinates(this.context.target?.position ?? 0);
             const source = convertToCoordinates(this.context.self.position);
-            const range = Math.max(Math.abs(target.x - source.x), Math.abs(target.y-source.y));
-            const rangeCriteria = this.card.criteria.filter(cr=>cr.range === range)[0];
-            if(totalDiceResult >= rangeCriteria.minRoll) {
+            const range = Math.max(Math.abs(target.x - source.x), Math.abs(target.y - source.y));
+            const rangeCriteria = this.card.criteria.filter(cr => cr.range === range)[0];
+            if (totalDiceResult >= rangeCriteria.minRoll) {
                 isSuccessfull = true;
             }
         }
         usedCard.successfull = isSuccessfull;
 
-        if(isSuccessfull) {
+        if (isSuccessfull) {
             // todo: account for card special skills
             const damage = this.card.weaponDamage.isFixed ? this.card.weaponDamage.value : this.card.weaponDamage?.value * totalDiceResult;
             this.context.target?.damage(damage);
@@ -120,7 +129,7 @@ class WeaponCardTargetHit extends TurnStateBase {
 class WeaponCardTargetMissed extends TurnStateBase {
     public order = 6.7;
     public state: "WeaponCardTargetMissed" = "WeaponCardTargetMissed";
-    
+
     public ok() {
         return new TurnEnded(this.context);
     }

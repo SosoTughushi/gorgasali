@@ -1,5 +1,5 @@
 import TurnEnded from "./TurnEnded";
-import { UseDefensiveCard, UseThrowableCard, UseWeaponExtensionCard, RealoadWeapons, ManageBackpack } from "./turnStateMachine";
+import { UseDefensiveCard, UseThrowableCard, UseWeaponExtensionCard } from "./turnStateMachine";
 import TurnStateBase from "./TurnStateBase";
 import WeaponExtensionCardUsed from "./WeaponExtensionCardUsed";
 import ThrowableCardUsed from "./ThrowableCardUsed";
@@ -21,15 +21,25 @@ export default class Moved extends TurnStateBase {
         return new WeaponExtensionCardUsed(this.context);
     }
 
-    reloadWeapons(action: RealoadWeapons) {
+    reloadWeapons() {
         return new TurnEnded(this.context);
     }
 
-    manageBackpack(action: ManageBackpack) {
+    manageBackpack() {
         return new TurnEnded(this.context);
     }
 
     shootEnemy() {
         return new TurnEnded(this.context);
+    }
+
+    getAvailableActions() {
+        return [{
+            name: "Reload Weapons",
+            action: () => this.reloadWeapons()
+        }, {
+            name: "Manage backpack",
+            action: () => this.manageBackpack()
+        }]
     }
 }

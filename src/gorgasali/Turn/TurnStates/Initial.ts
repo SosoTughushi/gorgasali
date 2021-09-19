@@ -24,4 +24,11 @@ export default class Initial extends TurnStateBase {
         this.context.movementDiceTotal = this.context.movementDice.dice1 + this.context.movementDice.dice2;
         return new MovementDiceRolled(this.context);
     }
+
+    getAvailableActions() {
+        return [{
+            name: "Roll Dice",
+            action: () => this.rollDice()
+        }]
+    }
 }

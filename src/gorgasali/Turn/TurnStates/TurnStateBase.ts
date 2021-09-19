@@ -1,9 +1,26 @@
+import Tile from "../../Tile";
 import TurnContext from "../TurnContext";
+import TurnStateMachine from "./turnStateMachine";
 
 
 
 export default abstract class TurnStateBase {
-    constructor(protected context: TurnContext) {
-        console.log(context);
+    public state: string = "TurnStateBase";
+    public order: number = 0;
+
+    constructor(protected context: TurnContext, public availableMoves?: Set<number>) {
     }
+
+    selectTile(tile: Tile): TurnStateMachine {
+        return this;
+    }
+
+    getAvailableActions(): AvailableActions[] {
+        return [];
+    }
+}
+
+type AvailableActions = {
+    name: string;
+    action() : TurnStateBase
 }

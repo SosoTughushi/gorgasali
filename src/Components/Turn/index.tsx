@@ -1,118 +1,21 @@
-import Character, { UsableCards } from "../Character";
-import TurnStateMachine from '../../gorgasali/Turn/TurnStates/turnStateMachine';
-import { Button } from 'react-bootstrap';
-import ProgressBar from 'react-bootstrap/ProgressBar';
-import TurnClass from '../../gorgasali/Turn/Turn';
-import CardComponent from '../Cards/Card/Index';
-import { Card } from '../../gorgasali/Cards/Card';
-import CardSlot from '../../gorgasali/Characters/CardSlot';
-import ChangesTurnState from "./ChangesTurnState";
-import { CardOutcome } from "../../gorgasali/Turn/TurnContext";
-import UsedCard from "./UsedCard";
 import "./Turn.scss";
+import TurnCollapsed from "./TurnCollapsed";
+import TurnExpanded from "./TurnExpanded";
+import { TurnProps } from "./TurnProps";
+import SidePanel from "../SidePanel";
+import { useState } from 'react';
 
 
-export default function Turn({ turn, onTurnStateChange }: TurnProps) {
-    const state = turn.state;
-    let handlers: UsableCards = {};
-
-    const actions: JSX.Element[] = [];
-    const addAction = (name: string, nextState: () => TurnStateMachine) => {
-        const button = <Button onClick={() => {
-            const newState = nextState();
-            onTurnStateChange(newState);
-        }}>{name}</Button>;
-        actions.push(button);
-    }
-    switch (state.state) {
-        case "Initial":
-            handlers = {
-                healingPotion: true,
-                ammoBag: true
-            };
-            addAction("Roll Dice", () => state.rollDice());
-            break;
-        case "HealingCardUsed":
-            addAction("Roll Dice", () => state.rollDice());
-            break;
-        case "AmmoBagUsed":
-            addAction("Roll Dice", () => state.rollDice());
-            break;
-        case "MovementDiceRolled":
-            handlers = { movementCard: true };
-            addAction("Skip", () => state.skipMovement());
-            break;
-        case "MovementCardUsed":
-            addAction("Skip", () => state.skipMovement());
-            break;
-        case "Moved":
-            handlers = {
-                defensiveCard: true,
-                throwableCard: true,
-                weaponExtensionCard: true,
-                loadedWeapons: true
-            }
-            addAction("Reload", () => state.reloadWeapons({}));
-            addAction("Manage Backpack", () => state.manageBackpack({}));
-            break;
-        case "DefensiveCardUsed":
-            handlers = {
-                loadedWeapons: true
-            }
-
-            addAction("Reload", () => state.reloadWeapons({}));
-            addAction("Manage Backpack", () => state.manageBackpack({}));
-            break;
-        case "ThrowableCardUsed":
-            handlers = {
-                loadedWeapons: true
-            }
-            addAction("Reload", () => state.reloadWeapons({}));
-            addAction("Manage Backpack", () => state.manageBackpack({}));
-            break;
-        case "WeaponExtensionCardUsed":
-            handlers = {
-                loadedWeapons: true
-            }
-            break;
-    }
-
-    const toCardComponent = (outcome: CardOutcome) => {
-        return <div className="col-md-3">
-            <UsedCard
-                card={outcome.usedCard}
-                diceResults={outcome.diceResults}
-                successfull={outcome.successfull} />
-        </div>
-
-    }
-
-    return <div>
-        <div className="row">
-            <div className="col-md-offset-6 col-md-6 " >
-                <h2>{state.state} </h2>
-                <ProgressBar now={state.order / 9 * 100} />
-                <br />
-            </div>
-        </div>
-
-        {actions}
-        <br />
-        {turn.context.movementDice &&
-            <div>
-                dice1: <h3>{turn.context.movementDice.dice1}</h3>
-                dice1: <h3>{turn.context.movementDice.dice2}</h3>
-                available move points: <h3>{turn.context.movementDiceTotal}</h3>
-            </div>}
-        <Character character={turn.board.currentPlayer} usableCards={handlers} turnContext={turn.context} onTurnStateChange={onTurnStateChange} />
-        <br />
-        <div className="row">
-            {turn.context.usedCards.map(toCardComponent)}
-
-        </div>
-    </div>
-}
-interface TurnProps extends ChangesTurnState {
-    turn: TurnClass;
+export default function TurnIndex({ onTurnStateChange, turn }: TurnIndexProps) {
+    let [expanded, setExpanded] = useState(false);
+    return <SidePanel
+        expanded={expanded}
+        orientation="bottom"
+        toggleButtonHandler={toggle => setExpanded(toggle)}
+        collapsedContent={<TurnCollapsed onTurnStateChange={onTurnStateChange} turn={turn} />}>
+        <TurnExpanded onTurnStateChange={onTurnStateChange} turn={turn} />
+    </SidePanel>
 }
 
+interface TurnIndexProps extends TurnProps {
+}

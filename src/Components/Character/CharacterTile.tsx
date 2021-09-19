@@ -29,7 +29,7 @@ export default function CharacterTile({ character, onCharacterTileClick, isSelec
 
 interface CharacterTileProps {
     character: Character,
-    isSelected: boolean,
-    isCurrentPlayer: boolean,
+    isSelected?: boolean,
+    isCurrentPlayer?: boolean,
     onCharacterTileClick(tile: Character): void;
 }

@@ -10,4 +10,11 @@ export default class HealingCardUsed extends TurnStateBase {
     rollDice() {
         return new Initial(this.context).rollDice();
     }
+
+    getAvailableActions() {
+        return [{
+            name: "Roll Dice",
+            action: () => this.rollDice()
+        }]
+    }
 }

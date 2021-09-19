@@ -17,11 +17,12 @@ import { Defensive } from "../../gorgasali/Cards/Support/Defensive/Defensive";
 import TurnContext from "../../gorgasali/Turn/TurnContext";
 import ChangesTurnState from "../Turn/ChangesTurnState";
 import Throwable from "../../gorgasali/Cards/Support/Throwable/Throwable";
+import TurnStateMachine from "../../gorgasali/Turn/TurnStates/turnStateMachine";
 
 
 
 
-export default function CharacterComponent({ character, usableCards, turnContext, onTurnStateChange }: CharacterProps) {
+export default function CharacterComponent({ character, usableCards, turnContext, onTurnStateChange, turnState }: CharacterProps) {
 
     function renderCardSlot(slot: CardSlotBase, needsReload: boolean | undefined, isAmmoBag: boolean | undefined = undefined) {
 
@@ -29,6 +30,8 @@ export default function CharacterComponent({ character, usableCards, turnContext
         const createHandler = (() => {
             if (!turnContext) return undefined;
             const context = turnContext;
+            if(!turnState) return undefined;
+            const state = turnState;
             if (!slot.card) return undefined;
             if (!usableCards) return undefined;
             if (isAmmoBag) return undefined;
@@ -145,13 +148,14 @@ export default function CharacterComponent({ character, usableCards, turnContext
 }
 
 export function convertToCssClass(name: string) {
-    return name.toLowerCase().replace("'", "").split(' ').join('-');
+    return name.toLowerCase().replace("'", "").split(' ').join('-') + " ";
 }
 
 interface CharacterProps extends ChangesTurnState {
     character: Character,
     usableCards?: UsableCards,
     turnContext?: TurnContext,
+    turnState?: TurnStateMachine
 }
 
 export interface UsableCards {

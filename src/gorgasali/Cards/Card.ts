@@ -6,6 +6,7 @@ import { WeaponType } from "./Weapons/WeaponType";
 
 import TurnStateMachine from "../Turn/TurnStates/turnStateMachine";
 import { WeaponCardState } from "./Weapons/WeaponCard";
+import TurnStateBase from "../Turn/TurnStates/TurnStateBase";
 
 export abstract class Card {
     constructor(

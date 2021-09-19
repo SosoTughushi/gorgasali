@@ -4,15 +4,16 @@ import ThrowableCardUsed from "../../../Turn/TurnStates/ThrowableCardUsed";
 import TurnStateBase from "../../../Turn/TurnStates/TurnStateBase";
 import { rollSingleDice } from "../../../Turn/TurnStates/turnStateMachine";
 import Throwable from "./Throwable";
-import { isAnyoneInRange } from "../../../Board/destinations/getShootingRange";
+import getShootingRange, { isAnyoneInRange } from "../../../Board/destinations/getShootingRange";
+import Tile from "../../../Tile";
 
 export default class FlameBulb extends Throwable {
     constructor() {
         super("Flame bulb", "Explosive area damage", 2, 2, { isFixed: true, value: 40 }, 9);
     }
-    
+
     canUse(context: TurnContext): boolean {
-        if(isAnyoneInRange.bind(context.board)(2, 2)) {
+        if (isAnyoneInRange.bind(context.board)(2, 2)) {
             return true;
         }
         return false;
@@ -33,6 +34,18 @@ class FlameBulbInProgress extends TurnStateBase {
     public state: "FlameBulbInProgress" = "FlameBulbInProgress";
     public range = 2;
 
+    constructor(context: TurnContext) {
+        super(context);
+        this.availableMoves = getShootingRange.bind(context.board)(2, 2)
+    }
+
+    selectTile(tile: Tile) {
+        if (!tile.character) {
+            return this;
+        }
+        return this.chooseTarget(tile.character);
+    }
+
     public chooseTarget(character: CharacterBase) {
         this.context.target = character;
         return new FlameBulbTargetChosen(this.context).roll();
@@ -47,7 +60,7 @@ class FlameBulbTargetChosen extends TurnStateBase {
         const roll1 = rollSingleDice();
         const roll2 = rollSingleDice();
 
-        const usedCard = this.context.usedCards.filter(c=>c.usedCard.type === "Throwable")[0];
+        const usedCard = this.context.usedCards.filter(c => c.usedCard.type === "Throwable")[0];
         usedCard.diceResults = [roll1, roll2];
 
         if (roll1 + roll2 >= 9) {
