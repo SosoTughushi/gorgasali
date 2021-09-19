@@ -3,7 +3,7 @@ import "./Character.scss";
 import ProgressBar from 'react-bootstrap/ProgressBar';
 import CardComponent from "../Cards/Card/Index";
 import Range from '../Cards/Common/Range';
-import { Card, Card as PlayCard } from "../../gorgasali/Cards/Card";
+import { Card, Card as PlayCard, CardCategory } from "../../gorgasali/Cards/Card";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBox } from '@fortawesome/free-solid-svg-icons';
 import Badge from "react-bootstrap/Badge";
@@ -56,25 +56,7 @@ export default function CharacterComponent({ character, usableCards, turnContext
                 }
             }
 
-            if (usableCards.defensiveCard && slot.card.type === "Defensive") {
-                return onCardClick(slot.card as Defensive);
-            }
-            if (usableCards.healingPotion && slot.card instanceof Potion) {
-                return onCardClick(slot.card);
-            }
-            if (usableCards.loadedWeapons && slot.card instanceof WeaponCard) {
-                return onCardClick(slot.card);
-            }
-            if (usableCards.movementCard && slot.card instanceof MovementConsumable) {
-                return onCardClick(slot.card);
-            }
-            if (usableCards.throwableCard && slot.card instanceof Throwable) {
-                return onCardClick(slot.card);
-            }
-            if (usableCards.weaponExtensionCard && slot.card instanceof GunSocket) {
-                return onCardClick(slot.card);
-            }
-            if (usableCards.ammoBag && slot.card.name === "Ammo bag") {
+            if(usableCards && usableCards.includes(slot.card.category)) {
                 return onCardClick(slot.card);
             }
         });
@@ -153,17 +135,8 @@ export function convertToCssClass(name: string) {
 
 interface CharacterProps extends ChangesTurnState {
     character: Character,
-    usableCards?: UsableCards,
+    usableCards?: CardCategory[],
     turnContext?: TurnContext,
     turnState?: TurnStateMachine
 }
 
-export interface UsableCards {
-    healingPotion?: boolean,
-    movementCard?: boolean,
-    defensiveCard?: boolean,
-    throwableCard?: boolean,
-    weaponExtensionCard?: boolean,
-    loadedWeapons?: boolean,
-    ammoBag?: boolean,
-}

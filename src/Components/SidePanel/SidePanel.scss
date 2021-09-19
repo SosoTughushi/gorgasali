@@ -3,6 +3,7 @@
     &.side-panel-bottom {
         bottom: 0;
         width: 100%;
+        max-height: 80%;
         .side-panel-content {
             width: 70%;
         }
@@ -10,6 +11,7 @@
     &.side-panel-top {
         top: 0;
         width: 100%;
+        max-height: 80%;
         .side-panel-content {
             width: 70%;
         }
@@ -17,6 +19,7 @@
     &.side-panel-left {
         left: 0;
         height: 100%;
+        max-width: 80%;
         .side-panel-content {
             height: 70%;
         }
@@ -24,6 +27,7 @@
     &.side-panel-right {
         right: 0;
         height: 100%;
+        max-width: 80%;
         .side-panel-content {
             // height: 70%;
             top: 50%;
@@ -35,6 +39,7 @@
         padding: 10px;
         border-radius: 20px;
         border: 5px solid black;
+        overflow: auto;
     }
     .side-panel-content-transparent {
         padding: 10px;
@@ -43,6 +48,12 @@
     .side-panel-toggle-button {
         margin: 0 auto;
         display: block;
+        &:hover {
+            color: rgb(106, 172, 230);
+        }
+        font-size: x-large;
+        text-align: center;
+        color: aliceblue;
     }
     z-index: 500;
 }

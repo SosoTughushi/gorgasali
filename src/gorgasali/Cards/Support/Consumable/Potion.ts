@@ -5,7 +5,7 @@ import { Consumable } from "./Consumable";
 
 export default class Potion extends Consumable {
     constructor(public size: "Small" | "Medium" | "Large") {
-        super(size + " potion", mapSizeToColor(size), "Consumable", "Restores " + mapSizeToHealingAmount(size) + " points",
+        super(size + " potion", mapSizeToColor(size), "Consumable", "HealingPotion", "Restores " + mapSizeToHealingAmount(size) + " points",
             undefined, undefined, undefined, undefined);
         this.healingAmount = mapSizeToHealingAmount(size);
     }
@@ -18,7 +18,7 @@ export default class Potion extends Consumable {
     }
 
     canUse(context: TurnContext) {
-        if(context.self.health === 100) {
+        if (context.self.health === 100) {
             return false;
         }
 

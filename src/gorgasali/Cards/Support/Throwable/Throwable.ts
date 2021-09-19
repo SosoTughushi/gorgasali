@@ -13,7 +13,7 @@ export default abstract class Throwable extends SupportCard {
         range: number | undefined, 
         damage: WeaponDamage | undefined,
         criteria: number | ScoutRangeMinRoll[]| undefined) {
-        super(name, "common", "Throwable", specialSkill, diceCount, range, damage, criteria);
+        super(name, "common", "Throwable", "Throwable", specialSkill, diceCount, range, damage, criteria);
     }
 
     abstract canUse(context: TurnContext) : boolean;

@@ -1,3 +1,4 @@
+import { CardCategory } from "../../Cards/Card";
 import TurnEnded from "./TurnEnded";
 import TurnStateBase from "./TurnStateBase";
 
@@ -9,7 +10,11 @@ export default class WeaponExtensionCardUsed extends TurnStateBase {
     shootEnemy(action: ShootEnemy) {
         return new TurnEnded(this.context);
     }
+
+    getAvailabeCards(): CardCategory[] {
+        return ["Weapon"];
+    }
 }
 
- type ShootEnemy = {
+type ShootEnemy = {
 }

@@ -7,7 +7,7 @@ import { Consumable } from "./Consumable";
 
 export default abstract class GunSocket extends Consumable {
     constructor(public targetGunType: WeaponType, name: string, specialSkill: string) {
-        super(name, "rare", "Consumable", specialSkill, undefined, undefined, undefined, undefined);
+        super(name, "rare", "Consumable", "WeaponExtension", specialSkill, undefined, undefined, undefined, undefined);
     }
 
     canUse(context: TurnContext) {

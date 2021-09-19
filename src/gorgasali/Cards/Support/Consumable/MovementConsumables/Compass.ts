@@ -6,7 +6,7 @@ import MovementConsumable from "./MovementConsumable";
 
 export default class Compass extends MovementConsumable {
     constructor() {
-        super("Compass", "rare", "Consumable", "Enables to move diagonally",
+        super("Compass", "rare", "Consumable", "Movement", "Enables to move diagonally",
             undefined, undefined, undefined, undefined);
     }
 

@@ -1,5 +1,7 @@
+import { CardCategory } from "../../Cards/Card";
 import Tile from "../../Tile";
 import TurnContext from "../TurnContext";
+import { Action } from "./Action";
 import TurnStateMachine from "./turnStateMachine";
 
 
@@ -15,12 +17,13 @@ export default abstract class TurnStateBase {
         return this;
     }
 
-    getAvailableActions(): AvailableActions[] {
+    getAvailableActions(): Action[] {
+        return [];
+    }
+
+    getAvailabeCards() : CardCategory[] {
         return [];
     }
 }
 
-type AvailableActions = {
-    name: string;
-    action() : TurnStateBase
-}
+

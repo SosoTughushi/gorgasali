@@ -1,3 +1,4 @@
+import { Action } from "./Action";
 import Initial from "./Initial";
 import MovementDiceRolled from "./MovementDiceRolled";
 import TurnStateBase from "./TurnStateBase";
@@ -11,9 +12,9 @@ export default class AmmoBagUsed extends TurnStateBase {
         return new Initial(this.context).rollDice();
     }
 
-    getAvailableActions() {
+    getAvailableActions(): Action[] {
         return [{
-            name: "Roll Dice",
+            type: "Roll Dice",
             action: () => this.rollDice()
         }]
     }

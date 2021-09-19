@@ -6,6 +6,7 @@ export default class Barrier extends Defensive {
         super("Barrier",
             "epic",
             "Defensive",
+            "Defensive",
             "Blocks movement and targeting",
             undefined,
             undefined,

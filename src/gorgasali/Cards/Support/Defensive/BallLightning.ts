@@ -7,6 +7,7 @@ export default class BallLightning extends Defensive {
             "Ball lightning",
             "legendary",
             "Defensive",
+            "Defensive",
             "Summons ball lightning to defend area",
             undefined,
             3,

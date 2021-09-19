@@ -6,6 +6,8 @@ import Moved from "./Moved";
 import MoveInProgress from "./MoveInProgress";
 import TurnContext from "../TurnContext";
 import getMoveDestinations from "../../Board/destinations/getMoveDestinations";
+import { CardCategory } from "../../Cards/Card";
+import { Action } from "./Action";
 
 
 export default class MovementDiceRolled extends TurnStateBase {
@@ -21,7 +23,7 @@ export default class MovementDiceRolled extends TurnStateBase {
     selectTile(tile: Tile) {
         return this.move(tile);
     }
-    
+
     skipMovement(): Moved {
         return new Moved(this.context);
     }
@@ -35,10 +37,14 @@ export default class MovementDiceRolled extends TurnStateBase {
         return inProgress.move(targetTile);
     }
 
-    getAvailableActions() {
+    getAvailableActions(): Action[] {
         return [{
-            name: "Skip Movement",
+            type: "Skip Movement",
             action: () => this.skipMovement()
         }]
+    }
+
+    getAvailabeCards(): CardCategory[] {
+        return ["Movement"];
     }
 }

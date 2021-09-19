@@ -2,6 +2,7 @@ import Tile from "../../Tile";
 import MoveInProgress from "./MoveInProgress";
 import Moved from "./Moved";
 import TurnStateBase from "./TurnStateBase";
+import { Action } from "./Action";
 
 
 export default class MovementCardUsed extends TurnStateBase {
@@ -21,9 +22,9 @@ export default class MovementCardUsed extends TurnStateBase {
         return new Moved(this.context);
     }
 
-    getAvailableActions() {
+    getAvailableActions(): Action[] {
         return [{
-            name: "Skip Movement",
+            type: "Skip Movement",
             action: () => this.skipMovement()
         }]
     }

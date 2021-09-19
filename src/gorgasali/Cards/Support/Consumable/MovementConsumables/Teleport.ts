@@ -10,7 +10,7 @@ import MovementConsumable from "./MovementConsumable";
 
 export default class Teleport extends MovementConsumable {
     constructor() {
-        super("Teleport", "epic", "Consumable", "Jump on any square within the range",
+        super("Teleport", "epic", "Consumable", "Movement", "Jump on any square within the range",
             undefined, 8, undefined, undefined);
     }
 

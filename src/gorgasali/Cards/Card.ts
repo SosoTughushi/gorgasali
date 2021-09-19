@@ -13,6 +13,7 @@ export abstract class Card {
         public name: string,
         public level: CardLevel,
         public type: CardType,
+        public category: CardCategory,
         public specialSkillText: string,
         public diceCount: number | undefined,
         public range: number | undefined,
@@ -32,5 +33,7 @@ export abstract class Card {
 type SupportCard = "Throwable" | "Consumable" | "Defensive" | "Armor";
 
 type CardType = WeaponType | SupportCard;
+
+export type CardCategory = "HealingPotion" | "Movement" | "Defensive" | "Throwable" | "WeaponExtension" | "Weapon" | "AmmoBag" | "Armor";
 
 

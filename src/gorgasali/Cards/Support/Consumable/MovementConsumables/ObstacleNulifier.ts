@@ -10,7 +10,7 @@ export default class ObstacleNulifier extends MovementConsumable {
     }
 
     constructor(public obstacle: ObstacleType) {
-        super(mapObstacleToName(obstacle), "common", "Consumable", "Move on the " + obstacle + " without penalty",
+        super(mapObstacleToName(obstacle), "common", "Consumable", "Movement", "Move on the " + obstacle + " without penalty",
             undefined, undefined, undefined, undefined);
     }
 }

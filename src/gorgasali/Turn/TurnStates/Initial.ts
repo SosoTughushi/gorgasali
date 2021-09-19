@@ -3,6 +3,8 @@ import { UseHealingCard, UseAmmoBag, rollSingleDice } from "./turnStateMachine";
 import TurnStateBase from "./TurnStateBase";
 import AmmoBagUsed from "./AmmoBagUsed";
 import HealingCardUsed from "./HealingCardUsed";
+import { CardCategory } from "../../Cards/Card";
+import { Action } from "./Action";
 
 
 export default class Initial extends TurnStateBase {
@@ -25,10 +27,13 @@ export default class Initial extends TurnStateBase {
         return new MovementDiceRolled(this.context);
     }
 
-    getAvailableActions() {
+    getAvailableActions(): Action[] {
         return [{
-            name: "Roll Dice",
+            type: "Roll Dice",
             action: () => this.rollDice()
         }]
+    }
+    getAvailabeCards(): CardCategory[] {
+        return ["HealingPotion", "AmmoBag"];
     }
 }

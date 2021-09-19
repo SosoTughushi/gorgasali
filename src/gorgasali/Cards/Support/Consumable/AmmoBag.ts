@@ -4,7 +4,7 @@ import { Consumable } from "./Consumable";
 
 export default class AmmoBag extends Consumable {
     constructor() {
-        super("Ammo bag", "epic", "Consumable", "Instant reload",
+        super("Ammo bag", "epic", "Consumable", "AmmoBag", "Instant reload",
             undefined, undefined, undefined, undefined)
     }
 

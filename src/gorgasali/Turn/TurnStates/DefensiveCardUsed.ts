@@ -1,3 +1,5 @@
+import { CardCategory } from "../../Cards/Card";
+import { Action } from "./Action";
 import TurnEnded from "./TurnEnded";
 import TurnStateBase from "./TurnStateBase";
 
@@ -21,13 +23,17 @@ export default class DefensiveCardUsed extends TurnStateBase {
     }
     
 
-    getAvailableActions() {
+    getAvailableActions(): Action[] {
         return [ {
-            name: "Reload Weapons",
+            type: "Reload Weapons",
             action: () => this.reloadWeapons()
         }, {
-            name: "Manage backpack",
+            type: "Manage backpack",
             action: () => this.manageBackpack()
         }]
+    }
+    
+    getAvailabeCards(): CardCategory[] {
+        return ["Weapon"];
     }
 }

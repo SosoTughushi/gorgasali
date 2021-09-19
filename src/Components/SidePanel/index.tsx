@@ -20,14 +20,12 @@ export default function SidePanel({ expanded, children, collapsedContent, orient
 
     let renderToggleButton = () => {
         if (toggleButtonHandler) {
-            return <div className="side-panel-toggle-button">
-                <Button onClick={() => toggleButtonHandler(!expanded)}>
-                    <FontAwesomeIcon icon={getToggleButtonIcon()} />
-                </Button>
+            return <div className="side-panel-toggle-button" onClick={() => toggleButtonHandler(!expanded)}>
+                <FontAwesomeIcon icon={getToggleButtonIcon()} />
             </div>
         }
     }
-    
+
     return <div className={"side-panel " + "side-panel-" + orientation}>
 
         <div className={transparent ? "side-panel-content-transparent" : "side-panel-content"} >

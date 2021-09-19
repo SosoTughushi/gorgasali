@@ -6,7 +6,7 @@ import MovementConsumable from "./MovementConsumable";
 
 export default class Adrenaline extends MovementConsumable {
     constructor() {
-        super("Adrenaline", "epic", "Consumable", "Doubles the units rolled for movement", undefined, undefined, undefined, undefined);
+        super("Adrenaline", "epic", "Consumable", "Movement", "Doubles the units rolled for movement", undefined, undefined, undefined, undefined);
     }
 
     use(context: TurnContext): MovementCardUsed {
