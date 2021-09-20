@@ -8,7 +8,7 @@ export default function TurnActions({ state, onTurnStateChange }: TurnActionsPro
     const turnActions = state.getAvailableActions();
     for (let i = 0; i < turnActions.length; i++) {
         const action = turnActions[i];
-        const button = <Button onClick={() => {
+        const button = <Button variant={"danger"} onClick={() => {
             const newState = action.action();
             onTurnStateChange(newState);
         }}>{action.type}</Button>;
@@ -16,7 +16,7 @@ export default function TurnActions({ state, onTurnStateChange }: TurnActionsPro
     }
 
     return <div className="turn-actions">
-        {actions}
+        {actions.map(b=> <span>{b}{' '}</span>)}
     </div>
 }
 

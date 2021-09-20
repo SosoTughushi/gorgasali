@@ -5,6 +5,7 @@ import ProgressBar from 'react-bootstrap/ProgressBar';
 import { CardOutcome } from "../../gorgasali/Turn/TurnContext";
 import UsedCard from "./UsedCard";
 import { TurnProps } from "./TurnProps";
+import MovementInfo from "./MovementInfo";
 
 
 export default function Turn({ turn, onTurnStateChange }: TurnProps) {
@@ -21,12 +22,6 @@ export default function Turn({ turn, onTurnStateChange }: TurnProps) {
     const availableCards = turn.state.getAvailabeCards();
 
     return <div>
-        {turn.context.movementDice &&
-            <div>
-                dice1: <h3>{turn.context.movementDice.dice1}</h3>
-                dice1: <h3>{turn.context.movementDice.dice2}</h3>
-                available move points: <h3>{turn.context.movementDiceTotal}</h3>
-            </div>}
         <Character
             character={turn.board.currentPlayer}
             usableCards={availableCards}
