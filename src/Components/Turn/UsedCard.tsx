@@ -5,7 +5,7 @@ import CardComponent from '../Cards/Card/Index';
 import DiceResult from "../Cards/Common/DiceResult";
 
 export default function UsedCard({ card, diceResults, successfull }: UsedCardProps) {
-    const slot = new CardSlot("Whatever");
+    const slot = new CardSlot("Weapon", false);
     slot.card = card;
 
     const diceSum = diceResults?.map(c => c as number).reduce((a, b) => a + b, 0)

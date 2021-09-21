@@ -6,6 +6,7 @@ import Adrenaline from "../Cards/Support/Consumable/MovementConsumables/Adrenali
 import Teleport from "../Cards/Support/Consumable/MovementConsumables/Teleport";
 import { ObstacleType } from "../Cards/Support/Consumable/MovementConsumables/ObstacleNulifier";
 import { Card } from "../Cards/Card";
+import Deck from "../Cards/Deck";
 
  type TurnContext = {
     self: CharacterBase;
@@ -18,7 +19,8 @@ import { Card } from "../Cards/Card";
     obstaclePenaltyNulified?: ObstacleType;
     movementAmplifiers?: MovementAmplifiers;
 
-    usedCards: CardOutcome[]
+    usedCards: CardOutcome[];
+    deck: Deck;
 };
 
 

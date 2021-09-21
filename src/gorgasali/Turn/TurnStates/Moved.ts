@@ -6,6 +6,7 @@ import ThrowableCardUsed from "./ThrowableCardUsed";
 import DefensiveCardUsed from "./DefensiveCardUsed";
 import { CardCategory } from "../../Cards/Card";
 import { Action } from "./Action";
+import {LootingInProgress} from "../Looting";
 
 
 export default class Moved extends TurnStateBase {
@@ -35,7 +36,19 @@ export default class Moved extends TurnStateBase {
         return new TurnEnded(this.context);
     }
 
+    loot() {
+        return new LootingInProgress(this.context);
+    }
+
     getAvailableActions(): Action[] {
+        const currentTile = this.context.board.getTiles()[this.context.board.currentPlayerPosition];
+        if (currentTile.hasBox) {
+            return [{
+                type: "Loot",
+                action: () => new LootingInProgress(this.context)
+            }]
+        }
+
         return [{
             type: "Reload Weapons",
             action: () => this.reloadWeapons()

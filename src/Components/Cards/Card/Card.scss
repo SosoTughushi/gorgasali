@@ -6,7 +6,9 @@
     text-align: center;
     color: whitesmoke;
     &.highlight {
-        filter: brightness(170%);
+        filter: brightness(140%);
+    }
+    &.clickable {
         &:hover {
             color: goldenrod;
             border: 10px solid goldenrod;

@@ -45,20 +45,20 @@ export default class CharacterBase {
         this._health = 100;
         this.boxCount = 1;
 
-        this.weaponSlot1 = new WeaponSlot();
-        this.weaponSlot2 = new WeaponSlot();
+        this.weaponSlot1 = new WeaponSlot(false);
+        this.weaponSlot2 = new WeaponSlot(false);
 
-        this.consumable1 = new CardSlot<Consumable>("Consumable");
-        this.consumable2 = new CardSlot<Consumable>("Consumable");
-        this.consumableBagSlot1 = new CardSlot<Consumable>("Consumable");
-        this.consumableBagSlot2 = new CardSlot<Consumable>("Consumable");
+        this.consumable1 = new CardSlot<Consumable>("Consumable", false);
+        this.consumable2 = new CardSlot<Consumable>("Consumable", false);
+        this.consumableBagSlot1 = new CardSlot<Consumable>("Consumable", true);
+        this.consumableBagSlot2 = new CardSlot<Consumable>("Consumable", true);
 
-        this.throwable = new CardSlot<Throwable>("Consumable");
-        this.throwableBagSlot = new CardSlot<Throwable>("Consumable");
+        this.throwable = new CardSlot<Throwable>("Throwable", false);
+        this.throwableBagSlot = new CardSlot<Throwable>("Throwable", true);
 
-        this.helmet = new CardSlot<Helmet>("Helmet");
-        this.bodyArmor = new CardSlot<BodyArmor>("Body Armor");
-        this.defensiveConsumable = new CardSlot<Defensive>("Defensive");
+        this.helmet = new CardSlot<Helmet>("Helmet", false);
+        this.bodyArmor = new CardSlot<BodyArmor>("Body Armor", false);
+        this.defensiveConsumable = new CardSlot<Defensive>("Defensive", false);
         this.position = -1;
     }
 

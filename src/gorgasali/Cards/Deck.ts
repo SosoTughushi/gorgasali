@@ -22,47 +22,68 @@ import { lynx, mantis, ibex, kbraus } from "./Weapons/StrikerWeaponCard";
 import WeaponCard from "./Weapons/WeaponCard";
 
 export default class Deck {
-    public weaponCards: WeaponCard[]
-    public supportCards: SupportCard[]
+    private weaponCards: WeaponCard[]
+    private supportCards: SupportCard[]
     constructor() {
         this.weaponCards = [
-            kiss, // janeli, tochinator, jalugar, // MassiveWeapon
-            kondor, // breathold, // Scout
-            scratch, // elva, gemini, dobergun, // SixShooter
-            lynx, // mantis, ibex, kbraus, // Striker
+            kiss, janeli, tochinator, jalugar, // MassiveWeapon
+            kondor, breathold, // Scout
+            scratch, elva, gemini, dobergun, // SixShooter
+            lynx, mantis, ibex, kbraus, // Striker
         ]
-        this.supportCards = [
-            new FlameBulb(), // 8x
-            new MagicSpear(), // 8x
-            new NTTBulb(), // 8x
-            new SmokeBulb(), // 8x
 
-            new Helmet(), // 15x
-            new BodyArmor(), // 15x
+        function repeat<T extends SupportCard>(creator: () => T, times: number) {
+            const arr: SupportCard[] = [];
+            for (let i = 0; i < times; i++) arr.push(creator());
+            return arr;
+        }
 
-            new BallLightning(), //3x
-            new Barrier(), // 5x
-            new MagicField(), // 8x
-            new TreePlatform(), // 8x
+        this.supportCards =
+            repeat(() => new FlameBulb(), 8)
+                .concat(repeat(() => new MagicSpear(), 8))
+                .concat(repeat(() => new NTTBulb(), 8))
+                .concat(repeat(() => new SmokeBulb(), 8))
 
-            new Potion("Small"), // 15
-            new Potion("Medium"), // 8
-            new Potion("Large"), //5
+                .concat(repeat(() => new Helmet(), 15))
+                .concat(repeat(() => new BodyArmor(), 15))
 
-            new ObstacleNulifier("water"), //15x
-            new ObstacleNulifier("mountain"),//15x
-            new ObstacleNulifier("forest"),//15x
+                .concat(repeat(() => new BallLightning(), 3))
+                .concat(repeat(() => new Barrier(), 5))
+                .concat(repeat(() => new MagicField(), 8))
+                .concat(repeat(() => new TreePlatform(), 8))
 
-            new SecondChance(), //8x
-            new ExtraSix(), //8x
-            new StrikeOption(), //8x
-            new EagleEye(), //8x
+                .concat(repeat(() => new Potion("Small"), 15))
+                .concat(repeat(() => new Potion("Medium"), 8))
+                .concat(repeat(() => new Potion("Large"), 5))
 
-            new Compass(),  // 8x
-            new Teleport(), // 5x
-            new Adrenaline(), // 5x
+                .concat(repeat(() => new ObstacleNulifier("water"), 15))
+                .concat(repeat(() => new ObstacleNulifier("mountain"), 15))
+                .concat(repeat(() => new ObstacleNulifier("forest"), 15))
 
-            new AmmoBag() // 5x
-        ];
+                .concat(repeat(() => new SecondChance(), 8))
+                .concat(repeat(() => new ExtraSix(), 8))
+                .concat(repeat(() => new StrikeOption(), 8))
+                .concat(repeat(() => new EagleEye(), 8))
+
+                .concat(repeat(() => new Compass(), 8))
+                .concat(repeat(() => new Teleport(), 5))
+                .concat(repeat(() => new Adrenaline(), 5))
+
+                .concat(repeat(() => new AmmoBag(), 5));
     }
+
+    public getRandomSupportCard(): SupportCard {
+        const randomIndex = Math.floor(Math.random() * this.supportCards.length);
+        const value = this.supportCards[randomIndex];
+        this.supportCards.splice(randomIndex, 1);
+        return value;
+    }
+
+    public getRandomWeaponCard(): WeaponCard {
+        const randomIndex = Math.floor(Math.random() * this.weaponCards.length);
+        const value = this.weaponCards[randomIndex];
+        this.weaponCards.splice(randomIndex, 1);
+        return value;
+    }
+
 }

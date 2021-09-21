@@ -1,13 +1,10 @@
 import { useState } from 'react';
 import './App.scss';
 import Board from '../Board';
-import CardComponent from '../Cards/Card/Index';
 import Deck from '../../gorgasali/Cards/Deck';
 import CharacterComponent from '../Character';
 import Ebue from '../../gorgasali/Characters/Ebue';
 import Tharsis from '../../gorgasali/Characters/Tharsis';
-import MagicSpear from '../../gorgasali/Cards/Support/Throwable/MagicSpear';
-import { Card } from '../../gorgasali/Cards/Card';
 import Armazi from '../../gorgasali/Characters/Armazi';
 import Character from '../../gorgasali/Characters/Character';
 import BoardClass from '../../gorgasali/Board/board';
@@ -18,17 +15,15 @@ import Octor from '../../gorgasali/Characters/Octor';
 import Kruber from '../../gorgasali/Characters/Kruber';
 import Dirain from '../../gorgasali/Characters/Dirain';
 import Emoon from '../../gorgasali/Characters/Emoon';
-import Compass from "../../gorgasali/Cards/Support/Consumable/MovementConsumables/Compass";
-import Adrenaline from "../../gorgasali/Cards/Support/Consumable/MovementConsumables/Adrenaline";
 import CharacterTileList from '../Character/CharacterTileList';
 import Turn from "../Turn/Index";
 import TurnStateMachine from '../../gorgasali/Turn/TurnStates/turnStateMachine';
 import Initial from "../../gorgasali/Turn/TurnStates/Initial";
 import TurnContext from '../../gorgasali/Turn/TurnContext';
-import Potion from '../../gorgasali/Cards/Support/Consumable/Potion';
 import { createCharacter } from './createCharacter';
 import SidePanel from '../SidePanel';
 import CharacterTile from '../Character/CharacterTile';
+import Loot from '../Loot';
 
 function App() {
 
@@ -41,10 +36,10 @@ function App() {
     b.placeCharacter(26, 8, createCharacter(new Tharsis()));
     b.placeCharacter(13, 22, createCharacter(new Varas()));
     b.placeCharacter(11, 6, createCharacter(new PrincessTsiva()));
-    b.placeCharacter(0, 16, createCharacter(new Octor()));
+    b.placeCharacter(4, 16, createCharacter(new Octor()));
     b.placeCharacter(18, 2, createCharacter(new Kruber()));
     b.placeCharacter(23, 4, createCharacter(new Dirain()));
-    b.placeCharacter(9, 0, createCharacter(new Emoon()));
+    b.placeCharacter(9, 4, createCharacter(new Emoon()));
 
     return b;
   });
@@ -52,7 +47,7 @@ function App() {
   const createInitialTurnContext = () => {
     const previousLocations = new Set<number>();
     previousLocations.add(board.currentPlayerPosition);
-    return { self: board.currentPlayer, board: board, usedCards: [], previousLocations };
+    return { self: board.currentPlayer, board: board, usedCards: [], previousLocations, deck: new Deck() };
   };
   const [turnContext, setTurnContext] = useState<TurnContext>(createInitialTurnContext)
   const [turnState, setTurnState] = useState<TurnStateMachine>(() => new Initial(turnContext));
@@ -70,6 +65,7 @@ function App() {
   }
   return (
     <div className="App">
+      <Loot onTurnStateChange={onTurnChange} state={turnState} />
 
       <SidePanel collapsedContent={<CharacterTileList
         characters={board.characters}
@@ -105,7 +101,8 @@ function App() {
 
       <Turn turn={{ board: board, state: turnState, context: turnContext }} onTurnStateChange={onTurnChange} />
 
-      {selecterCharacter ? <CharacterComponent character={selecterCharacter} onTurnStateChange={(_) => { }} /> : ""}
+
+      {selecterCharacter ? <CharacterComponent character={selecterCharacter} /> : ""}
 
     </div>
   );

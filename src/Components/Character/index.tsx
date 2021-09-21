@@ -3,62 +3,34 @@ import "./Character.scss";
 import ProgressBar from 'react-bootstrap/ProgressBar';
 import CardComponent from "../Cards/Card/Index";
 import Range from '../Cards/Common/Range';
-import { Card, Card as PlayCard, CardCategory } from "../../gorgasali/Cards/Card";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBox } from '@fortawesome/free-solid-svg-icons';
 import Badge from "react-bootstrap/Badge";
 import CharacterSymbol from "./CharacterSybol";
 import { CardSlotBase, WeaponSlot } from "../../gorgasali/Characters/CardSlot";
-import Potion from "../../gorgasali/Cards/Support/Consumable/Potion";
-import WeaponCard from "../../gorgasali/Cards/Weapons/WeaponCard";
-import MovementConsumable from "../../gorgasali/Cards/Support/Consumable/MovementConsumables/MovementConsumable";
-import GunSocket from "../../gorgasali/Cards/Support/Consumable/GunSocket";
-import { Defensive } from "../../gorgasali/Cards/Support/Defensive/Defensive";
-import TurnContext from "../../gorgasali/Turn/TurnContext";
-import ChangesTurnState from "../Turn/ChangesTurnState";
-import Throwable from "../../gorgasali/Cards/Support/Throwable/Throwable";
-import TurnStateMachine from "../../gorgasali/Turn/TurnStates/turnStateMachine";
 
 
 
 
-export default function CharacterComponent({ character, usableCards, turnContext, onTurnStateChange, turnState }: CharacterProps) {
+export default function CharacterComponent({ character, onCardSlotClick, clickableCondition }: CharacterProps) {
 
-    function renderCardSlot(slot: CardSlotBase, needsReload: boolean | undefined, isAmmoBag: boolean | undefined = undefined) {
-
+    function renderCardSlot(slot: CardSlotBase, needsReload: boolean | undefined, isBag: boolean | undefined = undefined) {
 
         const createHandler = (() => {
-            if (!turnContext) return undefined;
-            const context = turnContext;
-            if(!turnState) return undefined;
-            const state = turnState;
-            if (!slot.card) return undefined;
-            if (!usableCards) return undefined;
-            if (isAmmoBag) return undefined;
-            if (needsReload) return undefined;
 
-
-            function onCardClick(card: Card) {
-                if (card.canUse(context)) {
-                    return () => {
-                        turnContext?.usedCards.push({ usedCard: card });
-                        const result = card.use(context);
-                        if (slot instanceof WeaponSlot) {
-                            slot.needsReload = true;
-                        } else {
-                            slot.card = undefined;
-                        }
-
-                        if (result) {
-                            onTurnStateChange(result);
-                        }
-                    }
-                }
+            if (!clickableCondition) {
+                return undefined
+            }
+            if (!onCardSlotClick) {
+                return undefined;
+            }
+            if (!clickableCondition(slot)) {
+                return undefined;
             }
 
-            if(usableCards && usableCards.includes(slot.card.category)) {
-                return onCardClick(slot.card);
-            }
+            return () => {
+                onCardSlotClick(slot)
+            };
         });
 
         const handler = createHandler();
@@ -66,7 +38,7 @@ export default function CharacterComponent({ character, usableCards, turnContext
         const highlight = handler != undefined;
 
         if (handler) {
-            return <div onClick={() => handler()}> <CardComponent cardSlot={slot} needsReload={needsReload ?? false} highlight={highlight} /></div>
+            return <CardComponent cardSlot={slot} needsReload={needsReload ?? false} highlight={highlight} onCardSlotClick={(_) => handler()} />
         }
 
         return <CardComponent cardSlot={slot} needsReload={needsReload ?? false} highlight={highlight} />;
@@ -133,10 +105,9 @@ export function convertToCssClass(name: string) {
     return name.toLowerCase().replace("'", "").split(' ').join('-') + " ";
 }
 
-interface CharacterProps extends ChangesTurnState {
+interface CharacterProps {
     character: Character,
-    usableCards?: CardCategory[],
-    turnContext?: TurnContext,
-    turnState?: TurnStateMachine
+    clickableCondition?: (slot: CardSlotBase) => boolean,
+    onCardSlotClick?: (slot: CardSlotBase) => void
 }
 

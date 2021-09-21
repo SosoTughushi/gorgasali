@@ -10,7 +10,7 @@ export default abstract class TurnStateBase {
     public state: string = "TurnStateBase";
     public order: number = 0;
 
-    constructor(protected context: TurnContext, public availableMoves?: Set<number>) {
+    constructor(public context: TurnContext, public availableMoves?: Set<number>) {
     }
 
     selectTile(tile: Tile): TurnStateMachine {

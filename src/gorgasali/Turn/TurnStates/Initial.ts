@@ -1,10 +1,11 @@
 import MovementDiceRolled from "./MovementDiceRolled";
-import { UseHealingCard, UseAmmoBag, rollSingleDice } from "./turnStateMachine";
+import { UseHealingCard,  rollSingleDice } from "./turnStateMachine";
 import TurnStateBase from "./TurnStateBase";
 import AmmoBagUsed from "./AmmoBagUsed";
 import HealingCardUsed from "./HealingCardUsed";
 import { CardCategory } from "../../Cards/Card";
 import { Action } from "./Action";
+import AmmoBag from "../../Cards/Support/Consumable/AmmoBag";
 
 
 export default class Initial extends TurnStateBase {
@@ -14,7 +15,7 @@ export default class Initial extends TurnStateBase {
         return new HealingCardUsed(this.context);
     }
 
-    useAmmoBag(action: UseAmmoBag): AmmoBagUsed {
+    useAmmoBag(card: AmmoBag): AmmoBagUsed {
         return new AmmoBagUsed(this.context);
     }
 

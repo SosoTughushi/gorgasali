@@ -5,26 +5,30 @@ import WeaponCard from "../Cards/Weapons/WeaponCard";
 export class CardSlotBase {
     public card: Card | undefined;
     constructor(
-        public name: string
+        public name: CardSlotType,
+        public isBag: boolean
     ) {
     }
 }
+
+type CardSlotType = "Weapon" | "Defensive" | "Throwable" | "Consumable" | "Helmet" | "Body Armor";
 
 export default class CardSlot <T extends Card> extends CardSlotBase {
     
     public card: T | undefined;
 
     constructor(
-        name: string
+        name: CardSlotType,
+        isBag: boolean
     ) {
-        super(name);
+        super(name, isBag);
     }
 }
 
 export class WeaponSlot extends CardSlot<WeaponCard> {
     public needsReload: boolean;
-    constructor() {
-        super("Weapon");
+    constructor(isBag: boolean) {
+        super("Weapon", isBag);
         this.needsReload = false;
     }
 }

@@ -17,6 +17,7 @@ import WeaponExtensionCardUsed from "./WeaponExtensionCardUsed";
 import MovementCardUsed from "./MovementCardUsed";
 import { CardState } from "../../Cards/CardState";
 import TurnStateBase from "./TurnStateBase";
+import { LootState } from "../Looting";
 
 
 type TurnStateMachine =
@@ -33,6 +34,7 @@ type TurnStateMachine =
     | WeaponExtensionCardUsed
     | TurnEnded
     | CardState
+    | LootState
 
 export default TurnStateMachine
 
@@ -50,8 +52,6 @@ export function rollSingleDice(): Dice {
 
 export type UseHealingCard = {
     card: Potion,
-}
-export type UseAmmoBag = {
 }
 export type UseMovementCard = {
     card: MovementConsumable

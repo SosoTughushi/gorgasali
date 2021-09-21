@@ -2,6 +2,8 @@ import Tile, { getTileCost } from "../../Tile";
 import TurnStateBase from "./TurnStateBase";
 import Moved from "./Moved";
 import getMoveDestinations from "../../Board/destinations/getMoveDestinations";
+import { Action } from "./Action";
+import {LootingInProgress} from "../Looting";
 
 
 export default class MoveInProgress extends TurnStateBase {
@@ -31,5 +33,21 @@ export default class MoveInProgress extends TurnStateBase {
 
     endMove() {
         return new Moved(this.context);
+    }
+
+    loot() {
+        return new LootingInProgress(this.context);
+    }
+
+    getAvailableActions(): Action[] {
+        const currentTile = this.context.board.getTiles()[this.context.board.currentPlayerPosition];
+        if (currentTile.hasBox) {
+            return [{
+                type: "Loot",
+                action: () => this.loot()
+            }]
+        }
+
+        return [];
     }
 }

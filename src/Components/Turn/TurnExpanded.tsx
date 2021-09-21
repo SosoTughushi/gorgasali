@@ -6,6 +6,7 @@ import { CardOutcome } from "../../gorgasali/Turn/TurnContext";
 import UsedCard from "./UsedCard";
 import { TurnProps } from "./TurnProps";
 import MovementInfo from "./MovementInfo";
+import { CardSlotBase, WeaponSlot } from "../../gorgasali/Characters/CardSlot";
 
 
 export default function Turn({ turn, onTurnStateChange }: TurnProps) {
@@ -21,13 +22,57 @@ export default function Turn({ turn, onTurnStateChange }: TurnProps) {
 
     const availableCards = turn.state.getAvailabeCards();
 
+    function isCardSlotClickable(slot: CardSlotBase) {
+        if (!slot.card) {
+            return false;
+        }
+
+        if (slot instanceof WeaponSlot) {
+            if (slot.needsReload) {
+                return false;
+            }
+        }
+
+        if (slot.isBag) {
+            return false;
+        }
+
+        if (!availableCards.includes(slot.card.category)) {
+            return false;
+        }
+
+        if (!slot.card.canUse(turn.context)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    function onCardSlotClick(slot: CardSlotBase) {
+        if (!slot.card) {
+            return;
+        }
+        const card = slot.card;
+
+        turn.context?.usedCards.push({ usedCard: card });
+
+        const result = card.use(turn.context);
+        if (slot instanceof WeaponSlot) {
+            slot.needsReload = true;
+        } else {
+            slot.card = undefined;
+        }
+
+        if (result) {
+            onTurnStateChange(result);
+        }
+    }
+
     return <div>
         <Character
             character={turn.board.currentPlayer}
-            usableCards={availableCards}
-            turnContext={turn.context}
-            turnState={turn.state}
-            onTurnStateChange={onTurnStateChange} />
+            clickableCondition={isCardSlotClickable}
+            onCardSlotClick={onCardSlotClick} />
         <br />
         <div className="row">
             {turn.context.usedCards.map(toCardComponent)}
